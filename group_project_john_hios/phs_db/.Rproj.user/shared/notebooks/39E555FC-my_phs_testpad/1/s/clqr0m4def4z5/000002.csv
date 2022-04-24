@@ -1,0 +1,23 @@
+"0","```r
+health_board_labels <- read_csv(\"data/hb14_hb19.csv\") 
+```"
+"1","Rows: 18 Columns: 5
+-- Column specification ------------------------------------------------------------------------------------------------------------------
+Delimiter: \",\"
+chr (3): HB, HBName, Country
+dbl (2): HBDateEnacted, HBDateArchived
+
+i Use `spec()` to retrieve the full column specification for this data.
+i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+"
+"0","```r
+glimpse(health_board_labels)
+```"
+"1","Rows: 18
+Columns: 5
+$ HB             <chr> \"S08000015\", \"S08000016\", \"S08000017\", \"S08000018\", \"S08000019\", \"S08000020\", \"S08000021\", \"S08000022\", \"S0800002~
+$ HBName         <chr> \"NHS Ayrshire and Arran\", \"NHS Borders\", \"NHS Dumfries and Galloway\", \"NHS Fife\", \"NHS Forth Valley\", \"NHS Grampi~
+$ HBDateEnacted  <dbl> 20140401, 20140401, 20140401, 20140401, 20140401, 20140401, 20140401, 20140401, 20140401, 20140401, 20140401, 201~
+$ HBDateArchived <dbl> NA, NA, NA, 20180201, NA, NA, 20190331, NA, 20190331, NA, NA, NA, 20180201, NA, NA, NA, NA, NA
+$ Country        <chr> \"S92000003\", \"S92000003\", \"S92000003\", \"S92000003\", \"S92000003\", \"S92000003\", \"S92000003\", \"S92000003\", \"S9200000~
+"

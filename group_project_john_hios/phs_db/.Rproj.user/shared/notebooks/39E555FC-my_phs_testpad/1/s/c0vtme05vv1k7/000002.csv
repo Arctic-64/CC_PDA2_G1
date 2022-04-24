@@ -1,0 +1,45 @@
+"0","beds <- read_csv(""data/beds_by_nhs_board_of_treatment_and_specialty.csv"") "
+"1","[1mRows: [22m[34m30448[39m [1mColumns: [22m[34m20[39m
+"
+"1","[36m--[39m [1mColumn specification[22m [36m------------------------------------------------------------------------------------------------------------------[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (11): Quarter, QuarterQF, HB, HBQF, Location, LocationQF, Specialty, SpecialtyQF, SpecialtyName, SpecialtyNameQF, PercentageOccupa...
+[32mdbl[39m  (5): AllStaffedBeds, TotalOccupiedBeds, AverageAvailableStaffedBeds, AverageOccupiedBeds, PercentageOccupancy
+[33mlgl[39m  (4): AllStaffedBedsQF, TotalOccupiedBedsQF, AverageAvailableStaffedBedsQF, AverageOccupiedBedsQF
+"
+"1","
+[36mi[39m Use `spec()` to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set `show_col_types = FALSE` to quiet this message.
+"
+"0","glimpse(beds)"
+"1","Rows: 30,448"
+"1",""
+"1","
+"
+"1","Columns: 20"
+"1",""
+"1","
+"
+"1","$ Quarter                       [3m[38;5;246m<chr>[39m[23m ""2016Q3"", ""2016Q3"", ""2016Q4"", ""2016Q4"", ""2017Q1"", ""2017Q1"", ""2017Q2"", ""2017Q2"", ""2017Q3"", ""2017Q3""~
+$ QuarterQF                     [3m[38;5;246m<chr>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+$ HB                            [3m[38;5;246m<chr>[39m[23m ""SB0801"", ""SB0801"", ""SB0801"", ""SB0801"", ""SB0801"", ""SB0801"", ""SB0801"", ""SB0801"", ""SB0801"", ""SB0801""~
+$ HBQF                          [3m[38;5;246m<chr>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+$ Location                      [3m[38;5;246m<chr>[39m[23m ""D102H"", ""SB0801"", ""D102H"", ""SB0801"", ""D102H"", ""SB0801"", ""D102H"", ""SB0801"", ""D102H"", ""SB0801"", ""D1~
+$ LocationQF                    [3m[38;5;246m<chr>[39m[23m NA, ""d"", NA, ""d"", NA, ""d"", NA, ""d"", NA, ""d"", NA, ""d"", NA, ""d"", NA, ""d"", NA, ""d"", NA, ""d"", NA, ""d"",~
+$ Specialty                     [3m[38;5;246m<chr>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+$ SpecialtyQF                   [3m[38;5;246m<chr>[39m[23m ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z""~
+$ SpecialtyName                 [3m[38;5;246m<chr>[39m[23m ""All Acute"", ""All Acute"", ""All Acute"", ""All Acute"", ""All Acute"", ""All Acute"", ""All Acute"", ""All Ac~
+$ SpecialtyNameQF               [3m[38;5;246m<chr>[39m[23m ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d""~
+$ AllStaffedBeds                [3m[38;5;246m<dbl>[39m[23m 16413, 16413, 16117, 16117, 15622, 15622, 15604, 15604, 15426, 15426, 16159, 16159, 15681, 15681, ~
+$ AllStaffedBedsQF              [3m[38;5;246m<lgl>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+$ TotalOccupiedBeds             [3m[38;5;246m<dbl>[39m[23m 12380, 12380, 12049, 12049, 11569, 11569, 11614, 11614, 11658, 11658, 12434, 12434, 11871, 11871, ~
+$ TotalOccupiedBedsQF           [3m[38;5;246m<lgl>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+$ AverageAvailableStaffedBeds   [3m[38;5;246m<dbl>[39m[23m 178.4022, 178.4022, 175.1848, 175.1848, 173.5778, 173.5778, 171.4725, 171.4725, 167.6739, 167.6739~
+$ AverageAvailableStaffedBedsQF [3m[38;5;246m<lgl>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+$ AverageOccupiedBeds           [3m[38;5;246m<dbl>[39m[23m 134.56522, 134.56522, 130.96739, 130.96739, 128.54444, 128.54444, 127.62637, 127.62637, 126.71739,~
+$ AverageOccupiedBedsQF         [3m[38;5;246m<lgl>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+$ PercentageOccupancy           [3m[38;5;246m<dbl>[39m[23m 75.42801, 75.42801, 74.75957, 74.75957, 74.05582, 74.05582, 74.42963, 74.42963, 75.57371, 75.57371~
+$ PercentageOccupancyQF         [3m[38;5;246m<chr>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~"
+"1",""
+"1","
+"

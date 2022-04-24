@@ -1,0 +1,5 @@
+"0","```r
+beds <- read_csv(\"data/beds_by_nhs_board_of_treatment_and_specialty.csv\") 
+```"
+"1","Error: 'data/beds_by_nhs_board_of_treatment_and_specialty.csv' does not exist in current working directory ('C:/Users/John/Documents/CodeClan/group_project_john_hios').
+"

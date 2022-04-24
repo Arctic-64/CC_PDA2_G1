@@ -1,0 +1,13 @@
+"0","```r
+# library(here) is required for this code chunk
+source(here(\"scripts/clean_meteorite_data.R\"))
+```"
+"1","Rows: 45716 Columns: 6
+-- Column specification --------------------------------------------------------------------------------------------------------
+Delimiter: \",\"
+chr (3): name, fall, GeoLocation
+dbl (3): id, mass (g), year
+
+i Use `spec()` to retrieve the full column specification for this data.
+i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+"

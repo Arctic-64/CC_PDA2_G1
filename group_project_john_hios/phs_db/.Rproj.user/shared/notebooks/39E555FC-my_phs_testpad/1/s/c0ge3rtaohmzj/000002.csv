@@ -1,0 +1,36 @@
+"0","```r
+beds <- beds %>% 
+  full_join(shp_labels_join, by = c(\"HB\" = \"SHB\"))
+  
+glimpse(beds)
+```"
+"1","Rows: 10,029
+Columns: 27
+$ Quarter                       <chr> \"2020Q1\", \"2020Q1\", \"2020Q2\", \"2020Q2\", \"2020Q3\", \"2020Q3\", \"2020Q4\", \"2020Q4\", \"2021Q1\", \"2021Q1\"~
+$ QuarterQF                     <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, \"p\", \"p\", NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ~
+$ HB                            <chr> \"SB0801\", \"SB0801\", \"SB0801\", \"SB0801\", \"SB0801\", \"SB0801\", \"SB0801\", \"SB0801\", \"SB0801\", \"SB0801\"~
+$ HBQF                          <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+$ Location                      <chr> \"D102H\", \"SB0801\", \"D102H\", \"SB0801\", \"D102H\", \"SB0801\", \"D102H\", \"SB0801\", \"D102H\", \"SB0801\", \"D1~
+$ LocationQF                    <chr> NA, \"d\", NA, \"d\", NA, \"d\", NA, \"d\", NA, \"d\", NA, \"d\", NA, \"d\", NA, \"d\", NA, \"d\", NA, \"d\", NA, \"d\",~
+$ Specialty                     <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+$ SpecialtyQF                   <chr> \"z\", \"z\", \"z\", \"z\", \"z\", \"z\", \"z\", \"z\", \"z\", \"z\", \"z\", \"z\", \"z\", \"z\", \"z\", \"z\", \"z\", \"z\", \"z\", \"z\"~
+$ SpecialtyName                 <chr> \"All Acute\", \"All Acute\", \"All Acute\", \"All Acute\", \"All Acute\", \"All Acute\", \"All Acute\", \"All Ac~
+$ SpecialtyNameQF               <chr> \"d\", \"d\", \"d\", \"d\", \"d\", \"d\", \"d\", \"d\", \"d\", \"d\", \"d\", \"d\", \"d\", \"d\", \"d\", \"d\", \"d\", \"d\", \"d\", \"d\"~
+$ AllStaffedBeds                <dbl> 14896, 14896, 14366, 14366, 15442, 15442, 15665, 15665, 16547, 16547, 16159, 16159, 16897, 16897, ~
+$ AllStaffedBedsQF              <lgl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+$ TotalOccupiedBeds             <dbl> 10915, 10915, 8101, 8101, 9934, 9934, 11164, 11164, 12060, 12060, 12269, 12269, 12029, 12029, 1091~
+$ TotalOccupiedBedsQF           <lgl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+$ AverageAvailableStaffedBeds   <dbl> 163.69230769, 163.69230769, 157.86813187, 157.86813187, 167.84782609, 167.84782609, 170.27173913, ~
+$ AverageAvailableStaffedBedsQF <lgl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+$ AverageOccupiedBeds           <dbl> 119.94505495, 119.94505495, 89.02197802, 89.02197802, 107.97826087, 107.97826087, 121.34782609, 12~
+$ AverageOccupiedBedsQF         <lgl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+$ PercentageOccupancy           <dbl> 73.27470, 73.27470, 56.39009, 56.39009, 64.33105, 64.33105, 71.26716, 71.26716, 72.88330, 72.88330~
+$ PercentageOccupancyQF         <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+$ HBName                        <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+$ HBDateEnacted                 <dbl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+$ HBDateArchived                <dbl> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+$ Country.x                     <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+$ CountryName.x                 <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+$ Country.y                     <chr> \"S92000003\", \"S92000003\", \"S92000003\", \"S92000003\", \"S92000003\", \"S92000003\", \"S92000003\", \"S92000~
+$ CountryName.y                 <chr> \"Scotland\", \"Scotland\", \"Scotland\", \"Scotland\", \"Scotland\", \"Scotland\", \"Scotland\", \"Scotland\", \"S~
+"

@@ -1,0 +1,26 @@
+"0","```r
+shp_labels <- read_csv(\"data/special-health-boards_19022021.csv\") 
+```"
+"1","Rows: 9 Columns: 3
+-- Column specification ------------------------------------------------------------------------------------------------------------------
+Delimiter: \",\"
+chr (3): SHB, SHBName, Country
+
+i Use `spec()` to retrieve the full column specification for this data.
+i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+"
+"0","```r
+str(shp_labels)
+```"
+"1","spec_tbl_df [9 x 3] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+ $ SHB    : chr [1:9] \"SB0801\" \"SB0802\" \"SB0803\" \"SB0804\" ...
+ $ SHBName: chr [1:9] \"The<U+00A0>Golden Jubilee National Hospital\" \"State Hospitals Board for Scotland\" \"NHS24\" \"NHS Health Scotland\" ...
+ $ Country: chr [1:9] \"S92000003\" \"S92000003\" \"S92000003\" \"S92000003\" ...
+ - attr(*, \"spec\")=
+  .. cols(
+  ..   SHB = col_character(),
+  ..   SHBName = col_character(),
+  ..   Country = col_character()
+  .. )
+ - attr(*, \"problems\")=<externalptr> 
+"

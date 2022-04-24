@@ -1,0 +1,4 @@
+"0","```r
+msleep_conservation_prop <- msleep_conservation %>%
+  mutate(conservation_flag = if_else(conservation == \"domesticated\", \"domesticated\", \"not_domesticated\"))
+```"
