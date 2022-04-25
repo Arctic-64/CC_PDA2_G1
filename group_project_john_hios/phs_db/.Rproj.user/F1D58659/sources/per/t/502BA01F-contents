@@ -426,13 +426,17 @@ country_name_beds <- unique(beds$country_name) %>%
 ```
 
 ```{r}
-nb_name_beds <- unique(beds$nb_name) #%>% 
-  # discard(is.na)
+hb_name_beds <- unique(beds$hb_name) %>% 
+  discard(is.na)
   
 ```
 
 
-
+```{r}
+shb_name_beds <- unique(beds$shb_name) %>% 
+  discard(is.na)
+  
+```
 
 
 

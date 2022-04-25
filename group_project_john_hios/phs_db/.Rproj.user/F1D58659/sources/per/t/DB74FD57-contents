@@ -14,8 +14,22 @@ library(shinythemes)
 
 
 # Load data
-beds <- <- read_csv("beds_clean.csv.csv") 
-# all_months <- unique(temp_sco$month)
+beds <- read_csv("beds_clean.csv") 
+
+
+# Get drop-down list menu options
+hb_name_beds <- unique(beds$hb_name) %>% 
+  discard(is.na)
+
+shb_name_beds <- unique(beds$shb_name)  %>% 
+  discard(is.na)
+
+country_name_beds <- unique(beds$country_name) %>% 
+  discard(is.na)
+
+
+# The palette as per SF:
+phs_palette <- c("#99DAF5", "#004785")
 
 
 
@@ -31,11 +45,9 @@ ui <- fluidPage(
     # Sidebar with a drop-down menu 
     sidebarLayout(
       sidebarPanel(
-        "Sidebar",
-        "Some other text in the sidebar"
         selectInput("nhs_board_input",
                     "Select Board",
-                    choices = all_months
+                    choices = hb_name_beds
         )
         
         
@@ -44,9 +56,7 @@ ui <- fluidPage(
       
       # Show a plot of the generated distribution
       mainPanel(
-        "Main section",
-        "Some other text in the main section"
-        # plotOutput("distPlot")
+        plotOutput("trend_plot")
       )
     )
 
@@ -55,7 +65,17 @@ ui <- fluidPage(
 # Define server logic required to draw trend plots
 server <- function(input, output) {
 
-    output$distPlot <- renderPlot({
+    output$trend_plot <- renderPlot({
+      
+      beds %>%
+        filter(hb_name == input$nhs_board_input) %>%
+        filter(location == hb) %>%
+        ggplot() +
+        aes(x = quarter, y = total_occupied_beds, group = country_name, colour = hb_name) +
+        geom_line() +
+        geom_point() +
+        scale_colour_manual(guide = "none", values = phs_palette[2]) +
+        ylim(c(0, NA))
         
     })
 }

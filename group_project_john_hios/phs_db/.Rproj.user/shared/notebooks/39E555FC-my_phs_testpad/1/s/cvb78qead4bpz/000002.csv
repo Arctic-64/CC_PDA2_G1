@@ -1,6 +1,0 @@
-"0","nb_name_beds <- unique(beds$nb_name) #%>% "
-"2","Warning:"
-"2"," Unknown or uninitialised column: `nb_name`.
-"
-"0","  # discard(is.na)"
-"0","  "

@@ -1,8 +1,0 @@
-"0","# The palette as per SF:"
-"0","phs_palette <- c(""#99DAF5"", ""#004785"")"
-"0",""
-"0","# # To use for fills, add"
-"0","#   scale_fill_manual(values = phs_palette)"
-"0","# "
-"0","# # To use for line and point colors, add"
-"0","#   scale_colour_manual(values = phs_palette)"

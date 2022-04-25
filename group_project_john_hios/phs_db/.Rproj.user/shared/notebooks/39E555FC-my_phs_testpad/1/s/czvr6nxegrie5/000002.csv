@@ -1,3 +1,0 @@
-"0","country_name_beds <- unique(beds$country_name) %>% "
-"0","  discard(is.na)"
-"0","  "

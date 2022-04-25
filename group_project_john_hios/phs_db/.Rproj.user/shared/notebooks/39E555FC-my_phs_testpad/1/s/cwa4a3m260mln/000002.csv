@@ -1,7 +1,0 @@
-"0","```r
-# beds %>%
-#   distinct(Location, LocationQF)
- 
-# beds %>%
-#   distinct(Specialty, SpecialtyQ  F) 
-```"
