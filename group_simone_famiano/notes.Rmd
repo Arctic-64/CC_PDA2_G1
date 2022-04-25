@@ -1,0 +1,187 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+## Are there any demographic groups that are driving the activity?
+
+```{r}
+library(janitor)
+library(here)
+library(tidyverse)
+```
+
+```{r}
+#loading the data and cleaning names
+
+phs_data_sex_age <- read_csv(here(
+  "raw_data/Activity by Board of Treatment, Age and Sex.csv"))
+
+phs_data_sex_age <-  phs_data_sex_age %>% 
+  clean_names()
+
+```
+
+```{r}
+phs_data_sex_age
+```
+What admission type to keep?
+
+I have decided to exclude all cumulative rows (All Day cases, All Inpatients, All Inpatients and Day cases) and keep the following:
+
+- Elective Inpatients				
+
+- Emergency Inpatients				
+
+- Transfers
+
+```{r}
+# checking how many type of admission type are in the data set
+
+distinct(phs_data_sex_age, admission_type)
+```
+I am interested just in data after 2020, I am filtering out any data before 2020.
+
+```{r}
+# filtering out data before 2020
+# filtering out admission type categories 
+# selecting just columns with data regarding demographics
+# renaming 90 years + row
+
+phs_data_clean <- phs_data_sex_age %>% 
+  filter(quarter == "2020Q1" | quarter == "2020Q2" | quarter == "2020Q3" 
+         | quarter == "2020Q4" | quarter == "2021Q1" | quarter == "2021Q2"
+         | quarter == "2021Q3") %>% 
+  filter(admission_type == "Elective Inpatients" |
+         admission_type == "Emergency Inpatients"|
+         admission_type == "Not Specified") %>% 
+  select(id, quarter, hb, location, admission_type, sex, age, stays, 
+         length_of_stay, average_length_of_stay) %>% 
+  mutate(age = str_replace_all(age, "90 years and over", "90 +")) 
+
+phs_data_clean
+
+```
+I want the location name rather than post code or HB number.
+
+```{r}
+#checking health boards
+
+phs_data_clean %>% 
+  group_by(hb) %>% 
+  summarise(tot = n()) %>% 
+  select(hb)
+```
+I want to filter out any data for a single postcode and keep just the summary by Health Board.
+
+```{r}
+# creating a target variable to filter HB
+
+target <- c("S08000015", "S08000016", "S08000017", "S08000019", "S08000020",
+            "S08000022", "S08000024", "S08000025", "S08000026", "S08000028",
+            "S08000029", "S08000030",	"S08000031", "S08000032")
+```
+
+
+```{r}
+# renaming HB to location name
+
+phs_data_clean_location <- phs_data_clean %>% 
+  filter(hb %in% target & location %in% target) %>% 
+  mutate(
+    location = str_replace_all(location, "S08000015", "Ayrshire and Arran"),
+    location = str_replace_all(location, "S08000016", "Borders"),
+    location = str_replace_all(location, "S08000017", "Dumfries and Galloway"),
+    location = str_replace_all(location, "S08000019", "Forth Valley"),
+    location = str_replace_all(location, "S08000020", "Grampian"),
+    location = str_replace_all(location, "S08000022", "Highland"),
+    location = str_replace_all(location, "S08000024", "Lothian"),
+    location = str_replace_all(location, "S08000025", "Orkney"),
+    location = str_replace_all(location, "S08000026", "Shetland"),
+    location = str_replace_all(location, "S08000028", "Western Isle"),
+    location = str_replace_all(location, "S08000029", "Fife"),
+    location = str_replace_all(location, "S08000030", "Tayside"),
+    location = str_replace_all(location, "S08000031", 
+                               "Greater Glasgow and Clyde"),
+    location = str_replace_all(location, "S08000032", "Lanarkshire"),
+    location = str_replace_all(location, "S27000001", 
+                               "non-NHS Provider/ Location")
+      
+    )
+```
+
+Starting to create plots
+
+```{r}
+# creating variables for plotting
+
+tot_stays_age <- phs_data_clean_location %>% 
+  group_by(age, quarter, sex, location) %>% 
+  summarise(tot_stays = sum(stays)) %>% 
+  mutate(age = str_remove_all(age, "years")) %>% 
+  arrange(quarter)
+
+
+avg_stays_age <- phs_data_clean_location %>% 
+  group_by(age, quarter,sex) %>% 
+  summarise(avg_stays = mean(length_of_stay, na.rm = TRUE)) %>% 
+  mutate(age = str_remove_all(age, "years"))
+
+tot_stays_age
+
+avg_stays_age
+
+ggplot(tot_stays_age) +
+  geom_col(position = "dodge", colour = "white", aes(x = age, 
+                                                     y = tot_stays, 
+                                                     fill = quarter)
+           ) +
+  ggtitle("Total Stays per Age") +
+  labs(x = "Age", y = "Total Stays") +
+  scale_fill_manual(values = c("2020Q1" = "red",
+                               "2020Q2" = "#004785",
+                               "2020Q3" = "#99DAF5",
+                               "2020Q4" = "orange",
+                               "2021Q1" = "red",
+                               "2021Q2" = "green",
+                               "2021Q3" = "purple")) +
+  facet_wrap(~sex) +
+  theme(text=element_text(size=12,  family = "Avalon Regular"))
+  
+  
+
+ggplot(avg_stays_age) +
+  geom_col(position = "dodge", colour = "white", aes(x = age, 
+                                                     y = avg_stays, 
+                                                     fill = quarter)) +
+  ggtitle("Average length of stays per age") +
+  labs(x = "Age", y = "Average Length of stay") +
+  scale_fill_manual(values = c("2020Q1" = "red",
+                               "2020Q2" = "#004785",
+                               "2020Q3" = "#99DAF5",
+                               "2020Q4" = "orange",
+                               "2021Q1" = "red",
+                               "2021Q2" = "green",
+                               "2021Q3" = "purple"))
+
+```
+
+```{r}
+ggplot(tot_stays_age) +
+  geom_col(aes(x = age, y = tot_stays)) +
+  facet_wrap(~sex)
+
+tot_stays_age
+
+ggplot(phs_data_sex_age) +
+  geom_col(aes(x = age, y = stays)) +
+  facet_wrap(~sex)
+
+phs_data_sex_age
+
+```
+
+
+
+
+
+

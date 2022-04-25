@@ -1,0 +1,80 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(janitor)
+library(here)
+library(tidyverse)
+library(lubridate)
+```
+
+
+```{r}
+phs_data <-  read_csv("raw_data/hospital_admissions_hb_agesex_20220302.csv") %>% 
+  clean_names()
+```
+```{r}
+
+phs_data %>% 
+  tail()
+```
+```{r}
+distinct(phs_data, admission_type)
+```
+
+
+
+```{r}
+tot_admission <- phs_data %>% 
+  group_by(week_ending) %>% 
+  filter(age_group == "All ages" & sex == "All") %>% 
+  summarise(number_admissions = sum(number_admissions)) %>% 
+  mutate(week_ending = ymd(week_ending))
+  
+tot_admission
+```
+
+```{r}
+ggplot(tot_admission) +
+  geom_col(colour = "white", aes(x = week_ending, y = number_admissions)) 
+```
+
+```{r}
+tot_admission_sex <- phs_data %>% 
+  group_by(week_ending, sex) %>% 
+  filter(age_group == "All ages" & !sex == "All") %>% 
+  summarise(number_admissions = sum(number_admissions)) %>% 
+  mutate(week_ending = ymd(week_ending))
+  
+tot_admission_sex
+```
+```{r}
+ggplot(tot_admission_sex) +
+  geom_col(colour = "white", aes(x = week_ending, y = number_admissions, 
+                                 fill = sex)) +
+  scale_fill_manual("Gender", values = c("Female" =  "#99DAF5", 
+                                       "Male" = "#004785")
+                    ) +
+  theme(text=element_text(size=12,  family = "Avalon Regular")
+          )+
+  theme_bw()
+```
+
+```{r}
+tot_admission_age <- phs_data %>% 
+  group_by(week_ending, age_group) %>% 
+  filter(!age_group == "All ages") %>% 
+  summarise(number_admissions = sum(number_admissions)) %>% 
+  mutate(week_ending = ymd(week_ending))
+
+tot_admission_age
+```
+
+```{r}
+ggplot(tot_admission_age) +
+  geom_col(colour = "white", aes(x = week_ending, y = number_admissions, 
+                                 fill = age_group))
+```
+
