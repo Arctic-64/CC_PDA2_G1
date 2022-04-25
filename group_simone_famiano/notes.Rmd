@@ -114,17 +114,24 @@ Starting to create plots
 ```{r}
 # creating variables for plotting
 
-tot_stays_age <- phs_data_clean_location %>% 
+tot_stays_age <- phs_data_clean_location %>%
   group_by(age, quarter, sex, location) %>% 
+  summarise(tot_stays = sum(stays)) %>% 
+  mutate(age = str_remove_all(age, "years")) %>% 
+  arrange(quarter)
+
+tot_stays_age_no_location <- phs_data_clean_location %>%
+  group_by(age, quarter, sex) %>% 
   summarise(tot_stays = sum(stays)) %>% 
   mutate(age = str_remove_all(age, "years")) %>% 
   arrange(quarter)
 
 
 avg_stays_age <- phs_data_clean_location %>% 
-  group_by(age, quarter,sex) %>% 
+  group_by(age, quarter,sex, location) %>% 
   summarise(avg_stays = mean(length_of_stay, na.rm = TRUE)) %>% 
-  mutate(age = str_remove_all(age, "years"))
+  mutate(age = str_remove_all(age, "years")) %>% 
+  arrange(quarter)
 
 tot_stays_age
 
@@ -164,23 +171,23 @@ ggplot(avg_stays_age) +
                                "2021Q3" = "purple"))
 
 ```
-
 ```{r}
-ggplot(tot_stays_age) +
-  geom_col(aes(x = age, y = tot_stays)) +
-  facet_wrap(~sex)
+dashboard_data_table <- tot_stays_age %>%
+  rename("Age" = age,
+         "Quarter" = quarter,
+         "Gender" = sex,
+         "Location" = location,
+         "Total Stays" = tot_stays
+         )
 
-tot_stays_age
-
-ggplot(phs_data_sex_age) +
-  geom_col(aes(x = age, y = stays)) +
-  facet_wrap(~sex)
-
-phs_data_sex_age
-
+dashboard_data_table
 ```
 
 
+
+```{r}
+tot_and_avg_stays <- inner_join(tot_stays_age, avg_stays_age)
+```
 
 
 
