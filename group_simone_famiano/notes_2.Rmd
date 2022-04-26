@@ -17,8 +17,12 @@ phs_data <-  read_csv("raw_data/hospital_admissions_hb_agesex_20220302.csv") %>%
 ```
 ```{r}
 
-phs_data %>% 
-  tail()
+gender_randomise <- phs_data %>% 
+  #filter(sex == "Female" | sex == "Male")
+  filter(!age_group == "All ages") %>% 
+  summarise(tot= n())
+
+
 ```
 ```{r}
 distinct(phs_data, admission_type)

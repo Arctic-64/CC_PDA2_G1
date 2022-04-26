@@ -108,7 +108,7 @@ output$table_output <- renderDataTable({
                             ) +
           facet_wrap(~sex) +
           theme_bw() +
-          theme(text=element_text(size = 20,  family = "Avalon Regular"),
+          theme(text=element_text(size = 20,  family = "Arial"),
                 strip.background =element_rect(fill = "#062e3c"),
                 strip.text = element_text(colour = 'white', size = 18,
                                           family = "Arial"))

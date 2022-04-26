@@ -20,10 +20,14 @@ phs_data_sex_age <-  phs_data_sex_age %>%
   clean_names()
 
 ```
+Looking at the data:
+
+129,599 rows on 19 columns
 
 ```{r}
 phs_data_sex_age
 ```
+
 What admission type to keep?
 
 I have decided to exclude all cumulative rows (All Day cases, All Inpatients, All Inpatients and Day cases) and keep the following:
@@ -39,7 +43,7 @@ I have decided to exclude all cumulative rows (All Day cases, All Inpatients, Al
 
 distinct(phs_data_sex_age, admission_type)
 ```
-I am interested just in data after 2020, I am filtering out any data before 2020.
+I am interested just in data after 2020, I am filtering out rows from before 2020.
 
 ```{r}
 # filtering out data before 2020
@@ -71,7 +75,7 @@ phs_data_clean %>%
   summarise(tot = n()) %>% 
   select(hb)
 ```
-I want to filter out any data for a single postcode and keep just the summary by Health Board.
+I want to keep just data by the Health Board summary.
 
 ```{r}
 # creating a target variable to filter HB
@@ -120,16 +124,20 @@ tot_stays_age <- phs_data_clean_location %>%
   mutate(age = str_remove_all(age, "years")) %>% 
   arrange(quarter)
 
+# data set for plotting total stays by age group without specifying a location
+
 tot_stays_age_no_location <- phs_data_clean_location %>%
   group_by(age, quarter, sex) %>% 
   summarise(tot_stays = sum(stays)) %>% 
   mutate(age = str_remove_all(age, "years")) %>% 
   arrange(quarter)
 
+# data set for plotting average length of stay by age group without specifying a location
 
 avg_stays_age <- phs_data_clean_location %>% 
   group_by(age, quarter,sex) %>% 
-  summarise(average_length_of_stay = median(average_length_of_stay, na.rm = TRUE)) %>% 
+  summarise(average_length_of_stay = median(average_length_of_stay, 
+                                            na.rm = TRUE)) %>% 
   mutate(age = str_remove_all(age, "years")) %>% 
   arrange(quarter)
 
@@ -137,41 +145,66 @@ tot_stays_age_no_location
 
 avg_stays_age
 
-ggplot(tot_stays_age) +
-  geom_col(position = "dodge", colour = "white", aes(x = age, 
-                                                     y = tot_stays, 
-                                                     fill = quarter)
-           ) +
-  ggtitle("Total Stays per Age") +
-  labs(x = "Age", y = "Total Stays") +
-  scale_fill_manual(values = c("2020Q1" = "red",
-                               "2020Q2" = "#004785",
-                               "2020Q3" = "#99DAF5",
-                               "2020Q4" = "orange",
-                               "2021Q1" = "red",
-                               "2021Q2" = "green",
-                               "2021Q3" = "purple")) +
-  facet_wrap(~sex) +
-  theme(text=element_text(size=12,  family = "Avalon Regular"))
-  
-  
+```
 
-ggplot(avg_stays_age) +
+```{r}
+
+ggplot(tot_stays_age_no_location) +
   geom_col(position = "dodge", colour = "white", aes(x = age, 
-                                                     y = average_length_of_stay, 
-                                                     fill = quarter)) +
-  ggtitle("Average length of stays per age") +
-  labs(x = "Age", y = "Average Length of stay") +
-  scale_fill_manual(values = c("2020Q1" = "red",
-                               "2020Q2" = "#004785",
-                               "2020Q3" = "#99DAF5",
-                               "2020Q4" = "orange",
-                               "2021Q1" = "red",
-                               "2021Q2" = "green",
-                               "2021Q3" = "purple"))
+                                           y = tot_stays, 
+                                           fill = quarter)
+                    ) +
+          ggtitle("Total Stays") +
+          labs(x = "Age", y = "Total Stays") +
+          scale_fill_manual("Quarter", values = c("2020Q1" = "#061a1f",
+                                       "2020Q2" = "#062e3c",
+                                       "2020Q3" = "#074859",
+                                       "2020Q4" = "#11667f",
+                                       "2021Q1" = "#008b87",
+                                       "2021Q2" = "#47899b",
+                                       "2021Q3" = "#659799")
+                            ) +
+          facet_wrap(~sex) +
+          theme_bw() +
+          theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ```
+Data on total stays doesn't suggest a "winter emergency".
+
+Number of stays rise slightly in winter for almost any age group but not in so dramatic number to suggest an emergency. 
+
+We can observe a trend in number of stays rising by the older the age group is for both genders, until 70 - 79. From the 80-90 group the numbers of stays lower for females and have a significant drop for males. For genders 90+ stays are low, less than a couple of thousand for males.
+
 ```{r}
+ggplot(avg_stays_age) +
+  geom_col(position = "dodge",  
+               colour = "white", aes(x = age, y = average_length_of_stay, 
+                                                         fill = quarter)
+      ) +
+      ggtitle("Average Length of Stay") +
+      labs(x = "Age", y = "Average Length of Stay") +
+      scale_fill_manual("Quarter", values = c("2020Q1" = "#061a1f",
+                                   "2020Q2" = "#062e3c",
+                                   "2020Q3" = "#074859",
+                                   "2020Q4" = "#11667f",
+                                   "2021Q1" = "#008b87",
+                                   "2021Q2" = "#47899b",
+                                   "2021Q3" = "#659799")
+                        ) +
+      facet_wrap(~sex) +
+      theme_bw() +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+In the average length of stays data again we see a trend of numbers being higher by the older the age group get, this time there's no drop for 80+ patients but instead we see an evident increase of average time for 90+ patients, suggesting that even if their numbers are not so high like other senior age groups, they usually need more care.
+
+Again, we don't notice any particular dramatic rise in winter months. Even if the average stay tent to be longer in winter within most of the age groups, the data doesn't suggest the existence of a "winter emergency" 
+
+
+
+```{r}
+# creating a data set for the data table to be included in the shiny app
+
 avg_stays_age_location <- phs_data_clean_location %>% 
   group_by(age, quarter,sex, location) %>% 
   summarise(average_length_of_stay = median(
@@ -202,6 +235,10 @@ colnames(dashboard_data_table)
 
 
 ```{r}
+
+# joining the tot_stay data set with the average length of stay data set
+# this newly created data set will be the base of the plots in the shiny app
+
 tot_and_avg_stays <- inner_join(tot_stays_age_no_location, avg_stays_age) %>% 
   mutate(average_length_of_stay = round(average_length_of_stay)) %>% 
   arrange(desc(average_length_of_stay))
