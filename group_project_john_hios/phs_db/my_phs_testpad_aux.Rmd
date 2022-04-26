@@ -200,16 +200,6 @@ beds_oos %>%
 
 
 
-```{r}
-# beds <- beds %>% 
-#   mutate(Country = if_else(!is.na(Country.x), Country.x, Country.y)) %>% 
-#   select(-Country.x, -Country.y)
-# 
-# glimpse(beds) 
-```
-
-
-
 ## Join bed & country labels
 ```{r}
 beds_oos <- beds_oos %>%
@@ -298,7 +288,7 @@ beds_oos %>%
 
 ### Sanity check No. 1. 
 
-Check if I pick in the location column the aggregated results of value S08000031 for NHS Greater Glasgow and S08000020 for Grampian
+Check if I pick the aggregated results of value S08000031 for NHS Greater Glasgow and S08000020 for Grampian in the location column
 ```{r}
 beds_oos %>%
   # filter(hb_name == "NHS Greater Glasgow and Clyde") %>% 
@@ -374,7 +364,7 @@ beds_oos %>%
 
 
 ### Sanity check No. 2.
-Check to see if I pick in the location column the aggregated results of value SB0801 
+Check to see if I pick the aggregated results of value SB0801 in the location column
 ```{r}
 beds_oos %>%
   # filter(hb_name == "NHS Greater Glasgow and Clyde" ) %>% 
@@ -450,10 +440,10 @@ beds_oos %>%
 
 # Save cleaned data
 
-Write updated beds_oos data to a CSV file.
-```{r}
- write_csv(beds_oos, here("beds_oos_clean.csv"))
-```
+<!-- Write updated beds_oos data to a CSV file. -->
+<!-- ```{r} -->
+<!--  write_csv(beds_oos, here("beds_oos_clean.csv")) -->
+<!-- ``` -->
 
 
 
@@ -492,7 +482,7 @@ beds_oos %>%
   aes(x = percentage_occupancy) +
   geom_histogram(col = "white", binwidth = 1)
 ```
-## Box Plot
+## Box Plots
 ```{r}
 beds_oos %>%
   select(total_occupied_beds, country_name) %>% 
@@ -526,30 +516,138 @@ beds_oos %>%
   geom_boxplot()
 ```
 
-## Boostrap Sampling distribution
+## Boostrap Sampling distribution & 99.9% CI calculation
 
 ```{r}
-bootstrap_distn <- beds_oos %>%
+# Create a bootstrap sampling distribution (total_occupied_beds)
+set.seed(42)
+bootstrap_distn_tob <- beds_oos %>%
   select(total_occupied_beds, country_name) %>% 
   filter(country_name == "Scotland") %>% 
   specify(response = total_occupied_beds) %>%
   generate(reps = 10000, type = "bootstrap") %>%
   calculate(stat = "mean")
 
-bootstrap_distn %>%
+bootstrap_distn_tob %>%
   visualise(binwidth = 10000)
+
+# Calculate a 99.9% CI for ``mean(total_occupied_beds)``, and visualise it on the distribution
+
+tob_ci999 <- bootstrap_distn_tob %>%
+  get_ci(level = 0.999, type = "percentile")
+tob_ci999
+
+
+bootstrap_distn_tob %>%
+  visualise(bins = 30) +
+  shade_ci(endpoints = tob_ci999)
+
+
+############################################4#######################
+
+
+# Create a bootstrap sampling distribution (average_available_staffed_beds)
+set.seed(42)
+bootstrap_distn_aasb <- beds_oos %>%
+  select(average_available_staffed_beds, country_name) %>% 
+  filter(country_name == "Scotland") %>% 
+  specify(response = average_available_staffed_beds) %>%
+  generate(reps = 10000, type = "bootstrap") %>%
+  calculate(stat = "mean")
+
+bootstrap_distn_aasb %>%
+  visualise(binwidth = 10000)
+
+# Calculate a 99.9% CI for ``mean(average_available_staffed_beds)``, and visualise it on the distribution
+
+aasb_ci999 <- bootstrap_distn_aasb %>%
+  get_ci(level = 0.999, type = "percentile")
+aasb_ci999
+
+
+bootstrap_distn_aasb %>%
+  visualise(bins = 30) +
+  shade_ci(endpoints = aasb_ci999)
+
+
+############################################4#######################
+
+
+# Create a bootstrap sampling distribution (average_occupied_beds)
+set.seed(42)
+bootstrap_distn_aob <- beds_oos %>%
+  select(average_occupied_beds, country_name) %>% 
+  filter(country_name == "Scotland") %>% 
+  specify(response = average_occupied_beds) %>%
+  generate(reps = 10000, type = "bootstrap") %>%
+  calculate(stat = "mean")
+
+bootstrap_distn_aob %>%
+  visualise(binwidth = 10000)
+
+# Calculate a 99.9% CI for ``mean(average_occupied_beds)``, and visualise it on the distribution
+
+aob_ci999 <- bootstrap_distn_aob %>%
+  get_ci(level = 0.999, type = "percentile")
+aob_ci999
+
+
+bootstrap_distn_aob %>%
+  visualise(bins = 30) +
+  shade_ci(endpoints = aob_ci999)
+
+
+############################################4#######################
+
+
+# Create a bootstrap sampling distribution (percentage_occupancy)
+set.seed(42)
+bootstrap_distn_po <- beds_oos %>%
+  select(percentage_occupancy, country_name) %>% 
+  filter(country_name == "Scotland") %>% 
+  specify(response = percentage_occupancy) %>%
+  generate(reps = 10000, type = "bootstrap") %>%
+  calculate(stat = "mean")
+
+bootstrap_distn_po %>%
+  visualise(binwidth = 10000)
+
+# Calculate a 99.9% CI for ``mean(percentage_occupancy)``, and visualise it on the distribution
+
+po_ci999 <- bootstrap_distn_po %>%
+  get_ci(level = 0.999, type = "percentile")
+po_ci999
+
+
+bootstrap_distn_po %>%
+  visualise(bins = 30) +
+  shade_ci(endpoints = po_ci999)
+
 ```
 
-## Calculate a 95% CI for ``mean(total_occupied_beds)``, and visualise it on the distribution
 ```{r}
-lot_area_ci999 <- bootstrap_distn %>%
-  get_ci(level = 0.999, type = "percentile")
-lot_area_ci999
+
+# results <- tibble(country_labels, tob_ci999)
+results_tob <- tibble(
+  country_labels, 
+  lower_tob_ci999 = tob_ci999 %>%
+    pull(lower_ci),
+  upper_tob_ci999 = tob_ci999 %>%
+    pull(upper_ci)
+  )
 
 
-bootstrap_distn %>%
-  visualise(bins = 30) +
-  shade_ci(endpoints = lot_area_ci999)
+
+
+# country_labels
+
+# this_result <- c(
+#     HB = sample_num, 
+#     lower = tob_ci999 %>% 
+#       pull(lower_ci), 
+#     upper = tob_ci999 %>%
+#       pull(upper_ci)
+#     )
 ```
 
 
