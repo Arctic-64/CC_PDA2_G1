@@ -128,12 +128,12 @@ tot_stays_age_no_location <- phs_data_clean_location %>%
 
 
 avg_stays_age <- phs_data_clean_location %>% 
-  group_by(age, quarter,sex, location) %>% 
-  summarise(avg_stays = mean(length_of_stay, na.rm = TRUE)) %>% 
+  group_by(age, quarter,sex) %>% 
+  summarise(average_length_of_stay = median(average_length_of_stay, na.rm = TRUE)) %>% 
   mutate(age = str_remove_all(age, "years")) %>% 
   arrange(quarter)
 
-tot_stays_age
+tot_stays_age_no_location
 
 avg_stays_age
 
@@ -158,7 +158,7 @@ ggplot(tot_stays_age) +
 
 ggplot(avg_stays_age) +
   geom_col(position = "dodge", colour = "white", aes(x = age, 
-                                                     y = avg_stays, 
+                                                     y = average_length_of_stay, 
                                                      fill = quarter)) +
   ggtitle("Average length of stays per age") +
   labs(x = "Age", y = "Average Length of stay") +
@@ -172,21 +172,41 @@ ggplot(avg_stays_age) +
 
 ```
 ```{r}
-dashboard_data_table <- tot_stays_age %>%
+avg_stays_age_location <- phs_data_clean_location %>% 
+  group_by(age, quarter,sex, location) %>% 
+  summarise(average_length_of_stay = median(
+    average_length_of_stay, na.rm = TRUE)) %>% 
+  mutate(age = str_remove_all(age, "years"),
+         average_length_of_stay = round(average_length_of_stay)) 
+
+
+location_joined <- inner_join(tot_stays_age, avg_stays_age_location)
+
+dashboard_data_table <- location_joined %>%
+  relocate(age, .after = quarter) %>% 
   rename("Age" = age,
          "Quarter" = quarter,
          "Gender" = sex,
          "Location" = location,
-         "Total Stays" = tot_stays
-         )
+         "Total Stays" = tot_stays,
+         "Average Length of Stay (in days)" = average_length_of_stay
+         ) %>% 
+  arrange(Location)
 
 dashboard_data_table
+
+colnames(dashboard_data_table)
+
 ```
 
 
 
 ```{r}
-tot_and_avg_stays <- inner_join(tot_stays_age, avg_stays_age)
+tot_and_avg_stays <- inner_join(tot_stays_age_no_location, avg_stays_age) %>% 
+  mutate(average_length_of_stay = round(average_length_of_stay)) %>% 
+  arrange(desc(average_length_of_stay))
+
+tot_and_avg_stays
 ```
 
 
