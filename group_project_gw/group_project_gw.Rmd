@@ -41,13 +41,14 @@ phs_admissions_data <- read_csv("../group_project_gw/raw_data/Activity_by_Board_
 
 ```
 
-Selecting data columns of interest, filtering for quarters from 2020-2021 inclusive, column header renaming:
+Selecting data columns of interest, then filtering to (i) include quarters from 2020-2021 inclusive only and (ii) to exclude the aggregates "Scotland" and "All Inpatients and Day cases", then column  renaming:
 
 ```{r}
 phs_admissions_data <- phs_admissions_data %>%
   select(quarter, hb, location, admission_type, specialty_name, episodes, length_of_episode, spells) %>%
   filter(str_detect(quarter, pattern = "^202")) %>%
-  filter(admission_type != "Not Specified") %>%
+  filter(admission_type != "Not Specified", admission_type != "All Inpatients and Day cases") %>%
+  filter(hb != "S92000003") %>% 
   rename("hb_code" = "hb", "location_code" = "location")
 
 ```
@@ -57,7 +58,7 @@ phs_admissions_data <- phs_admissions_data %>%
 Creating tibble containing hb code and hb name:
 
 ```{r}
-hb_name_convert <- tibble(hb_code = c("SB0801", "S08000015", "S08000016", "S08000017", "S08000018", "S08000019", "S08000020", "S08000021", "S08000022", "S08000023", "S08000024", "S08000025", "S08000026", "S08000027", "S08000028", "S08000029", "S08000030", "S08000031", "S08000032", "S92000003", "SN0811", "S27000001"), hb_name = c("The Golden Jubilee National Hospital", "Ayrshire and Arran", "Borders", "Dumfries and Galloway", "Fife", "Forth Valley", "Grampian", "Greater Glasgow and Clyde", "Highland", "Lanarkshire", "Lothian", "Orkney", "Shetland", "Tayside", "Western Isles", "Fife", "Tayside", "Greater Glasgow and Clyde", "Lanarkshire", "Scotland", "National Facility NHS Louisa Jordan", "Non-NHS Provider Location"))
+hb_name_convert <- tibble(hb_code = c("SB0801", "S08000015", "S08000016", "S08000017", "S08000018", "S08000019", "S08000020", "S08000021", "S08000022", "S08000023", "S08000024", "S08000025", "S08000026", "S08000027", "S08000028", "S08000029", "S08000030", "S08000031", "S08000032", "SN0811", "S27000001"), hb_name = c("The Golden Jubilee National Hospital", "Ayrshire and Arran", "Borders", "Dumfries and Galloway", "Fife", "Forth Valley", "Grampian", "Greater Glasgow and Clyde", "Highland", "Lanarkshire", "Lothian", "Orkney", "Shetland", "Tayside", "Western Isles", "Fife", "Tayside", "Greater Glasgow and Clyde", "Lanarkshire", "National Facility NHS Louisa Jordan", "Non-NHS Provider Location"))
 
 ```
 
@@ -78,9 +79,9 @@ Urban = "Forth Valley", "Greater Glasgow and Clyde", "Lanarkshire", "Lothian", "
 Rural = "Ayrshire and Arran", "Borders", "Dumfries and Galloway",  "Fife", "Grampian", "Highland", "Orkney", "Shetland","Tayside", "Western Isles", 
 
 ```{r}
-urban <- c("Forth Valley", "Greater Glasgow and Clyde", "Lanarkshire", "Lothian", "Fife", "Tayside", "Greater Glasgow and Clyde", "Lanarkshire", "The Golden Jubilee National Hospital", "Scotland", "National Facility NHS Louisa Jordan", "Non-NHS Provider Location")
+urban <- c("Forth Valley", "Greater Glasgow and Clyde", "Lanarkshire", "Lothian", "Fife", "Tayside", "Greater Glasgow and Clyde", "Lanarkshire", "The Golden Jubilee National Hospital", "National Facility NHS Louisa Jordan", "Non-NHS Provider Location")
 
-hb_occ_beds <- phs_admissions_data %>%
+phs_admissions_data <- phs_admissions_data %>%
   mutate(urban_rural = if_else(hb_name %in% urban, "Urban", "Rural"), .after = location_code)
 
 ```
@@ -112,11 +113,35 @@ write_csv(phs_admissions_data, "../group_project_gw/clean_data/phs_admissions_da
   
 ```
 
+Creating table of hb and population:
+
+Required if doing per capita calculation
+
+```{r}
+hb_pops <- read_csv("../group_project_gw/raw_data/Health_Board_2019_Population_Estimates.csv") %>% clean_names() %>%
+  rename("hb_code" = "hb")
+
+hb_pops <- hb_pops %>%
+  select(year, hb_code, sex, all_ages) %>%
+  filter(sex == "All", year == "2020") %>%
+  group_by(hb_code) %>%
+  summarise(pop = sum(all_ages))
+
+```
+
+Joining of activity data table with hb population table; joining on the hb code:
+
+```{r}
+phs_admissions_data <- phs_admissions_data %>%
+  left_join(hb_pops, "hb_code" = "hb_code")
+
+```
+
 
 # Data analysis
 
 ```{r}
-# num episodes for one hb per quarter
+# 1. num episodes for one hb per quarter
 # input selector is dropdown option list for diff hbs
 phs_admissions_data %>% 
   filter(hb_name == "Lothian") %>% # Lothian for example
@@ -127,24 +152,24 @@ phs_admissions_data %>%
   geom_point(aes(x = quarter, y = episodes, colour = admission_type), alpha = 1) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
   xlab("Admission type") +
-  ylab("Thousands of episodes") # need to change original y scale to 1000s
+  ylab("Episodes") # need to change original y scale to 1000s
 
 ```
 
-Q. All Inpatients and Day cases is an aggregate so remove? Remove Transfers?
-Q. Remove "Scotland"?
+Q. Remove Transfers?
 
 ```{r}
 # num episodes (normalised) per hb per quarter
 # input selector is dropdown hb option list
 phs_admissions_data %>% 
-  group_by(quarter, hb_name) %>%  
-  summarise(episodes = sum(episodes/total_occupied_beds)) %>% 
+  filter(hb_name != "National Facility NHS Louisa Jordan", hb_name != "Non-NHS Provider Location", hb_name != "The Golden Jubilee National Hospital") %>% # remove hb with pop NA
+  group_by(quarter, hb_name) %>% 
+  summarise(episodes = sum(episodes)/mean(pop)) %>% 
   ggplot() +
   geom_line(aes(x = quarter, y = episodes, group = hb_name, colour = hb_name), alpha = 0.75) +
   geom_point(aes(x = quarter, y = episodes, colour = hb_name), alpha = 0.75) +
   xlab("Quarter") +
-  ylab("Episodes") +
+  ylab("Episodes per capita") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 
@@ -156,15 +181,16 @@ Removed:
 ```{r}
 # num episodes (normalised) per for urban vs. rural
 phs_admissions_data %>%
-  filter(hb_code != "S27000001", hb_code != "SN0811", hb_name != "Scotland") %>% 
+  filter(hb_name != "National Facility NHS Louisa Jordan", hb_name != "Non-NHS Provider Location", hb_name != "The Golden Jubilee National Hospital") %>% # remove hb with pop NA
+  filter(hb_code != "S27000001", hb_code != "SN0811") %>% 
   group_by(urban_rural, admission_type) %>% 
-  summarise(episodes = sum(episodes/total_occupied_beds)) %>% 
+  summarise(episodes = sum(episodes)/mean(pop)) %>% 
   ggplot() +
   aes(x = admission_type, y = episodes) +
   geom_bar(stat = "identity") +
   facet_grid(~urban_rural) +
   xlab("Admission type") +
-  ylab("Episodes") +
+  ylab("Episodes per capita") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 
@@ -176,15 +202,40 @@ Removed:
 ```{r}
 # num episodes (normalised) for urban vs. rural per quarter
 phs_admissions_data %>%
-  filter(hb_code != "S27000001", hb_name != "National Facility NHS Louisa Jordan", hb_name != "Scotland") %>% 
+  filter(hb_name != "National Facility NHS Louisa Jordan", hb_name != "Non-NHS Provider Location", hb_name != "The Golden Jubilee National Hospital") %>% # remove hb with pop NA
+  filter(hb_code != "S27000001", hb_name != "National Facility NHS Louisa Jordan") %>% 
   group_by(quarter, urban_rural) %>% 
-  summarise(episodes = sum(episodes/total_occupied_beds)) %>%
+  summarise(episodes = sum(episodes)/mean(pop)) %>% 
   ggplot() +
   aes(x = quarter, y = episodes, group = urban_rural, colour = urban_rural) +
   geom_line() +
+  ylab("Episodes per capita") +
   ylim(0,NA)
 
 ```
+
+Geospatial plot (extension):
+
+Code sent to Jack to replace the 'no. beds' tab. Polygon selection and piping into server will be explored.
+
+```{r}
+# library(leaflet)
+# library(rgdal)
+
+```
+
+```{r}
+# hb_shapes <- readOGR("../data/HB_WGS_84_EPSG4326/reprojected_hb.shp")
+# 
+# leaflet() %>%
+#   addTiles() %>%
+#   addPolygons(data = hb_shapes,
+#               color = "#660000",
+#               weight = 1)
+
+```
+
+
 
 # Shiny dashboard
 
