@@ -13,7 +13,8 @@ library(rgdal)
 data loading
 ```{r}
 raw_data <- read_csv(here("data/beds_by_nhs_board_of_treatment_and_specialty.csv"))
-hospitals <- read_csv(here("data/hospitals_scotland.csv"))
+hospitals <- read_csv(here("data/hospitals_scotland.csv")) %>%
+filter(!is.na(XCoordinate | YCoordinate))
 health_boards <- read_csv(here("data/HB_scotland.csv"))
 ```
 
@@ -25,19 +26,26 @@ HB_data <- inner_join(raw_data, health_boards, by = c("Location" = "HB"))
 scotland <- read_sf("../data/HB_WGS_84_EPSG4326/reprojected_hb.shp")
 hosptials_data
 HB_data
+
+hospitals_longlat <- hospitals %>%
+st_as_sf(coords = c("XCoordinate", "YCoordinate"), crs = 27700) %>% st_transform(4326) %>%
+st_coordinates() %>%
+as_tibble()
+hospitals <- cbind(hospitals, hospitals_longlat)
+hospitals
 ```
 
 ```{r}
 leaflet() %>%
 addTiles() %>%
   addPolygons(data = scotland, popup = ~HBName, group = "HB_regions") %>%
-  addMarkers(data = hospitals, lng = ~YCoordinate, lat = ~XCoordinate, label = ~LocationName, group = "hospital_locations")
+  addCircles(data = hospitals, lng = ~X, lat = ~Y, label = ~LocationName, group = "hospital_locations", color = "red")
 ```
 
 ```{r}
 leaflet() %>%
 addTiles() %>%
-  addMarkers(data = hospitals, lng = ~XCoordinate, lat = ~YCoordinate, label = ~LocationName, group = "hospital_locations")
+  addMarkers(data = hospitals, lng = ~X, lat = ~Y, label = ~LocationName, group = "hospital_locations")
 ```
 
 

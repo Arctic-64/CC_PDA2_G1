@@ -1,0 +1,4 @@
+"0","leaflet() %>%"
+"0","addTiles() %>%"
+"0","  addPolygons(data = scotland, popup = ~HBName, group = ""HB_regions"") %>%"
+"0","  addCircles(data = hospitals, lng = ~X, lat = ~Y, label = ~LocationName, group = ""hospital_locations"", color = ""red"")"

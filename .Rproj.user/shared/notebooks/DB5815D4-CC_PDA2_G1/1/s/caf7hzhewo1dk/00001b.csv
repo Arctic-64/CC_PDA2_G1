@@ -1,4 +1,0 @@
-"0","hosptials_data <- inner_join(raw_data, hospitals, by = ""Location"")"
-"0","HB_data <- inner_join(raw_data, health_boards, by = c(""Location"" = ""HB""))"
-"0","scotland <- read_sf(""../data/HB_WGS_84_EPSG4326/reprojected_hb.shp"")"
-"0","hosptials_data"

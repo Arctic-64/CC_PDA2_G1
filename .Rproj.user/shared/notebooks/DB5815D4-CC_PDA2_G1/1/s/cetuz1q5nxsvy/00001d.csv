@@ -1,9 +1,0 @@
-"0","leaflet() %>%"
-"0","addTiles() %>%"
-"0","  addPolygons(data = scotland, popup = ~HBName, group = ""HB_regions"") %>%"
-"0","  addMarkers(data = hospitals, lng = ~YCoordinate, lat = ~XCoordinate, label = ~LocationName, group = ""hospital_locations"")"
-"2","Warning in validateCoords(lng, lat, funcName) :"
-"2","
- "
-"2"," Data contains 1 rows with either missing or invalid lat/lon values and will be ignored
-"

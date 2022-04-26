@@ -1,8 +1,0 @@
-"0","leaflet() %>%"
-"0","addTiles() %>%"
-"0","  addMarkers(data = hospitals, lng = ~XCoordinate, lat = ~YCoordinate, label = ~LocationName, group = ""hospital_locations"")"
-"2","Warning in validateCoords(lng, lat, funcName) :"
-"2","
- "
-"2"," Data contains 1 rows with either missing or invalid lat/lon values and will be ignored
-"

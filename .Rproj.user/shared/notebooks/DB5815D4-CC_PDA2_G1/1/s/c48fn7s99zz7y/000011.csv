@@ -1,0 +1,38 @@
+"0","raw_data <- read_csv(here(""data/beds_by_nhs_board_of_treatment_and_specialty.csv""))"
+"1","[1mRows: [22m[34m30448[39m [1mColumns: [22m[34m20[39m
+"
+"1","[36m--[39m [1mColumn specification[22m [36m-------------------------------------------------------------------------------------------------------------------------------------[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (11): Quarter, QuarterQF, HB, HBQF, Location, LocationQF, Specialty, SpecialtyQF, SpecialtyName, SpecialtyNameQF, PercentageOccupancyQF
+[32mdbl[39m  (5): AllStaffedBeds, TotalOccupiedBeds, AverageAvailableStaffedBeds, AverageOccupiedBeds, PercentageOccupancy
+[33mlgl[39m  (4): AllStaffedBedsQF, TotalOccupiedBedsQF, AverageAvailableStaffedBedsQF, AverageOccupiedBedsQF
+"
+"1","
+[36mi[39m Use `spec()` to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set `show_col_types = FALSE` to quiet this message.
+"
+"0","hospitals <- read_csv(here(""data/hospitals_scotland.csv"")) %>%"
+"0","filter(!is.na(XCoordinate | YCoordinate))"
+"1","[1mRows: [22m[34m277[39m [1mColumns: [22m[34m17[39m
+"
+"1","[36m--[39m [1mColumn specification[22m [36m-------------------------------------------------------------------------------------------------------------------------------------[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (14): Location, LocationName, Postcode, AddressLine, HB, HSCP, HSCPQF, CA, CAQF, IntZone, IntZoneQF, DataZone, DataZoneQF, BasedOnPostcode
+[32mdbl[39m  (3): _id, XCoordinate, YCoordinate
+"
+"1","
+[36mi[39m Use `spec()` to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set `show_col_types = FALSE` to quiet this message.
+"
+"0","health_boards <- read_csv(here(""data/HB_scotland.csv""))"
+"1","[1mRows: [22m[34m18[39m [1mColumns: [22m[34m5[39m
+"
+"1","[36m--[39m [1mColumn specification[22m [36m-------------------------------------------------------------------------------------------------------------------------------------[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (3): HB, HBName, Country
+[32mdbl[39m (2): HBDateEnacted, HBDateArchived
+"
+"1","
+[36mi[39m Use `spec()` to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set `show_col_types = FALSE` to quiet this message.
+"
