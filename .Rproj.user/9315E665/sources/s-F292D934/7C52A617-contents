@@ -1,0 +1,157 @@
+library(tidyverse)
+
+# joins
+
+# keys (primary & forigen)
+# primary keys are unique identifiers
+# forigen keys are PK's from another table/peice of data.
+# bridgeing table can be used to map tables to tables with both having duplicate keys. aka joining table.
+
+#mutating joins
+## inner_join, left_, right_, full_
+
+#filtering joins
+#semi_join
+#anti_
+
+## tidy data
+
+## lhs %>% rhs (left hand side pipe right hand side)
+
+## table, replationships
+## one-to-one #pk
+## one-to-many # pk to fk
+## many-to-many # one to many : many to one
+
+customers <- tibble(
+  customer_ID = c(001, 002, 004, 005, 008, 010), 
+  name = c("John Smith", "Jane Adams", "Robert Landry", "Jane Tow", "Raul Tann", "Hilary Joyal"),
+  email_address = c("johnsmith@gmail.com", "janea@gmail.com", "rlabdry@hotmail.com", "janet89@aol.com", "paul.tann1@gmail.com", NA),
+  shipping_address = c("32 Station Road, Edinburgh", "42 Park Drive, Edinburgh", NA, "10 Gardiner Rd, Edinburgh", "12 Main St, Edinburgh", " 234 Queensferry Rd, Edinburgh,")
+)
+orders <- tibble(
+  customer_ID = c(001, 002, 005, 010, 012, 001), 
+  order_number = c("KU65781", "SU98201", "JS76821", "YR28212", "JS91221","YR21873"),
+  order_total = c("?32.50", "?56.00", "?100.02", "?20.25", "?39.50", "?45.00"),
+  product_code = c("XZY780", "XYZ123", "XYZ256", "XYZ262", "XYZ345", "XYZ127")
+)
+past_customers <- tibble(
+  customer_ID = c(020, 021), 
+  name = c("Dave Brown", "Jess Bishop"),
+  email_address = c("dbrown@hotmail.com", "jessb@gmail.com"),
+  shipping_address = c("57 Park View, Leith", "12 Reid Way, Broxburn")
+)
+
+
+customers
+orders
+
+inner_join(customers, orders, by = "customer_ID")
+## which keys appear in both datasets
+
+left_join(customers, orders, by="customer_ID") # will return all rows on LHS
+right_join(customers, orders, by="customer_ID") # will return all rows on the RHS
+
+full_join(customers, orders, by= "customer_ID")
+
+
+customers2 <- customers %>% 
+  mutate(payment_type = c("card", "cash", "cash", "card", "card", "card"))
+
+orders2 <- orders %>%
+  mutate(payment_type = c("card", "cash", "cash", "card", "card", "cash"))
+
+
+inner_join(customers2, orders2, by = c("customer_ID", "payment_type"))
+inner_join(customers2, orders2, by = "customer_ID")
+
+
+#semi_join()# return all rows from x with  match in y
+
+#anti_join()# return all rows from x without a match in y
+
+
+anti_join(customers2, orders2, "customer_ID")
+
+## add cols
+
+statuses <- tibble(
+  status = c("active", "active", "inactive", "inactive", "active", "inactive")
+)
+
+bind_cols(customers, statuses)
+
+bind_rows(customers, past_customers)
+
+
+
+
+
+iris %>%
+  pivot_longer(cols = Species, names_to = "the_names", values_to = "the_values")
+
+
+
+df <- tibble(id = c(1:2), x = c('a', 'b'), y = c('c','d'), z  = c('e','f'))
+df %>%
+  pivot_longer(-id, names_to = "name", values_to = "value")
+
+df %>%
+  pivot_longer(c(-id, -x), names_to = "name", values_to = "value")
+
+
+
+
+subject_hr <- tibble( name = c("SUBJ01","SUBJ02","SUBJ03"), 
+                      hr_am = c(68,72,68), 
+                      hr_pm = c(58,89,52))
+
+subject_hr %>%
+  pivot_longer(cols = c("hr_am", "hr_pm"), names_to = "measurment_time", values_to = "heartrate")
+
+
+
+
+income <- tibble(religion = c("Agnostic","Atheist","Buddhist", "Catholic"), 
+                 X10k = c(12,25,3,75), 
+                 X10k_to_20k = c(34,14,6,60),
+                 X20k_to_30k = c(45,22,10,110))
+
+income %>%
+  pivot_longer(-religion, names_to = "category", values_to = "income")
+
+
+
+messy_orders <- tibble( name = c("Joe Bloggs","Jane Smith","Penny Jones"), 
+                        order_info = c("XY7282/29-06-19","LO0182/15-03-19","AS6812/04-06-19"), 
+                        order_amount = c(58.00,125.00,75.25))
+
+messy_orders
+
+messy_orders %>%
+  separate(order_info, into = c("order_number", "date"), sep = "/")
+
+
+setwd("D:/UNIVERSITY/CodeClan/de13_classnotes/week_02/day_1/3_tidy_data/data/")
+hospitals = read.csv(file = "hospitals93to98.csv")
+
+
+hospitals %>%
+  pivot_longer(cols = starts_with("FY"), names_to = "Year", values_to = "Number", names_prefix = "FY") -> hospitals_long
+
+hospitals_long %>%
+  pivot_wider(names_from = Field, values_from = Number) -> hospitals_wide
+
+view(hospitals_long)
+view(hospitals_wide)
+
+
+# longer names_to values_to (quoted)
+# wider names_from values_from (not quoted)
+
+# seperate (more than one value in a cell)
+# unite combine values from more than one cell
+
+
+
+

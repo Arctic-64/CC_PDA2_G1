@@ -1,0 +1,79 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+weeks 6 day 5 homework
+
+
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(janitor)
+library(infer)
+library(here)
+sleep_data <-  msleep
+
+sleep_data
+
+nrow(sleep_data)
+colnames(sleep_data)
+unique(sleep_data$sleep_total) ## no NA values = good
+sort(unique(sleep_data$name))
+```
+
+
+```{r}
+t.test(sleep_data$sleep_total)
+```
+
+the jabberwakos sleep is 7 hours as denoted by mu
+the confidernece intervul at 95% from the Ttest is 9.46 to 11.405
+7 is outside this window and as such we can say that jabberwoks have a statistically lower ammount of sleep than the other animals
+i also have no idea if this is the right way of doing it, these stats are messing with my head, uni PTSD is at critical levels
+HAAAALLLLPPPP MEEEEEEEEE!!!!
+
+```{r}
+omni = filter(sleep_data, vore == "omni")
+omni = omni$sleep_total
+herb = filter(sleep_data, vore == "herbi")
+herb = herb$sleep_total
+t.test(omni, herb, alternative = "two.sided", var.equal = FALSE)
+
+
+### i made that up, so heres what i think im supposed to be doing below
+######################################################################
+
+sleep_data_by_vore <-  sleep_data %>%
+  filter(vore %in% c("omni", "herbi")) %>%
+  group_by(vore)
+
+null_distribution <- sleep_data_by_vore %>%
+  specify(sleep_total ~ vore)%>%
+  hypothesise(null = "independence") %>%
+  generate(reps = 1000, type = "permute") %>%
+  calculate(stat = "diff in means", order = c("omni", "herbi"))
+
+
+observed_stat <- sleep_data_by_vore%>%
+  specify(sleep_total ~ vore) %>%
+  calculate(stat = "diff in means", order = c("omni", "herbi"))
+
+null_distribution %>%
+  visualize()+
+  shade_p_value(obs_stat = observed_stat, direction = "right")
+
+```
+
+the p vlaue is greater than 0.1 which suggests a general trend dut weak evidence that the means are the same
+this lends credence to the idea that the sleep dureations are different but im bad at math so i have no idea
+
+the second test shows the graph, i think its somehow usefull
+
+
+```{r}
+
+```
+
+

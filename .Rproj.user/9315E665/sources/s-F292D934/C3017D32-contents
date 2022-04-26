@@ -1,0 +1,116 @@
+---
+title: "PDA_NYC_BIKES"
+output: html_document
+date: '2022-04-19'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+library(tsibble)
+library(tsibbledata)
+library(tidyverse)
+library(janitor)
+library(lubridate)
+library(ggplot2)
+library(leaflet)
+library(sf)
+library(rgeos)
+library(rnaturalearth)
+library(rnaturalearthdata)
+```
+
+
+```{r}
+nyc_bikes_df <- clean_names(nyc_bikes)
+```
+
+```{r}
+nyc_bikes_df <- nyc_bikes_df %>%
+  mutate(day = weekdays(start_time), month = months(start_time), year = year(start_time)) %>%
+  mutate(age = year - birth_year) %>%
+  mutate(age = ifelse(age>100, NA, age))
+
+
+nyc_bikes_df$day <- ordered(nyc_bikes_df$day, levels=c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"))
+nyc_bikes_df$month <- ordered(nyc_bikes_df$month, levels=c("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"))
+
+```
+all bike usage over time
+
+```{r}
+ggplot(nyc_bikes_df, aes(x=start_time, y=..density..)) +
+  geom_histogram(bins = 52, colour = "black") + 
+  geom_density(colour = "red") +
+  xlab("date")
+```
+```{r}
+print("this yearly diagram of service use demonstrates a seasonal pattern, however more data will be required to confirm this theory.
+current marketing and business decisions should be conducted with expecte high use in july and august and limmited use over the winter.")
+```
+peak bike usage times
+
+```{r}
+ggplot(nyc_bikes_df, aes(x=month, fill = day)) +
+  geom_bar() + 
+  xlab("month")
+```
+
+
+```{r}
+print("the highest usage for the service is dureing the months of july and august likely due to the good weather.
+the most popular days for usage however are weekdays which possibly suggests there is a market for commuters using this service for transport to work. ")
+```
+
+bike usage by age and gender
+
+```{r}
+ggplot(nyc_bikes_df, aes(x=age, fill = gender)) +
+  geom_bar() + 
+  xlab("age") +
+  theme_bw()
+```
+```{r}
+print("the average age for a user is between 25 and 35, while an anomalous stand out group does seem to exist, the gender imporbability seen here calls into the question the reliability of this data for these factors.
+
+the ratios of genders using the service appear to be consistent with males being greater users of the service by around double.
+this can affect the marketing campaigns and market audience decisions going forward.
+a massive portion of the unknown genders is unknown, however this is magnified in a particular age group which is a statistical improbability.
+its very possible the data on these people is inaccurate.")
+```
+
+
+
+
+```{r}
+bike_station_data <- select(nyc_bikes_df, start_station, start_long, start_lat) %>%
+distinct(start_station, .keep_all = TRUE)
+
+leaflet(bike_station_data) %>%
+  addTiles() %>%
+  setView(-74.06, 40.72, zoom = 13) %>%
+  addCircleMarkers(lng = ~start_long, lat = ~start_lat, 
+             popup = ~start_station)
+```
+
+```{r}
+print("this plot shows the geographical position between the stations.
+there are 52 active stations in the area covered by the data.
+the density of stations near jersey city is greater and so the possibility for inefficiancy increases")
+```
+
+
+```{r}
+print("future work on this dataset should include an analysis on which stations are most used and the distances of each trip using the station locations coordinates.
+      this can also be broken down into the average distance covered by individual bikes. this information can be used to rotate bikes between high use and low use stations.
+      or position the bikes at the stations such that the bikes of low use become more available to distruibute the bikes usage.")
+```
+
