@@ -1,0 +1,15 @@
+"0","```r
+t.test(sleep_data$sleep_total)
+```"
+"1","
+	One Sample t-test
+
+data:  sleep_data$sleep_total
+t = 21.359, df = 82, p-value < 2.2e-16
+alternative hypothesis: true mean is not equal to 0
+95 percent confidence interval:
+  9.461972 11.405497
+sample estimates:
+mean of x 
+ 10.43373 
+"

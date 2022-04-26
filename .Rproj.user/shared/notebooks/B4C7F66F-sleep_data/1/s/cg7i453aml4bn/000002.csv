@@ -1,0 +1,43 @@
+"0","```r
+omni = filter(sleep_data, vore == \"omni\")
+omni = omni$sleep_total
+herb = filter(sleep_data, vore == \"herbi\")
+herb = herb$sleep_total
+t.test(omni, herb, alternative = \"two.sided\", var.equal = FALSE)
+```"
+"1","
+	Welch Two Sample t-test
+
+data:  omni and herb
+t = 1.3039, df = 49.974, p-value = 0.1982
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -0.7650114  3.5962614
+sample estimates:
+mean of x mean of y 
+10.925000  9.509375 
+"
+"0","```r
+### i made that up, so heres what i think im supposed to be doing below
+######################################################################
+
+sleep_data_by_vore <-  sleep_data %>%
+  filter(vore %in% c(\"omni\", \"herbi\")) %>%
+  group_by(vore)
+
+null_distribution <- sleep_data_by_vore %>%
+  specify(sleep_total ~ vore)%>%
+  hypothesise(null = \"independence\") %>%
+  generate(reps = 1000, type = \"permute\") %>%
+  calculate(stat = \"diff in means\", order = c(\"omni\", \"herbi\"))
+
+
+observed_stat <- sleep_data_by_vore%>%
+  specify(sleep_total ~ vore) %>%
+  calculate(stat = \"diff in means\", order = c(\"omni\", \"herbi\"))
+
+null_distribution %>%
+  visualize()+
+  shade_p_value(obs_stat = observed_stat, direction = \"right\")
+
+```"
