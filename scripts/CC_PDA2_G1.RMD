@@ -6,6 +6,7 @@ library(ggplot2)
 library(here)
 library(lubridate)
 library(sf)
+library(leaflet)
 ```
 
 data loading
@@ -18,11 +19,12 @@ addition of geo data
 
 ```{r}
 data <- inner_join(raw_data, hospitals, by = "Location")
-data
+scotland
 ```
 
 data preprocessing
 ```{r}
+
 ```
 
 ```{r}

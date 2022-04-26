@@ -1,2 +1,0 @@
-"0","data <- inner_join(raw_data, hospitals, by = ""Location"")"
-"0","data"
