@@ -11,6 +11,7 @@
 library(shiny)
 library(tidyverse)
 library(shinythemes)
+library(shinyWidgets)
 
 
 # Load data
@@ -18,18 +19,21 @@ beds <- read_csv("beds_clean.csv")
 
 
 # Get drop-down list menu options
-hb_name_beds <- unique(beds$hb_name) %>% 
+hb_name_labels <- unique(beds$hb_name) %>% 
   discard(is.na)
 
-shb_name_beds <- unique(beds$shb_name)  %>% 
+shb_name_labels <- unique(beds$shb_name)  %>% 
   discard(is.na)
 
-country_name_beds <- unique(beds$country_name) %>% 
+country_name_labels <- unique(beds$country_name) %>% 
   discard(is.na)
+
+kpi_labels <- c("total_occupied_beds", "average_available_staffed_beds",
+               "average_occupied_beds", "percentage_occupancy")
 
 
 # The palette as per SF:
-phs_palette <- c("#99DAF5", "#004785")
+phs_palette <- c("#99DAF5", "#004785", "#C027B9", "#82BB25")
 
 
 
@@ -47,7 +51,12 @@ ui <- fluidPage(
       sidebarPanel(
         selectInput("nhs_board_input",
                     "Select Board",
-                    choices = hb_name_beds
+                    choices = hb_name_labels
+        ),
+        
+        selectInput("kpi_input",
+                    "Select Key Performance Index (KPI)",
+                    choices = kpi_labels
         )
         
         
@@ -66,12 +75,13 @@ ui <- fluidPage(
 server <- function(input, output) {
 
     output$trend_plot <- renderPlot({
-      
+
       beds %>%
         filter(hb_name == input$nhs_board_input) %>%
         filter(location == hb) %>%
         ggplot() +
-        aes(x = quarter, y = total_occupied_beds, group = country_name, colour = hb_name) +
+        aes(x = quarter, y = .data[[input$kpi_input]], group = country_name, colour = hb_name) +
+        # aes_string(x = "quarter", y = .data[["input$kpi_labels"]], group = "country_name", colour = "hb_name") +
         geom_line() +
         geom_point() +
         scale_colour_manual(guide = "none", values = phs_palette[2]) +
@@ -82,3 +92,5 @@ server <- function(input, output) {
 
 # Run the application 
 shinyApp(ui = ui, server = server)
+
+

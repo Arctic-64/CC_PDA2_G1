@@ -61,7 +61,7 @@ library(here)
 ```
 
 ```
-## here() starts at C:/Users/John/Documents/CodeClan/group_project_john_hios/phs_db
+## here() starts at C:/Users/John/Documents/CodeClan/CC_PDA2_G1/group_project_john_hios/phs_db
 ```
 
 ```r
@@ -641,7 +641,7 @@ beds %>%
 
 ### Sanity check No. 1. 
 
-Check if I pick in the location column the aggregated results of value S08000031 
+Check if I pick in the location column the aggregated results of value S08000031 for NHS Greater Glasgow and S08000020 for Grampian
 
 ```r
 beds %>%
@@ -837,16 +837,37 @@ beds %>%
 ![](my_phs_testpad_files/figure-html/unnamed-chunk-29-4.png)<!-- -->
 
 
+# Save cleaned data
+
+Write updated beds data to a CSV file.
+
+```r
+ write_csv(beds, here("beds_clean.csv"))
+```
 
 
 
 
+# Doodles
+
+
+```r
+country_name_beds <- unique(beds$country_name) %>% 
+  discard(is.na)
+```
+
+
+```r
+hb_name_beds <- unique(beds$hb_name) %>% 
+  discard(is.na)
+```
 
 
 
-
-
-
+```r
+shb_name_beds <- unique(beds$shb_name) %>% 
+  discard(is.na)
+```
 
 
 

@@ -27,7 +27,7 @@ library(ggthemes)
 ## Set up colour palette
 ```{r}
 # The palette as per SF:
-phs_palette <- c("#99DAF5", "#004785")
+phs_palette <- c("#99DAF5", "#004785", "#C027B9", "#82BB25")
 
 # # To use for fills, add
 #   scale_fill_manual(values = phs_palette)
@@ -63,7 +63,10 @@ beds %>%
 ### Keep data related to our time frame of interest 
 ```{r}
 quarters_in_scope <- c("2020Q1", "2020Q2", "2020Q3", "2020Q4", "2021Q1", "2021Q2", "2021Q3")
+```
 
+
+```{r}
 beds <- beds %>%
   filter(Quarter %in% quarters_in_scope)
 ```
