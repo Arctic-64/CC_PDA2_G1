@@ -158,7 +158,7 @@ beds %>%
 
 
 
-## Join bed & health board
+## Joint bed & health board
 ```{r}
 beds <- beds %>%
   left_join(health_board_labels, "HB")
@@ -222,132 +222,7 @@ beds %>%
 
 
 
-# Add confidence interval information in beds 
-
-
-## View health board data
-```{r}
-hb_ci <- read_csv("hb_ci.csv") 
-
-glimpse(hb_ci)
-```
-
-## View special health board data
-```{r}
-shb_ci <- read_csv("shb_ci.csv") 
-
-glimpse(shb_ci)
-```
-
-## View country data
-```{r}
-country_ci <- read_csv("country_ci.csv") 
-
-glimpse(country_ci)
-```
-
-
-## Join bed & country ci
-```{r}
-country_ci <- country_ci%>% 
-  select(-country_name)
-
-beds <- beds %>%
-  left_join(country_ci, by = c("hb" = "country"))
-
-glimpse(beds)
-```
-
-## Join bed & health board
-```{r}
-hb_ci <- hb_ci%>% 
-  select(-hb_name)
-
-
-beds <- beds %>%
-  left_join(hb_ci, "hb")
-
-glimpse(beds)
-```
-
-## Clean up junk
-```{r}
-beds <- beds %>%
-  mutate(lower_tob_ci999 = if_else(!is.na(lower_tob_ci999.x), lower_tob_ci999.x, lower_tob_ci999.y)) %>%
-  select(-lower_tob_ci999.x, -lower_tob_ci999.y) %>%
-  mutate(upper_tob_ci999 = if_else(!is.na(upper_tob_ci999.x), upper_tob_ci999.x, upper_tob_ci999.y)) %>%
-  select(-upper_tob_ci999.x, -upper_tob_ci999.y) %>%
-  mutate(lower_aasb_ci999 = if_else(!is.na(lower_aasb_ci999.x), lower_aasb_ci999.x, lower_aasb_ci999.y)) %>%
-  select(-lower_aasb_ci999.x, -lower_aasb_ci999.y) %>%
-  mutate(upper_aasb_ci999 = if_else(!is.na(upper_aasb_ci999.x), upper_aasb_ci999.x, upper_aasb_ci999.y)) %>%
-  select(-upper_aasb_ci999.x, -upper_aasb_ci999.y) %>%
-  mutate(lower_aob_ci999 = if_else(!is.na(lower_aob_ci999.x), lower_aob_ci999.x, lower_aob_ci999.y)) %>%
-  select(-lower_aob_ci999.x, -lower_aob_ci999.y) %>%
-  mutate(upper_aob_ci999 = if_else(!is.na(upper_aob_ci999.x), upper_aob_ci999.x, upper_aob_ci999.y)) %>%
-  select(-upper_aob_ci999.x, -upper_aob_ci999.y) %>%
-  mutate(lower_po_ci999 = if_else(!is.na(lower_po_ci999.x), lower_po_ci999.x, lower_po_ci999.y)) %>%
-  select(-lower_po_ci999.x, -lower_po_ci999.y) %>%
-  mutate(upper_po_ci999 = if_else(!is.na(upper_po_ci999.x), upper_po_ci999.x, upper_po_ci999.y)) %>%
-  select(-upper_po_ci999.x, -upper_po_ci999.y)
-
-glimpse(beds)
-```
-
-## Join bed & special health board
-```{r}
-shb_ci <- shb_ci%>% 
-  select(-shb_name)
-
-
-beds <- beds %>%
-  left_join(shb_ci, , by = c("hb" = "shb"))
-
-glimpse(beds)
-```
-
-
-## Clean up junk
-```{r}
-beds <- beds %>%
-  mutate(lower_tob_ci999 = if_else(!is.na(lower_tob_ci999.x), lower_tob_ci999.x, lower_tob_ci999.y)) %>%
-  select(-lower_tob_ci999.x, -lower_tob_ci999.y) %>%
-  mutate(upper_tob_ci999 = if_else(!is.na(upper_tob_ci999.x), upper_tob_ci999.x, upper_tob_ci999.y)) %>%
-  select(-upper_tob_ci999.x, -upper_tob_ci999.y) %>%
-  mutate(lower_aasb_ci999 = if_else(!is.na(lower_aasb_ci999.x), lower_aasb_ci999.x, lower_aasb_ci999.y)) %>%
-  select(-lower_aasb_ci999.x, -lower_aasb_ci999.y) %>%
-  mutate(upper_aasb_ci999 = if_else(!is.na(upper_aasb_ci999.x), upper_aasb_ci999.x, upper_aasb_ci999.y)) %>%
-  select(-upper_aasb_ci999.x, -upper_aasb_ci999.y) %>%
-  mutate(lower_aob_ci999 = if_else(!is.na(lower_aob_ci999.x), lower_aob_ci999.x, lower_aob_ci999.y)) %>%
-  select(-lower_aob_ci999.x, -lower_aob_ci999.y) %>%
-  mutate(upper_aob_ci999 = if_else(!is.na(upper_aob_ci999.x), upper_aob_ci999.x, upper_aob_ci999.y)) %>%
-  select(-upper_aob_ci999.x, -upper_aob_ci999.y) %>%
-  mutate(lower_po_ci999 = if_else(!is.na(lower_po_ci999.x), lower_po_ci999.x, lower_po_ci999.y)) %>%
-  select(-lower_po_ci999.x, -lower_po_ci999.y) %>%
-  mutate(upper_po_ci999 = if_else(!is.na(upper_po_ci999.x), upper_po_ci999.x, upper_po_ci999.y)) %>%
-  select(-upper_po_ci999.x, -upper_po_ci999.y)
-
-glimpse(beds)
-```
-
-
 # KPI plots (Scotland: 2020Q1 - 2021Q3)
-
-
-```{r}
-## Test plot
-
-beds %>%
-  filter(country_name == "Scotland") %>%
-  ggplot() +
-  aes(x = quarter, group = country_name) +
-  geom_line(aes(y = total_occupied_beds, colour = country_name)) +
-  geom_point(aes(y = total_occupied_beds, colour = country_name)) +
-  geom_line(aes(y = lower_tob_ci999), colour = "red") +
-  geom_line(aes(y = upper_tob_ci999), colour = "red") +
-  scale_colour_manual(guide = "none", values = phs_palette[2]) +
-  ylim(c(0, NA))
-  
-```
 
 
 ## Selected Geography: Scotland
@@ -355,11 +230,9 @@ beds %>%
 beds %>%
   filter(country_name == "Scotland") %>% 
   ggplot() +
-  aes(x = quarter, group = country_name) +
-  geom_line(aes(y = total_occupied_beds, colour = country_name)) +
-  geom_point(aes(y = total_occupied_beds, colour = country_name)) +
-  geom_line(aes(y = lower_tob_ci999), colour = "red") +
-  geom_line(aes(y = upper_tob_ci999), colour = "red") +
+  aes(x = quarter, y = total_occupied_beds, group = country_name, colour = country_name) +
+  geom_line() +
+  geom_point() +
   scale_colour_manual(guide = "none", values = phs_palette[2]) +
   ylim(c(0, NA))
 
@@ -367,11 +240,9 @@ beds %>%
 beds %>%
   filter(country_name == "Scotland") %>%
   ggplot() +
-  aes(x = quarter, group = country_name) +
-  geom_line(aes(y = average_available_staffed_beds, colour = country_name)) +
-  geom_point(aes(y = average_available_staffed_beds, colour = country_name)) +
-  geom_line(aes(y = lower_aasb_ci999), colour = "red") +
-  geom_line(aes(y = upper_aasb_ci999), colour = "red") +
+  aes(x = quarter, y = average_available_staffed_beds, group = country_name, colour = country_name) +
+  geom_line() +
+  geom_point() +
   scale_colour_manual(guide = "none", values = phs_palette[2]) +
   ylim(c(0, NA))
 
@@ -379,26 +250,20 @@ beds %>%
 beds %>%
   filter(country_name == "Scotland") %>%
   ggplot() +
-  aes(x = quarter, group = country_name) +
-  geom_line(aes(y = average_occupied_beds, colour = country_name)) +
-  geom_point(aes(y = average_occupied_beds, colour = country_name)) +
-  geom_line(aes(y = lower_aob_ci999), colour = "red") +
-  geom_line(aes(y = upper_aob_ci999), colour = "red") +
+  aes(x = quarter, y = average_occupied_beds, group = country_name, colour = country_name) +
+  geom_line() +
+  geom_point() +
   scale_colour_manual(guide = "none", values = phs_palette[2]) +
   ylim(c(0, NA))
-
 
 beds %>%
   filter(country_name == "Scotland") %>%
   ggplot() +
-  aes(x = quarter, group = country_name) +
-  geom_line(aes(y = percentage_occupancy, colour = country_name)) +
-  geom_point(aes(y = percentage_occupancy, colour = country_name)) +
-  geom_line(aes(y = lower_po_ci999), colour = "red") +
-  geom_line(aes(y = upper_po_ci999), colour = "red") +
+  aes(x = quarter, y = percentage_occupancy, group = country_name, colour = country_name) +
+  geom_line() +
+  geom_point() +
   scale_colour_manual(guide = "none", values = phs_palette[2]) +
   ylim(c(0, NA))
-
 ```
 
 ### Sanity check No. 1. 
@@ -432,41 +297,11 @@ beds %>%
 ```{r}
 beds %>%
   filter(hb_name == "NHS Greater Glasgow and Clyde") %>%
-  filter(location == hb) %>%  
+  filter(location == hb) %>% 
   ggplot() +
-  aes(x = quarter, group = hb_name) +
-  geom_line(aes(y = total_occupied_beds, colour = hb_name)) +
-  geom_point(aes(y = total_occupied_beds, colour = hb_name)) +
-  geom_line(aes(y = lower_tob_ci999), colour = "red") +
-  geom_line(aes(y = upper_tob_ci999), colour = "red") +
-  scale_colour_manual(guide = "none", values = phs_palette[2]) +
-  ylim(c(0, NA))
-
-
-
-beds %>%
-  filter(hb_name == "NHS Greater Glasgow and Clyde") %>%
-  filter(location == hb) %>%  
-  ggplot() +
-  aes(x = quarter, group = hb_name) +
-  geom_line(aes(y = average_available_staffed_beds, colour = hb_name)) +
-  geom_point(aes(y = average_available_staffed_beds, colour = hb_name)) +
-  geom_line(aes(y = lower_aasb_ci999), colour = "red") +
-  geom_line(aes(y = upper_aasb_ci999), colour = "red") +
-  scale_colour_manual(guide = "none", values = phs_palette[2]) +
-  ylim(c(0, NA))
-
-
-
-beds %>%
-  filter(hb_name == "NHS Greater Glasgow and Clyde") %>%
-  filter(location == hb) %>%  
-  ggplot() +
-  aes(x = quarter, group = hb_name) +
-  geom_line(aes(y = average_occupied_beds, colour = hb_name)) +
-  geom_point(aes(y = average_occupied_beds, colour = hb_name)) +
-  geom_line(aes(y = lower_aob_ci999), colour = "red") +
-  geom_line(aes(y = upper_aob_ci999), colour = "red") +
+  aes(x = quarter, y = total_occupied_beds, group = country_name, colour = hb_name) +
+  geom_line() +
+  geom_point() +
   scale_colour_manual(guide = "none", values = phs_palette[2]) +
   ylim(c(0, NA))
 
@@ -475,14 +310,32 @@ beds %>%
   filter(hb_name == "NHS Greater Glasgow and Clyde") %>%
   filter(location == hb) %>%  
   ggplot() +
-  aes(x = quarter, group = hb_name) +
-  geom_line(aes(y = percentage_occupancy, colour = hb_name)) +
-  geom_point(aes(y = percentage_occupancy, colour = hb_name)) +
-  geom_line(aes(y = lower_po_ci999), colour = "red") +
-  geom_line(aes(y = upper_po_ci999), colour = "red") +
+  aes(x = quarter, y = average_available_staffed_beds, group = country_name, colour = hb_name) +
+  geom_line() +
+  geom_point() +
   scale_colour_manual(guide = "none", values = phs_palette[2]) +
   ylim(c(0, NA))
 
+
+beds %>%
+  filter(hb_name == "NHS Greater Glasgow and Clyde") %>%
+  filter(location == hb) %>% 
+  ggplot() +
+  aes(x = quarter, y = average_occupied_beds, group = country_name, colour = hb_name) +
+  geom_line() +
+  geom_point() +
+  scale_colour_manual(guide = "none", values = phs_palette[2]) +
+  ylim(c(0, NA))
+
+beds %>%
+  filter(hb_name == "NHS Greater Glasgow and Clyde") %>%
+  filter(location == hb) %>%  
+  ggplot() +
+  aes(x = quarter, y = percentage_occupancy, group = country_name, colour = hb_name) +
+  geom_line() +
+  geom_point() +
+  scale_colour_manual(guide = "none", values = phs_palette[2]) +
+  ylim(c(0, NA))
 ```
 
 
@@ -517,56 +370,43 @@ beds %>%
   filter(shb_name == "The Golden Jubilee National Hospital") %>%
   filter(location == hb) %>% 
   ggplot() +
-  aes(x = quarter, group = shb_name) +
-  geom_line(aes(y = total_occupied_beds, colour = shb_name)) +
-  geom_point(aes(y = total_occupied_beds, colour = shb_name)) +
-  geom_line(aes(y = lower_tob_ci999), colour = "red") +
-  geom_line(aes(y = upper_tob_ci999), colour = "red") +
+  aes(x = quarter, y = total_occupied_beds, group = country_name, colour = shb_name) +
+  geom_line() +
+  geom_point() +
   scale_colour_manual(guide = "none", values = phs_palette[2]) +
   ylim(c(0, NA))
-
 
 
 beds %>%
   filter(shb_name == "The Golden Jubilee National Hospital") %>%
-  filter(location == hb) %>%
+  filter(location == hb) %>%  
   ggplot() +
-  aes(x = quarter, group = shb_name) +
-  geom_line(aes(y = average_available_staffed_beds, colour = shb_name)) +
-  geom_point(aes(y = average_available_staffed_beds, colour = shb_name)) +
-  geom_line(aes(y = lower_aasb_ci999), colour = "red") +
-  geom_line(aes(y = upper_aasb_ci999), colour = "red") +
+  aes(x = quarter, y = average_available_staffed_beds, group = country_name, colour = shb_name) +
+  geom_line() +
+  geom_point() +
   scale_colour_manual(guide = "none", values = phs_palette[2]) +
   ylim(c(0, NA))
-
-
-
-beds %>%
-  filter(shb_name == "The Golden Jubilee National Hospital") %>%
-  filter(location == hb) %>%
-  ggplot() +
-  aes(x = quarter, group = shb_name) +
-  geom_line(aes(y = average_occupied_beds, colour = shb_name)) +
-  geom_point(aes(y = average_occupied_beds, colour = shb_name)) +
-  geom_line(aes(y = lower_aob_ci999), colour = "red") +
-  geom_line(aes(y = upper_aob_ci999), colour = "red") +
-  scale_colour_manual(guide = "none", values = phs_palette[2]) +
-  ylim(c(0, NA))
-
 
 
 beds %>%
   filter(shb_name == "The Golden Jubilee National Hospital") %>%
   filter(location == hb) %>% 
   ggplot() +
-  aes(x = quarter, group = shb_name) +
-  geom_line(aes(y = percentage_occupancy, colour = shb_name)) +
-  geom_point(aes(y = percentage_occupancy, colour = shb_name)) +
-  geom_line(aes(y = lower_po_ci999), colour = "red") +
-  geom_line(aes(y = upper_po_ci999), colour = "red") +
+  aes(x = quarter, y = average_occupied_beds, group = country_name, colour = shb_name) +
+  geom_line() +
+  geom_point() +
   scale_colour_manual(guide = "none", values = phs_palette[2]) +
   ylim(c(0, NA))
 
+beds %>%
+  filter(shb_name == "The Golden Jubilee National Hospital") %>%
+  filter(location == hb) %>%  
+  ggplot() +
+  aes(x = quarter, y = percentage_occupancy, group = country_name, colour = shb_name) +
+  geom_line() +
+  geom_point() +
+  scale_colour_manual(guide = "none", values = phs_palette[2]) +
+  ylim(c(0, NA))
 ```
 
 
@@ -574,7 +414,7 @@ beds %>%
 
 Write updated beds data to a CSV file.
 ```{r}
- write_csv(beds, here("beds_ci_clean.csv"))
+ write_csv(beds, here("beds_clean.csv"))
 ```
 
 

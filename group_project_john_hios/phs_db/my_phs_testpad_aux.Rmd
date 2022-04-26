@@ -316,7 +316,7 @@ beds_oos %>%
 ## Selected Geography: NHS Board
 ```{r}
 beds_oos %>%
-  filter(hb_name == "NHS Greater Glasgow and Clyde") %>%
+  filter(hb_name == "NHS Ayrshire and Arran") %>%
   filter(location == hb) %>% 
   ggplot() +
   aes(x = quarter, y = total_occupied_beds, group = country_name, colour = hb_name) +
@@ -328,7 +328,7 @@ beds_oos %>%
 
 
 beds_oos %>%
-  filter(hb_name == "NHS Greater Glasgow and Clyde") %>%
+  filter(hb_name == "NHS Ayrshire and Arran") %>%
   filter(location == hb) %>%  
   ggplot() +
   aes(x = quarter, y = average_available_staffed_beds, group = country_name, colour = hb_name) +
@@ -340,7 +340,7 @@ beds_oos %>%
 
 
 beds_oos %>%
-  filter(hb_name == "NHS Greater Glasgow and Clyde") %>%
+  filter(hb_name == "NHS Ayrshire and Arran") %>%
   filter(location == hb) %>% 
   ggplot() +
   aes(x = quarter, y = average_occupied_beds, group = country_name, colour = hb_name) +
@@ -351,7 +351,7 @@ beds_oos %>%
   theme(axis.text.x = element_text(angle = 30, vjust = +1, hjust = 1))
 
 beds_oos %>%
-  filter(hb_name == "NHS Greater Glasgow and Clyde") %>%
+  filter(hb_name == "NHS Ayrshire and Arran") %>%
   filter(location == hb) %>%  
   ggplot() +
   aes(x = quarter, y = percentage_occupancy, group = country_name, colour = hb_name) +
@@ -656,7 +656,7 @@ results_country <- tibble(
 
 
 
-# Investigate distribution of NHS data for ``The Golden Jubilee National Hospital``
+# Investigate distribution of SHB data for ``The Golden Jubilee National Hospital``
 
 ## Histogram
 ```{r}
@@ -827,6 +827,225 @@ results_shb <- tibble(
   )
 
 ```
+
+
+# Investigate distribution of all NHB data 
+
+## View all HB values
+```{r}
+beds_hbs_names <- beds_oos %>% 
+  distinct(hb, hb_name)
+```
+
+## Histogram
+```{r}
+
+this_nhb <- beds_hbs_names[[6,1]]
+
+beds_oos %>%
+  select(total_occupied_beds, location) %>%
+  filter(location == this_nhb) %>% 
+  ggplot() +
+  aes(x = total_occupied_beds) +
+  geom_histogram(col = "white", binwidth = 1000)
+
+
+beds_oos %>%
+  select(average_available_staffed_beds, location) %>%
+  filter(location == this_nhb) %>% 
+  ggplot() +
+  aes(x = average_available_staffed_beds) +
+  geom_histogram(col = "white", binwidth = 20)
+
+
+beds_oos %>%
+  select(average_occupied_beds, location) %>%
+  filter(location == this_nhb) %>% 
+  ggplot() +
+  aes(x = average_occupied_beds) +
+  geom_histogram(col = "white", binwidth = 20)
+
+
+beds_oos %>%
+  select(percentage_occupancy, location) %>%
+  filter(location == this_nhb) %>%  
+  ggplot() +
+  aes(x = percentage_occupancy) +
+  geom_histogram(col = "white", binwidth = 1)
+```
+
+
+## Boostrap Sampling distribution & 99.9% CI calculation
+
+```{r}
+
+results_nhb <- tibble()
+
+
+for (nhb_num in 2:15){
+  
+
+  this_nhb <- beds_hbs_names[[nhb_num,1]]
+  
+  
+  # Create a bootstrap sampling distribution (total_occupied_beds)
+  set.seed(42)
+  bootstrap_distn_tob <- beds_oos %>%
+    select(total_occupied_beds, location) %>%
+    filter(location == this_nhb) %>% 
+    specify(response = total_occupied_beds) %>%
+    generate(reps = 10000, type = "bootstrap") %>%
+    calculate(stat = "mean")
+  
+  bootstrap_distn_tob %>%
+    visualise(binwidth = 10000)
+  
+  # Calculate a 99.9% CI for ``mean(total_occupied_beds)``, and visualise it on the distribution
+  
+  tob_ci999 <- bootstrap_distn_tob %>%
+    get_ci(level = 0.999, type = "percentile")
+  tob_ci999
+  
+  
+  bootstrap_distn_tob %>%
+    visualise(bins = 30) +
+    shade_ci(endpoints = tob_ci999)
+  
+  
+  ############################################4#######################
+  
+  
+  # Create a bootstrap sampling distribution (average_available_staffed_beds)
+  set.seed(42)
+  bootstrap_distn_aasb <- beds_oos %>%
+    select(average_available_staffed_beds, location) %>%
+    filter(location == this_nhb) %>% 
+    specify(response = average_available_staffed_beds) %>%
+    generate(reps = 10000, type = "bootstrap") %>%
+    calculate(stat = "mean")
+  
+  bootstrap_distn_aasb %>%
+    visualise(binwidth = 10000)
+  
+  # Calculate a 99.9% CI for ``mean(average_available_staffed_beds)``, and visualise it on the distribution
+  
+  aasb_ci999 <- bootstrap_distn_aasb %>%
+    get_ci(level = 0.999, type = "percentile")
+  aasb_ci999
+  
+  
+  bootstrap_distn_aasb %>%
+    visualise(bins = 30) +
+    shade_ci(endpoints = aasb_ci999)
+  
+  
+  ############################################4#######################
+  
+  
+  # Create a bootstrap sampling distribution (average_occupied_beds)
+  set.seed(42)
+  bootstrap_distn_aob <- beds_oos %>%
+    select(average_occupied_beds, location) %>%
+    filter(location == this_nhb) %>% 
+    specify(response = average_occupied_beds) %>%
+    generate(reps = 10000, type = "bootstrap") %>%
+    calculate(stat = "mean")
+  
+  bootstrap_distn_aob %>%
+    visualise(binwidth = 10000)
+  
+  # Calculate a 99.9% CI for ``mean(average_occupied_beds)``, and visualise it on the distribution
+  
+  aob_ci999 <- bootstrap_distn_aob %>%
+    get_ci(level = 0.999, type = "percentile")
+  aob_ci999
+  
+  
+  bootstrap_distn_aob %>%
+    visualise(bins = 30) +
+    shade_ci(endpoints = aob_ci999)
+  
+  
+  ############################################4#######################
+  
+  
+  # Create a bootstrap sampling distribution (percentage_occupancy)
+  set.seed(42)
+  bootstrap_distn_po <- beds_oos %>%
+    select(percentage_occupancy, location) %>%
+    filter(location == this_nhb) %>% 
+    specify(response = percentage_occupancy) %>%
+    generate(reps = 10000, type = "bootstrap") %>%
+    calculate(stat = "mean")
+  
+  bootstrap_distn_po %>%
+    visualise(binwidth = 10000)
+  
+  # Calculate a 99.9% CI for ``mean(percentage_occupancy)``, and visualise it on the distribution
+  
+  po_ci999 <- bootstrap_distn_po %>%
+    get_ci(level = 0.999, type = "percentile")
+  po_ci999
+  
+  
+  bootstrap_distn_po %>%
+    visualise(bins = 30) +
+    shade_ci(endpoints = po_ci999)
+
+
+# Gather all confidence intervals in one tibble
+
+
+this_result <- tibble(
+  beds_hbs_names[nhb_num,], 
+  lower_tob_ci999 = tob_ci999 %>%
+    pull(lower_ci),
+  upper_tob_ci999 = tob_ci999 %>%
+    pull(upper_ci), 
+  lower_aasb_ci999 = aasb_ci999 %>%
+    pull(lower_ci),
+  upper_aasb_ci999 = aasb_ci999 %>%
+    pull(upper_ci), 
+  lower_aob_ci999 = aob_ci999 %>%
+    pull(lower_ci),
+  upper_aob_ci999 = aob_ci999 %>%
+    pull(upper_ci), 
+  lower_po_ci999 = po_ci999 %>%
+    pull(lower_ci),
+  upper_po_ci999 = po_ci999 %>%
+    pull(upper_ci)
+  )
+
+
+# add this_result to growing tibble of results
+  results_nhb <- results_nhb %>%
+    bind_rows(this_result)
+}
+
+```
+
+
+
+# Save confidence intervals tables
+
+
+```{r}
+results_country %>% 
+  clean_names() %>% 
+  write_csv(here("country_ci.csv"))
+
+results_shb %>% 
+  clean_names() %>% 
+  write_csv(here("shb_ci.csv"))
+
+results_nhb %>% 
+  clean_names() %>% 
+  write_csv(here("hb_ci.csv"))
+
+```
+
+
+
 
 # Doodles
 
