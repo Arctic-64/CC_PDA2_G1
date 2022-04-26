@@ -22,7 +22,7 @@ phs_data_sex_age <-  phs_data_sex_age %>%
 ```
 Looking at the data:
 
-129,599 rows on 19 columns
+129,599 rows for 19 columns
 
 ```{r}
 phs_data_sex_age
@@ -112,6 +112,14 @@ phs_data_clean_location <- phs_data_clean %>%
       
     )
 ```
+
+```{r}
+hyp_data <- phs_data_clean_location %>% 
+  filter(quarter == "2020Q1") %>% 
+  group_by(sex, age) %>%
+  summarise(tot = sum(stays))
+```
+
 
 Starting to create plots
 

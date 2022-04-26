@@ -15,18 +15,7 @@ library(lubridate)
 phs_data <-  read_csv("raw_data/hospital_admissions_hb_agesex_20220302.csv") %>% 
   clean_names()
 ```
-```{r}
 
-gender_randomise <- phs_data %>% 
-  #filter(sex == "Female" | sex == "Male")
-  filter(!age_group == "All ages") %>% 
-  summarise(tot= n())
-
-
-```
-```{r}
-distinct(phs_data, admission_type)
-```
 ```{r}
 target <- c("S08000015", "S08000016", "S08000017", "S08000019", "S08000020",
             "S08000022", "S08000024", "S08000025", "S08000026", "S08000028",
@@ -83,13 +72,53 @@ phs_data_quarters %>%
   summarise(tot = n())
 
 phs_data_quarters %>% 
-  group_by(sex) %>% 
+  group_by(gender) %>% 
   summarise(tot = n())
 
 phs_data_quarters %>% 
-  group_by(hb) %>% 
+  group_by(location) %>% 
     summarise(tot = n())
+```
+
+```{r}
+hyp_data <- phs_data_clean_location %>% 
+  filter(quarter == "2020Q1") %>% 
+  group_by(sex, age) %>%
+  summarise(tot = sum(stays))
+
+hyp_data_sex <- hyp_data %>% 
+  group_by(sex) %>% 
+  summarise(tot = sum(tot))
+
+hyp_data_sex
+```
+```{r}
+hyp_data_age <- hyp_data %>% 
+  group_by(age) %>% 
+  summarise(tot = sum(tot)) %>% 
+  arrange(desc(tot))
+
+hyp_data_age
+```
 
 
+
+```{r}
+tot_2021_q4_sex <- phs_data_quarters %>% 
+  group_by(gender) %>% 
+  summarise(tot = sum(stays))
+```
+
+```{r}
+tot_2021_q4_age <- phs_data %>% 
+  filter(!age_group == "All ages") %>% 
+  filter(week_ending %in% c(20211003:20220102)) %>% 
+  filter(!admission_type %in% "All") %>% 
+  filter(hb %in% target) %>% 
+  group_by(age_group) %>% 
+  summarise(tot = sum(number_admissions)) %>% 
+  arrange(desc(tot))
+
+tot_2021_q4_age
 ```
 
