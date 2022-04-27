@@ -6,26 +6,28 @@ data <- read_csv("../shiny_dashboard_gw/data/phs_admissions_data_clean.csv")
 hb_name <- unique(data$hb_name)
 hb_urban <- unique(data$urban_rural)
 
+#hb_urban <- unique(data$urban_rural)
+
 ui <- fluidPage(
   
   titlePanel(h1("National variation in hospital activity", align = "center")),
   
   fluidRow(
     
-    titlePanel(h2("Health board")),
+    titlePanel(h2("Health Board")),
     br(),
-    p("Explore the differences between (left) and within (right) the Health boards of Scotland. Within a Health board the variation in admissions is shown."),
+    p("Explore the differences between (left) and within (right) the 14 Health boards of Scotland. Within a Health board the variation in admissions is shown."),
     br(),
-    column(6,
+    column(6, 
             pickerInput(inputId = "multi_hb_input", 
-                       label = "Select Health boards", 
+                       label = "Select Health Boards", 
                        choices = unique(data$hb_name),
                        multiple = TRUE,
                        selected = unique(data$hb_name))),
            
     column(6,
             selectInput(inputId = "hb_input", 
-                              label = "Select NHS Health Board", 
+                              label = "Select Health Board", 
                               choices = hb_name)),
            
     ),
@@ -80,7 +82,6 @@ server <- function(input, output) {
   output$hb_quarter <- renderPlot({
     data %>%
       filter(hb_name == input$multi_hb_input) %>%
-      filter(hb_name != "Non-NHS Provider Location", hb_name != "The Golden Jubilee National Hospital") %>% # remove hb with pop NA
       group_by(quarter, hb_name) %>% 
       summarise(episodes = sum(episodes)/mean(pop)) %>% 
       ggplot() +
@@ -93,9 +94,8 @@ server <- function(input, output) {
   
   output$hb_urban <- renderPlot({
     data %>%
-      filter(hb_name != "Non-NHS Provider Location", hb_name != "The Golden Jubilee National Hospital") %>% # remove hb with pop NA
       filter(hb_code != "S27000001") %>% # urban_rural status unclear
-      group_by(urban_rural, admission_type) %>% 
+      group_by(urban_rural, admission_type) %>%
       summarise(episodes = sum(episodes)/mean(pop)) %>% 
       ggplot() +
       aes(x = admission_type, y = episodes) +
@@ -103,13 +103,12 @@ server <- function(input, output) {
       facet_grid(~urban_rural) +
       xlab("Admission type") +
       ylab("Episodes per capita") +
-      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))})
+      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+    })
   
   output$hb_urban_rural_time <- renderPlot({
     
     data %>%
-      filter(hb_name != "Non-NHS Provider Location", hb_name != "The Golden Jubilee National Hospital") %>% # remove hb with pop NA
-      filter(hb_code != "S27000001") %>% 
       group_by(quarter, urban_rural) %>% 
       summarise(episodes = sum(episodes)/mean(pop)) %>% 
       ggplot() +

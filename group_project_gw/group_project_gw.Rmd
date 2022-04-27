@@ -41,14 +41,24 @@ phs_admissions_data <- read_csv("../group_project_gw/raw_data/Activity_by_Board_
 
 ```
 
-Selecting data columns of interest, then filtering to (i) include quarters from 2020-2021 inclusive only and (ii) to exclude the aggregates S92000003 "Scotland" and "All Inpatients and Day cases", and the SN0811 "National Facility NHS Louisa Jordan" as only 2021Q1 data also as located within Urban Glasgow and contains NAs, then column renaming:
+Selecting data columns of interest, then filtering to (i) include quarters from 2020-2021 inclusive only and (ii) to exclude the aggregates S92000003 "Scotland" and "All Inpatients and Day cases", and the SN0811 "National Facility NHS Louisa Jordan" as only 2021Q1 data also as located within urban Glasgow and contains NAs, 
+and Special Health Board SB0801 "The Golden Jubilee national hospital" as no population for per capita analysis and no NHS urban or rural classification so no use for analysis relating to 3 of 4 plots;
+"S27000001" "Non-NHS Provider Location"
+Removed: 
+- "Non-NHS Provider Location" and "The Golden Jubilee National Hospital") as hbs with population NA.
+- S27000001 = "Non-NHS Provider Location" as urban_rural status unclear.
+Removed: 
+- S27000001 = "Non-NHS Provider Location" as urban_rural status unclear; and
+- SN0811 = "National Facility NHS Louisa Jordan" as located within Urban Glasgow and contains NAs
+- "Scotland" as it's an aggregate but has a Rural category
+then column renaming to be more explicit about contents:
 
 ```{r}
 phs_admissions_data <- phs_admissions_data %>%
   select(quarter, hb, location, admission_type, specialty_name, episodes, length_of_episode, spells) %>%
   filter(str_detect(quarter, pattern = "^202")) %>%
   filter(admission_type != "Not Specified", admission_type != "All Inpatients and Day cases") %>%
-  filter(hb != "S92000003", hb != "SN0811") %>% 
+  filter(hb != "S92000003", hb != "SN0811", hb != "SB0801", hb != "S27000001") %>% 
   rename("hb_code" = "hb", "location_code" = "location")
 
 ```
@@ -58,7 +68,7 @@ phs_admissions_data <- phs_admissions_data %>%
 Creating tibble containing hb code and hb name:
 
 ```{r}
-hb_name_convert <- tibble(hb_code = c("SB0801", "S08000015", "S08000016", "S08000017", "S08000018", "S08000019", "S08000020", "S08000021", "S08000022", "S08000023", "S08000024", "S08000025", "S08000026", "S08000027", "S08000028", "S08000029", "S08000030", "S08000031", "S08000032", "S27000001"), hb_name = c("The Golden Jubilee National Hospital", "Ayrshire and Arran", "Borders", "Dumfries and Galloway", "Fife", "Forth Valley", "Grampian", "Greater Glasgow and Clyde", "Highland", "Lanarkshire", "Lothian", "Orkney", "Shetland", "Tayside", "Western Isles", "Fife", "Tayside", "Greater Glasgow and Clyde", "Lanarkshire",  "Non-NHS Provider Location"))
+hb_name_convert <- tibble(hb_code = c("S08000015", "S08000016", "S08000017", "S08000018", "S08000019", "S08000020", "S08000021", "S08000022", "S08000023", "S08000024", "S08000025", "S08000026", "S08000027", "S08000028", "S08000029", "S08000030", "S08000031", "S08000032"), hb_name = c("Ayrshire and Arran", "Borders", "Dumfries and Galloway", "Fife", "Forth Valley", "Grampian", "Greater Glasgow and Clyde", "Highland", "Lanarkshire", "Lothian", "Orkney", "Shetland", "Tayside", "Western Isles", "Fife", "Tayside", "Greater Glasgow and Clyde", "Lanarkshire"))
 
 ```
 
@@ -74,12 +84,12 @@ Assigning hb categories of urban or rural:
 
 Based on Scottish Rural Medicine Collaborative (https://www.srmc.scot.nhs.uk/about/) rural classifications which do not include cities of Aberdeen or Dundee
 
-Urban = "Forth Valley", "Greater Glasgow and Clyde", "Lanarkshire", "Lothian", "Fife", "Tayside", "Greater Glasgow and Clyde", "Lanarkshire", "The Golden Jubilee National Hospital", "Scotland", "National Facility NHS Louisa Jordan", "Non-NHS Provider Location"
+Urban = "Forth Valley", "Greater Glasgow and Clyde", "Lanarkshire", "Lothian", "Fife", "Tayside", "Greater Glasgow and Clyde", "Lanarkshire", "The Golden Jubilee National Hospital", "Scotland", "National Facility NHS Louisa Jordan"
 
 Rural = "Ayrshire and Arran", "Borders", "Dumfries and Galloway",  "Fife", "Grampian", "Highland", "Orkney", "Shetland","Tayside", "Western Isles", 
 
 ```{r}
-urban <- c("Forth Valley", "Greater Glasgow and Clyde", "Lanarkshire", "Lothian", "Fife", "Tayside", "Greater Glasgow and Clyde", "Lanarkshire", "The Golden Jubilee National Hospital", "Non-NHS Provider Location")
+urban <- c("Forth Valley", "Greater Glasgow and Clyde", "Lanarkshire", "Lothian", "Fife", "Tayside", "Greater Glasgow and Clyde", "Lanarkshire")
 
 phs_admissions_data <- phs_admissions_data %>%
   mutate(urban_rural = if_else(hb_name %in% urban, "Urban", "Rural"), .after = location_code)
@@ -162,7 +172,6 @@ Q. Remove Transfers?
 # 2. num episodes (normalised) per hb per quarter
 # input selector is dropdown hb option list
 phs_admissions_data %>% 
-  filter(hb_name != "Non-NHS Provider Location", hb_name != "The Golden Jubilee National Hospital") %>% # remove hb with pop NA
   group_by(quarter, hb_name) %>% 
   summarise(episodes = sum(episodes)/mean(pop)) %>% 
   ggplot() +
@@ -173,16 +182,12 @@ phs_admissions_data %>%
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 
-Removed: 
-- "Non-NHS Provider Location" and "The Golden Jubilee National Hospital") as hbs with population NA.
-- S27000001 = "Non-NHS Provider Location" as urban_rural status unclear.
+
 
 ```{r}
 # num episodes (normalised) per for urban vs. rural
 phs_admissions_data %>%
-  filter(hb_name != "Non-NHS Provider Location", hb_name != "The Golden Jubilee National Hospital") %>% # remove hb with pop NA
-  filter(hb_code != "S27000001") %>% # urban_rural status unclear
-  group_by(urban_rural, admission_type) %>% 
+  group_by(urban_rural, admission_type) %>%
   summarise(episodes = sum(episodes)/mean(pop)) %>% 
   ggplot() +
   aes(x = admission_type, y = episodes) +
@@ -193,16 +198,10 @@ phs_admissions_data %>%
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 
-Removed: 
-- S27000001 = "Non-NHS Provider Location" as urban_rural status unclear; and
-- SN0811 = "National Facility NHS Louisa Jordan" as located within Urban Glasgow and contains NAs
-- "Scotland" as it's an aggregate but has a Rural category
 
 ```{r}
 # num episodes (normalised) for urban vs. rural per quarter
 phs_admissions_data %>%
-  filter(hb_name != "Non-NHS Provider Location", hb_name != "The Golden Jubilee National Hospital") %>% # remove hb with pop NA
-  filter(hb_code != "S27000001") %>% 
   group_by(quarter, urban_rural) %>% 
   summarise(episodes = sum(episodes)/mean(pop)) %>% 
   ggplot() +
