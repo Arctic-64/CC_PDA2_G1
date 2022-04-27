@@ -11657,10 +11657,6 @@ quarter,hb_code,location_code,urban_rural,admission_type,specialty_name,episodes
 2021Q1,S27000001,S27000001,Urban,Transfers,Geriatric Medicine,5,235,0,Non-NHS Provider Location,NA,NA
 2021Q2,S27000001,S27000001,Urban,Transfers,Geriatric Medicine,5,409,0,Non-NHS Provider Location,NA,NA
 2021Q3,S27000001,S27000001,Urban,Transfers,Geriatric Medicine,15,1018,0,Non-NHS Provider Location,NA,NA
-2021Q1,SN0811,SN0811,Urban,All Day cases,Gastroenterology,15,0,15,National Facility NHS Louisa Jordan,NA,NA
-2021Q1,SN0811,SN0811,Urban,All Day cases,General Surgery,70,0,70,National Facility NHS Louisa Jordan,NA,NA
-2021Q1,SN0811,G101Z,Urban,All Day cases,Gastroenterology,15,0,15,National Facility NHS Louisa Jordan,NA,NA
-2021Q1,SN0811,G101Z,Urban,All Day cases,General Surgery,70,0,70,National Facility NHS Louisa Jordan,NA,NA
 2020Q1,SB0801,D102H,Urban,All Day cases,Cardiology,896,0,869,The Golden Jubilee National Hospital,10915,NA
 2020Q2,SB0801,D102H,Urban,All Day cases,Cardiology,423,0,410,The Golden Jubilee National Hospital,8101,NA
 2020Q3,SB0801,D102H,Urban,All Day cases,Cardiology,703,0,674,The Golden Jubilee National Hospital,9934,NA
