@@ -15,25 +15,25 @@ library(shinyWidgets)
 
 
 # Load data
-beds <- read_csv("beds_clean.csv") 
+kpi_beds <- read_csv("kpi_beds_clean.csv") %>%
+  mutate(across(is.numeric, round, digits=1))  
 
+kpi_diff_beds <- read_csv("kpi_diff_beds_clean.csv") %>%
+  mutate(across(is.numeric, round, digits=1)) 
 
-# Get drop-down list menu options
-hb_name_labels <- unique(beds$hb_name) %>% 
+# Get drop-down list menu options (and delete any occurring NAs)
+hb_name_labels <- unique(kpi_beds$HBName) %>% 
   discard(is.na)
 
-shb_name_labels <- unique(beds$shb_name)  %>% 
-  discard(is.na)
 
-country_name_labels <- unique(beds$country_name) %>% 
-  discard(is.na)
-
-kpi_labels <- c("total_occupied_beds", "average_available_staffed_beds",
-               "average_occupied_beds", "percentage_occupancy")
-
+kpi_labels <- c("All Staffed Beds", 
+                "Total Occupied Beds", 
+                "Average Available Staffed Beds", 
+                "Average Occupied Beds", 
+                "Percentage Occupancy")
 
 # The palette as per SF:
-phs_palette <- c("#99DAF5", "#004785", "#C027B9", "#82BB25")
+phs_palette <- c("#99DAF5", "#004785", "#C027B9", "#82BB25", "red", "yellow")
 
 
 
@@ -41,33 +41,47 @@ phs_palette <- c("#99DAF5", "#004785", "#C027B9", "#82BB25")
 ui <- fluidPage(
 
     # Application title
-    titlePanel("Acute care vs. NHS bed numbers"),
+    h1(strong("Acute care vs. NHS bed numbers"), align="center", style = "font-size:100px;"),
+    
+    tags$head(tags$style('
+       body {
+       font-family: Arial; 
+       font-size: 16px;
+       }'
+    )),
+    
+    br(),
+    br(),
     
     # ADD theme here
     # theme = shinytheme("united"),
-
-    # Sidebar with a drop-down menu 
-    sidebarLayout(
-      sidebarPanel(
+    
+    fluidRow(  
+      column(6,
         selectInput("nhs_board_input",
                     "Select Board",
                     choices = hb_name_labels
         ),
-        
+      ),  
+       
+      column(6, 
         selectInput("kpi_input",
                     "Select Key Performance Index (KPI)",
                     choices = kpi_labels
         )
-        
-        
-        
-      ),
+      ), 
       
-      # Show a plot of the generated distribution
-      mainPanel(
-        plotOutput("trend_plot")
-      )
-    )
+    ),
+
+    br(),
+    br(),
+    
+    # Show a plot of the generated distribution
+    plotOutput("trend_plot"),
+    br(),
+    br(),
+    plotOutput("diff_plot")
+
 
 )
 
@@ -76,17 +90,30 @@ server <- function(input, output) {
 
     output$trend_plot <- renderPlot({
 
-      beds %>%
-        filter(hb_name == input$nhs_board_input) %>%
-        filter(location == hb) %>%
+      kpi_beds %>%
+        filter(HBName == input$nhs_board_input) %>%
+        filter(Location == HB) %>%
         ggplot() +
-        aes(x = quarter, y = .data[[input$kpi_input]], group = country_name, colour = hb_name) +
-        # aes_string(x = "quarter", y = .data[["input$kpi_labels"]], group = "country_name", colour = "hb_name") +
-        geom_line() +
-        geom_point() +
-        scale_colour_manual(guide = "none", values = phs_palette[2]) +
+        aes(x = Quarter, y = .data[[input$kpi_input]], group = HBName, fill = HBName) +
+        geom_col(colour = "black") +
+        geom_text(aes(label = .data[[input$kpi_input]]), vjust = -0.5) +
+        scale_fill_manual(guide = "none", values = phs_palette[1]) +
         ylim(c(0, NA))
         
+    })
+    
+    output$diff_plot <- renderPlot({
+      
+      kpi_diff_beds %>%
+        filter(HBName == input$nhs_board_input) %>%
+        filter(Location == HB) %>%
+        ggplot() +
+        aes(x = Quarter, y = .data[[input$kpi_input]], group = HBName, fill = HBName) +
+        geom_col(colour = "black") +
+        ylab("Pre-Covid19 Percentage Difference (%)") +
+        geom_text(aes(label = .data[[input$kpi_input]]), vjust = -0.5) +
+        scale_fill_manual(guide = "none", values = phs_palette[1])
+      
     })
 }
 

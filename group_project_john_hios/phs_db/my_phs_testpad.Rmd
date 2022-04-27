@@ -777,6 +777,7 @@ kpi_mean_stats <- beds_oos %>%
   filter(location == hb) %>% 
   summarise(
     # location_count = n(),
+    mean_asb = mean(all_staffed_beds),
     mean_tob = mean(total_occupied_beds),
     mean_aasb = mean(average_available_staffed_beds), 
     mean_aob = mean(average_occupied_beds), 
@@ -808,6 +809,16 @@ Write updated bed data to a CSV file.
 
 ## Selected Geography: Scotland
 ```{r}
+beds %>%
+  filter(hb_name == "Scotland") %>% 
+  ggplot() +
+  aes(x = quarter, group = hb_name) +
+  geom_line(aes(y = all_staffed_beds, colour = hb_name)) +
+  geom_point(aes(y = all_staffed_beds, colour = hb_name)) +
+  geom_line(aes(y = mean_tob), colour = "red") +
+  scale_colour_manual(guide = "none", values = phs_palette[2]) +
+  ylim(c(0, NA))
+
 beds %>%
   filter(hb_name == "Scotland") %>% 
   ggplot() +
@@ -859,7 +870,20 @@ beds %>%
 ## Selected Geography: NHS Board
 ```{r}
 beds %>%
-  filter(hb_name == "NHS Greater Glasgow and Clyde") %>% 
+  # filter(hb_name == "NHS Greater Glasgow and Clyde") %>% 
+  filter(hb_name == "NHS Grampian") %>% 
+  filter(location == hb) %>%  
+  ggplot() +
+  aes(x = quarter, group = hb_name) +
+  geom_line(aes(y = all_staffed_beds, colour = hb_name)) +
+  geom_point(aes(y = all_staffed_beds, colour = hb_name)) +
+  geom_line(aes(y = mean_tob), colour = "red") +
+  scale_colour_manual(guide = "none", values = phs_palette[2]) +
+  ylim(c(0, NA))
+
+beds %>%
+  # filter(hb_name == "NHS Greater Glasgow and Clyde") %>% 
+  filter(hb_name == "NHS Grampian") %>% 
   filter(location == hb) %>%  
   ggplot() +
   aes(x = quarter, group = hb_name) +
@@ -871,7 +895,8 @@ beds %>%
 
 
 beds %>%
-  filter(hb_name == "NHS Greater Glasgow and Clyde") %>% 
+  # filter(hb_name == "NHS Greater Glasgow and Clyde") %>% 
+  filter(hb_name == "NHS Grampian") %>% 
   filter(location == hb) %>%  
   ggplot() +
   aes(x = quarter, group = hb_name) +
@@ -884,7 +909,8 @@ beds %>%
 
 
 beds %>%
-  filter(hb_name == "NHS Greater Glasgow and Clyde") %>% 
+  # filter(hb_name == "NHS Greater Glasgow and Clyde") %>% 
+  filter(hb_name == "NHS Grampian") %>% 
   filter(location == hb) %>%  
   ggplot() +
   aes(x = quarter, group = hb_name) +
@@ -896,7 +922,8 @@ beds %>%
 
 
 beds %>%
-  filter(hb_name == "NHS Greater Glasgow and Clyde") %>% 
+  # filter(hb_name == "NHS Greater Glasgow and Clyde") %>% 
+  filter(hb_name == "NHS Grampian") %>% 
   filter(location == hb) %>%  
   ggplot() +
   aes(x = quarter, group = hb_name) +
@@ -915,6 +942,18 @@ beds %>%
   filter(location == hb) %>%  
   ggplot() +
   aes(x = quarter, group = hb_name) +
+  geom_line(aes(y = all_staffed_beds, colour = hb_name)) +
+  geom_point(aes(y = all_staffed_beds, colour = hb_name)) +
+  geom_line(aes(y = mean_tob), colour = "red") +
+  scale_colour_manual(guide = "none", values = phs_palette[2]) +
+  ylim(c(0, NA))
+
+
+beds %>%
+  filter(hb_name == "The Golden Jubilee National Hospital") %>% 
+  filter(location == hb) %>%  
+  ggplot() +
+  aes(x = quarter, group = hb_name) +
   geom_line(aes(y = total_occupied_beds, colour = hb_name)) +
   geom_point(aes(y = total_occupied_beds, colour = hb_name)) +
   geom_line(aes(y = mean_tob), colour = "red") +
@@ -961,12 +1000,80 @@ beds %>%
 
 
 
+# Split master beds tibble for shiny app
+
+```{r}
+# Load data
+beds <- read_csv("beds_clean.csv") 
+
+glimpse(beds)
+```
+
+## KPI tibble
+```{r}
+kpi_beds <- beds %>% 
+  select(
+    quarter, hb, hb_name, location,
+    all_staffed_beds, total_occupied_beds, average_available_staffed_beds,
+    average_occupied_beds, percentage_occupancy) %>% 
+  rename(
+    Quarter = quarter, 
+    HB = hb, 
+    HBName = hb_name, 
+    Location = location,
+    `All Staffed Beds` = all_staffed_beds, 
+    `Total Occupied Beds` = total_occupied_beds, 
+    `Average Available Staffed Beds` = average_available_staffed_beds,
+    `Average Occupied Beds` = average_occupied_beds,
+    `Percentage Occupancy` = percentage_occupancy
+  )
+
+```
+
+
+## KPI differences tibble
+```{r}
+kpi_diff_beds <- beds %>% 
+  mutate(
+    all_staffed_beds0 = 100 * (all_staffed_beds - mean_asb) / mean_asb,
+    total_occupied_beds0 = 100 * (all_staffed_beds - mean_tob) / mean_tob, 
+    average_available_staffed_beds0 = 100 * (average_available_staffed_beds - mean_aasb) / mean_aasb,
+    average_occupied_beds0 = 100 * (average_occupied_beds - mean_aob) / mean_aob, 
+    percentage_occupancy0 = 100 * (percentage_occupancy - mean_po) / mean_po
+  ) %>% 
+  select(
+    quarter, hb, hb_name, location,
+    all_staffed_beds0, total_occupied_beds0, average_available_staffed_beds0,
+    average_occupied_beds0, percentage_occupancy0)
+```
+
+
+```{r}
+kpi_diff_beds <- kpi_diff_beds %>% 
+  rename(
+    Quarter = quarter, 
+    HB = hb, 
+    HBName = hb_name, 
+    Location = location,
+    `All Staffed Beds` = all_staffed_beds0, 
+    `Total Occupied Beds` = total_occupied_beds0, 
+    `Average Available Staffed Beds` = average_available_staffed_beds0,
+    `Average Occupied Beds` = average_occupied_beds0,
+    `Percentage Occupancy` = percentage_occupancy0
+  )
+```
 
 
 
 
+# Save KPI data
 
+Write updated bed KPI data to a CSV file.
+```{r}
+ write_csv(kpi_beds, here("kpi_beds_clean.csv"))
 
+ write_csv(kpi_diff_beds, here("kpi_diff_beds_clean.csv"))
+```
 
 
 
@@ -980,7 +1087,7 @@ beds %>%
 <!-- ``` -->
 
 <!-- ```{r} -->
-<!-- hb_name_beds <- unique(beds$hb_name) %>%  -->
+<!-- hb_name_beds <- unique(beds$hb_name) %>% -->
 <!--   discard(is.na) -->
 
 <!-- ``` -->
