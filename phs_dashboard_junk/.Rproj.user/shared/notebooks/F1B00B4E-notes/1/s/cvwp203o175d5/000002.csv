@@ -1,0 +1,19 @@
+"0","```r
+# filtering out data before 2020
+# filtering out admission type categories 
+# selecting just columns with data regarding demographics
+# renaming 90 years + row
+
+phs_data_clean <- phs_data_sex_age %>% 
+  filter(quarter == \"2020Q1\" | quarter == \"2020Q2\" | quarter == \"2020Q3\" 
+         | quarter == \"2020Q4\" | quarter == \"2021Q1\" | quarter == \"2021Q2\"
+         | quarter == \"2021Q3\") %>% 
+  filter(admission_type == \"Elective Inpatients\" |
+         admission_type == \"Emergency Inpatients\"|
+         admission_type == \"Not Specified\") %>% 
+  select(id, quarter, hb, location, admission_type, sex, age, stays, 
+         length_of_stay, average_length_of_stay) %>% 
+  mutate(age = str_replace_all(age, \"90 years and over\", \"90 +\")) 
+
+phs_data_clean
+```"

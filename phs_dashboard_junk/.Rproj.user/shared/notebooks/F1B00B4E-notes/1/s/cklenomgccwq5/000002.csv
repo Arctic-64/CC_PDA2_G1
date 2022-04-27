@@ -1,0 +1,10 @@
+"0","```r
+#data set for comparing result with second demographics dataset for an eventual join 
+
+hyp_data <- phs_data_clean_location %>% 
+  filter(quarter == \"2020Q1\") %>% 
+  group_by(sex, age) %>%
+  summarise(tot = sum(stays))
+```"
+"1","`summarise()` has grouped output by 'sex'. You can override using the `.groups` argument.
+"

@@ -1,0 +1,26 @@
+{
+    "id": "492A337B",
+    "path": "~/CodeClan/CC_PDA2_G1/phs_dashboard/phs/app.R",
+    "project_path": "phs/app.R",
+    "type": "r_source",
+    "hash": "2963382069",
+    "contents": "",
+    "dirty": true,
+    "created": 1651069994133.0,
+    "source_on_save": false,
+    "relative_order": 1,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "75,2",
+        "scrollLine": "36"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1651070711,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1651070711684,
+    "read_only": false,
+    "read_only_alternatives": []
+}

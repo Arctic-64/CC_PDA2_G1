@@ -1,0 +1,5 @@
+"0","```r
+# checking how many type of admission type are in the data set
+
+distinct(phs_data_sex_age, admission_type)
+```"
