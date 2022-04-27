@@ -1,3 +1,0 @@
-"0","leaflet() %>%"
-"0","addTiles() %>%"
-"0","  addMarkers(data = hospitals, lng = ~X, lat = ~Y, label = ~LocationName, group = ""hospital_locations"")"
