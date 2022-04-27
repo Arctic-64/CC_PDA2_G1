@@ -1,0 +1,92 @@
+"0","ui <- fluidPage("
+"0",""
+"0","    # Application title"
+"0","    titlePanel(""jacks experiment""),"
+"0",""
+"0","        #output print"
+"0","    verticalLayout("
+"0","        wellPanel(textOutput(""region_selected"")),"
+"0",""
+"0","        # the map"
+"0","        mainPanel("
+"0","           leafletOutput(""scotlandHM""),"
+"0","           plotOutput(""plotteddata"")"
+"0","        )"
+"0","    )"
+"0",")"
+"0",""
+"0",""
+"0",""
+"0","# Define server logic "
+"0","server <- function(input, output) {"
+"0","  ##map bullshit"
+"0","  output$scotlandHM <- renderLeaflet({"
+"0","    leaflet() %>%"
+"0","addTiles() %>%"
+"0","addResetMapButton()%>%"
+"0","  addPolygons(data = scotlandpoly, popup = ~HBName, group = ""HB_regions"", layerId = ~HBName) %>%"
+"0","  addCircles(data = hospitals, lng = ~X, lat = ~Y, label = ~LocationName, group = ""hospital_locations"", color = ""red"")"
+"0","    })"
+"0","    ## trigger map bullshit"
+"0","observeEvent(input$scotlandHM_shape_click, { "
+"0","    region_selected <- input$scotlandHM_shape_click"
+"0","    p <- renderText(region_selected$id)"
+"0","    output$region_selected <- p"
+"0",""
+"0"," ##map data bullshit"
+"0"," filtered_df <- reactive({"
+"0","    HB_data %>%"
+"0","      filter(HBName == p)"
+"0","  })"
+"0","  ##plotting bullshit"
+"0","  output$plotteddata <- renderPlot({"
+"0","    ggplot(filtered_df()) +"
+"0","      aes(x = Quarter, y = TotalOccupiedBeds) +"
+"0","      geom_col()"
+"0","    "
+"0","  })"
+"0","    "
+"0","  })}"
+"0",""
+"0",""
+"0",""
+"0","# Run the application "
+"0","shinyApp(ui = ui, server = server)"
+"2","
+Listening on http://127.0.0.1:4249
+"
+"2","Warning:"
+"2"," Error in filter: [38;5;157mProblem while computing `..1 = HBName == p`.[39m
+[1mCaused by error in [38;5;157m`HBName == p`[39m:[22m
+[33m![39m comparison (1) is possible only for atomic and list types
+"
+"2","  201: [37m<Anonymous>[39m
+"
+"2","Warning:"
+"2"," Error in filter: [38;5;157mProblem while computing `..1 = HBName == p`.[39m
+[1mCaused by error in [38;5;157m`HBName == p`[39m:[22m
+[33m![39m comparison (1) is possible only for atomic and list types
+"
+"2","  201: [37m<Anonymous>[39m
+"
+"2","Warning:"
+"2"," Error in filter: [38;5;157mProblem while computing `..1 = HBName == p`.[39m
+[1mCaused by error in [38;5;157m`HBName == p`[39m:[22m
+[33m![39m comparison (1) is possible only for atomic and list types
+"
+"2","  201: [37m<Anonymous>[39m
+"
+"2","Warning:"
+"2"," Error in filter: [38;5;157mProblem while computing `..1 = HBName == p`.[39m
+[1mCaused by error in [38;5;157m`HBName == p`[39m:[22m
+[33m![39m comparison (1) is possible only for atomic and list types
+"
+"2","  201: [37m<Anonymous>[39m
+"
+"2","Warning:"
+"2"," Error in filter: [38;5;157mProblem while computing `..1 = HBName == p`.[39m
+[1mCaused by error in [38;5;157m`HBName == p`[39m:[22m
+[33m![39m comparison (1) is possible only for atomic and list types
+"
+"2","  201: [37m<Anonymous>[39m
+"
