@@ -36,13 +36,18 @@
 "0"," ##map data bullshit"
 "0"," filtered_df <- reactive({"
 "0","    HB_data %>%"
-"0","      filter(HBName == p())"
+"0","      filter(scotlandpoly.HBName == p()) %>%"
+"0","      group_by(Quarter) %>%"
+"0","      summarise(PercentageOccupancy = mean(PercentageOccupancy), Quarter) %>%"
+"0","      arrange(desc())"
 "0","  })"
 "0","  ##plotting bullshit"
 "0","  output$plotteddata <- renderPlot({"
 "0","        ggplot(filtered_df()) +"
+"0","      annotate('rect', xmin = -Inf, xmax = ""2019Q4"", "
+"0","  ymin=-Inf, ymax=Inf, alpha=0.5, fill=""white"") +"
 "0","        aes(x = Quarter, y = PercentageOccupancy) +"
-"0","        geom_line() +"
+"0","        geom_line(group = 1) +"
 "0","        geom_point()"
 "0","    "
 "0","  })"
@@ -55,4 +60,32 @@
 "0","shinyApp(ui = ui, server = server)"
 "2","
 Listening on http://127.0.0.1:6450
+"
+"1","[38;5;157m`summarise()` has grouped output by 'Quarter'. You can override using the `.groups` argument.[39m
+"
+"2","Warning:"
+"2"," Error in arrange: [38;5;157m`desc()` must be called with exactly one argument.[39m
+"
+"2","  199: [37m<Anonymous>[39m
+"
+"1","[38;5;157m`summarise()` has grouped output by 'Quarter'. You can override using the `.groups` argument.[39m
+"
+"2","Warning:"
+"2"," Error in arrange: [38;5;157m`desc()` must be called with exactly one argument.[39m
+"
+"2","  199: [37m<Anonymous>[39m
+"
+"1","[38;5;157m`summarise()` has grouped output by 'Quarter'. You can override using the `.groups` argument.[39m
+"
+"2","Warning:"
+"2"," Error in arrange: [38;5;157m`desc()` must be called with exactly one argument.[39m
+"
+"2","  199: [37m<Anonymous>[39m
+"
+"1","[38;5;157m`summarise()` has grouped output by 'Quarter'. You can override using the `.groups` argument.[39m
+"
+"2","Warning:"
+"2"," Error in arrange: [38;5;157m`desc()` must be called with exactly one argument.[39m
+"
+"2","  199: [37m<Anonymous>[39m
 "

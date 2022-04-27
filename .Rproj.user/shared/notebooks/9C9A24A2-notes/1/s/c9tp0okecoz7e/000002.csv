@@ -1,0 +1,13 @@
+"0","```r
+dashboard_data_table %>% 
+  group_by(Location, Quarter) %>% 
+  summarise(`Total Stays` = sum(`Total Stays`)) %>% 
+  ggplot() +
+  geom_col(position = \"dodge\", colour = \"white\", aes(x = Location, 
+                                                     y = `Total Stays`, 
+                                                     fill = Quarter)) +
+  
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```"
+"1","`summarise()` has grouped output by 'Location'. You can override using the `.groups` argument.
+"

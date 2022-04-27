@@ -1,0 +1,22 @@
+"0","```r
+
+ggplot(tot_stays_age_no_location) +
+  geom_col(position = \"dodge\", colour = \"white\", aes(x = age, 
+                                           y = tot_stays, 
+                                           fill = quarter)
+                    ) +
+          ggtitle(\"Total Stays\") +
+          labs(x = \"Age\", y = \"Total Stays\") +
+          scale_fill_manual(\"Quarter\", values = c(\"2020Q1\" = \"#061a1f\",
+                                       \"2020Q2\" = \"#062e3c\",
+                                       \"2020Q3\" = \"#074859\",
+                                       \"2020Q4\" = \"#11667f\",
+                                       \"2021Q1\" = \"#008b87\",
+                                       \"2021Q2\" = \"#47899b\",
+                                       \"2021Q3\" = \"#659799\")
+                            ) +
+          facet_wrap(~sex) +
+          theme_bw() +
+          theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```"

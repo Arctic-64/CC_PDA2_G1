@@ -14,6 +14,7 @@ library(rgdal)
 ```
 
 data loading
+
 ```{r}
 raw_data <- read_csv(here("data/beds_by_nhs_board_of_treatment_and_specialty.csv"))
 
@@ -23,14 +24,15 @@ health_boards <- read_csv(here("data/HB_scotland.csv"))
 
 hospitals <- read_csv(here("data/hospitals_scotland.csv")) %>%
 filter(!is.na(XCoordinate | YCoordinate))
-```
 
-addition of geo data
 
-```{r}
 hosptials_data <- inner_join(raw_data, hospitals, by = "Location")
 HB_data <- inner_join(raw_data, health_boards, by = c("Location" = "HB"))
 
+HB_data = select(HB_data, Quarter, PercentageOccupancy, TotalOccupiedBeds, AverageOccupiedBeds, AllStaffedBeds, Location, SpecialtyName, HB)
+corrected_names = data.frame(scotlandpoly$HBName, scotlandpoly$HBCode)
+
+HB_data <- inner_join(HB_data, corrected_names, by = c("Location" = "scotlandpoly.HBCode"))
 
 hospitals_longlat <- hospitals %>%
 st_as_sf(coords = c("XCoordinate", "YCoordinate"), crs = 27700) %>% st_transform(4326) %>%
@@ -40,6 +42,7 @@ hospitals <- cbind(hospitals, hospitals_longlat)
 ```
 
 shiny
+
 ```{r}
 ui <- fluidPage(
 
@@ -79,13 +82,18 @@ observeEvent(input$scotlandHM_shape_click, {
  ##map data bullshit
  filtered_df <- reactive({
     HB_data %>%
-      filter(HBName == p())
+      filter(scotlandpoly.HBName == p()) %>%
+      group_by(Quarter) %>%
+      summarise(PercentageOccupancy = mean(PercentageOccupancy), Quarter) %>%
+      arrange()
   })
   ##plotting bullshit
   output$plotteddata <- renderPlot({
         ggplot(filtered_df()) +
+      annotate('rect', xmin = -Inf, xmax = "2019Q4", 
+  ymin=-Inf, ymax=Inf, alpha=0.5, fill="white") +
         aes(x = Quarter, y = PercentageOccupancy) +
-        geom_line() +
+        geom_line(group = 1) +
         geom_point()
     
   })
@@ -100,60 +108,7 @@ shinyApp(ui = ui, server = server)
 
 
 ```{r}
-ui <- fluidPage(
-
-    # Application title
-    titlePanel("jacks experiment"),
-
-        #output print
-    verticalLayout(
-        wellPanel(textOutput("region_selected")),
-
-        # the map
-        mainPanel(
-           leafletOutput("scotlandHM"),
-           plotOutput("plotteddata")
-        )
-    )
-)
-
-
-
-# Define server logic 
-server <- function(input, output) {
-  ##map bullshit
-  output$scotlandHM <- renderLeaflet({
-    leaflet() %>%
-addTiles() %>%
-addResetMapButton()%>%
-  addPolygons(data = scotlandpoly, popup = ~HBName, group = "HB_regions", layerId = ~HBName) %>%
-  addCircles(data = hospitals, lng = ~X, lat = ~Y, label = ~LocationName, group = "hospital_locations", color = "red")
-    })
-    ## trigger map bullshit
-observeEvent(input$scotlandHM_shape_click, { 
-    region_selected <- reactive(input$scotlandHM_shape_click)
-    p <- reactive(region_selected()$id)
-    output$region_selected <- renderText(p())
-
- ##map data bullshit
- filtered_df <- reactive({
-    HB_data %>%
-      filter(HBName == p())
-  })
-  ##plotting bullshit
-  output$plotteddata <- renderPlot({
-        ggplot(filtered_df()) +
-        aes(x = Quarter, y = PercentageOccupancy) +
-        geom_line() +
-        geom_point()
-    
-  })
-    
-  })}
-
-
-
-# Run the application 
-shinyApp(ui = ui, server = server)
+HB_data
+scotlandpoly$HBCode
 ```
 

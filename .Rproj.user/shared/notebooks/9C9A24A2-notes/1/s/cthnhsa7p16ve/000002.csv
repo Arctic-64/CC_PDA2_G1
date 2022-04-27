@@ -1,0 +1,8 @@
+"0","```r
+#checking health boards
+
+phs_data_clean %>% 
+  group_by(hb) %>% 
+  summarise(tot = n()) %>% 
+  select(hb)
+```"

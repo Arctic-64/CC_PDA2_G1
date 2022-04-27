@@ -1,0 +1,8 @@
+"0","```r
+hyp_data <- phs_data_clean_location %>% 
+  filter(quarter == \"2020Q1\") %>% 
+  group_by(sex, age) %>%
+  summarise(tot = sum(stays))
+```"
+"1","`summarise()` has grouped output by 'sex'. You can override using the `.groups` argument.
+"
