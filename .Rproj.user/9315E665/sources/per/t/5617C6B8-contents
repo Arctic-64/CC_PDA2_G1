@@ -1,4 +1,6 @@
+
 library
+
 ```{r}
 library(shiny)
 library(shinydashboard)
@@ -47,11 +49,11 @@ shiny
 ui <- fluidPage(
 
     # Application title
-    titlePanel("jacks experiment"),
+    titlePanel("Jacks experiment"),
 
         #output print
     verticalLayout(
-        wellPanel(textOutput("region_selected")),
+        wellPanel("Region_Selected: ", textOutput("region_selected")),
 
         # the map
         mainPanel(
@@ -79,22 +81,38 @@ observeEvent(input$scotlandHM_shape_click, {
     p <- reactive(region_selected()$id)
     output$region_selected <- renderText(p())
 
+
  ##map data bullshit
  filtered_df <- reactive({
     HB_data %>%
       filter(scotlandpoly.HBName == p()) %>%
       group_by(Quarter) %>%
-      summarise(PercentageOccupancy = mean(PercentageOccupancy), Quarter) %>%
+      summarise(PercentageOccupancy_mean = mean(PercentageOccupancy, na.rm = TRUE), 
+                PercentageOccupancy_lowwer = quantile(PercentageOccupancy, 0.25, na.rm = TRUE), 
+                PercentageOccupancy_upper = quantile(PercentageOccupancy, 0.75, na.rm = TRUE),  
+                Quarter, scotlandpoly.HBName) %>%
       arrange()
   })
+ 
+ 
   ##plotting bullshit
   output$plotteddata <- renderPlot({
         ggplot(filtered_df()) +
+      
       annotate('rect', xmin = -Inf, xmax = "2019Q4", 
   ymin=-Inf, ymax=Inf, alpha=0.5, fill="white") +
-        aes(x = Quarter, y = PercentageOccupancy) +
-        geom_line(group = 1) +
-        geom_point()
+      
+      geom_vline(aes(xintercept = "2019Q4"), color = "red") +
+      
+        geom_line(aes(x = Quarter, y = PercentageOccupancy_mean), group = "mean", size = 1) +
+        geom_line(aes(x = Quarter, y = PercentageOccupancy_upper), group = "75th percentile", size=0.5, alpha=0.5, color = "blue", linetype="twodash") +
+        geom_line(aes(x = Quarter, y = PercentageOccupancy_lowwer), group = "25th percentile", size=0.5, alpha=0.5, color = "blue", linetype="twodash") +
+        labs(
+    x = "yearly quarter", 
+    y = "Avarage percentage hospital cappacity with quartile markers", 
+    title = "patterns of hosptial cappacity over time",
+    subtitle = "historical referance data plotted before 2020"
+  ) + ylim(0, 100)
     
   })
     
@@ -106,9 +124,4 @@ observeEvent(input$scotlandHM_shape_click, {
 shinyApp(ui = ui, server = server)
 ```
 
-
-```{r}
-HB_data
-scotlandpoly$HBCode
-```
 
