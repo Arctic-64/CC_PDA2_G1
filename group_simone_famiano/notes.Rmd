@@ -256,6 +256,8 @@ tot_and_avg_stays
 
 
 ```{r}
+#plot for Jack
+
 dashboard_data_table %>% 
   group_by(Location, Quarter) %>% 
   summarise(`Total Stays` = sum(`Total Stays`)) %>% 
