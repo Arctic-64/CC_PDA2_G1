@@ -1,0 +1,13 @@
+"0","```r
+null_distribution <- msleep_hrs %>% 
+  specify(sleep_total ~ vore) %>% 
+  hypothesize(null = \"independence\") %>% 
+  generate(reps = 1000, type = \"permute\") %>% 
+  calculate(stat = \"diff in means\", order = c(\"omni\", \"herbi\")) 
+
+head(null_distribution)
+```"
+"1","Response: sleep_total (numeric)
+Explanatory: vore (factor)
+Null Hypothesis: independence
+"

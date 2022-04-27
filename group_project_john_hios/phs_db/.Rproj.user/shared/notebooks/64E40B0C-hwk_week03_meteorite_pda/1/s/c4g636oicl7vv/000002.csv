@@ -1,0 +1,4 @@
+"0","```r
+# Check contents and size
+head(meteorite_landings)
+```"

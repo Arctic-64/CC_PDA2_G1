@@ -1,0 +1,5 @@
+"0","```r
+library(arules)
+```"
+"1","Error in library(arules) : there is no package called â€˜arulesâ€™
+"

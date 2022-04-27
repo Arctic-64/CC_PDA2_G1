@@ -1,0 +1,6 @@
+"0","```r
+msleep_conservation  %>%
+  group_by(conservation) %>%
+  summarise(prop = n()/nrow(msleep_conservation)) %>%
+  filter(conservation == \"domesticated\")
+```"

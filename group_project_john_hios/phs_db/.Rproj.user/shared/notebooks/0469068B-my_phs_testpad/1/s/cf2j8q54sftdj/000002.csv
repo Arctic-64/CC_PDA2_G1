@@ -1,0 +1,25 @@
+"0","country_labels <- read_csv(""data/geography_codes_and_labels_country.csv"") "
+"1","[1mRows: [22m[34m1[39m [1mColumns: [22m[34m2[39m
+"
+"1","[36m--[39m [1mColumn specification[22m [36m--------------------------------------------------------------------------------------------------------------[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (2): Country, CountryName
+"
+"1","
+[36mi[39m Use `spec()` to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set `show_col_types = FALSE` to quiet this message.
+"
+"0","glimpse(country_labels)"
+"1","Rows: 1"
+"1",""
+"1","
+"
+"1","Columns: 2"
+"1",""
+"1","
+"
+"1","$ Country     [3m[38;5;246m<chr>[39m[23m ""S92000003""
+$ CountryName [3m[38;5;246m<chr>[39m[23m ""Scotland"""
+"1",""
+"1","
+"

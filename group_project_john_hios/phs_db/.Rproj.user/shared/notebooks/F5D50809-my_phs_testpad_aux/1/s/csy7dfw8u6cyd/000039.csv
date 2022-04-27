@@ -1,0 +1,6 @@
+"0",""
+"0","# Calculate a 99.9% CI for ``mean(average_available_staffed_beds)``, and visualise it on the distribution"
+"0",""
+"0","aasb_ci999 <- bootstrap_distn_aasb %>%"
+"0","  get_ci(level = 0.999, type = ""percentile"")"
+"0","aasb_ci999"

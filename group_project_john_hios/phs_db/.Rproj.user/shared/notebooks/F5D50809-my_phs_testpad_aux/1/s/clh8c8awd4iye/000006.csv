@@ -1,0 +1,3 @@
+"0","beds_oos %>%"
+"0","  summarise(across(.cols = everything(),"
+"0","                   .fns = ~sum(is.na(.x))))"
