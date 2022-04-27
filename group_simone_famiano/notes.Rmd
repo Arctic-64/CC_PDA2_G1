@@ -114,6 +114,8 @@ phs_data_clean_location <- phs_data_clean %>%
 ```
 
 ```{r}
+#data set for comparing result with second demographics dataset for an eventual join 
+
 hyp_data <- phs_data_clean_location %>% 
   filter(quarter == "2020Q1") %>% 
   group_by(sex, age) %>%
@@ -262,12 +264,58 @@ dashboard_data_table %>%
   group_by(Location, Quarter) %>% 
   summarise(`Total Stays` = sum(`Total Stays`)) %>% 
   ggplot() +
-  geom_col(position = "dodge", colour = "white", aes(x = Location, 
-                                                     y = `Total Stays`, 
-                                                     fill = Quarter)) +
+  geom_col(position = "dodge", colour = "white", aes(y = Location, 
+                                                     x = Quarter)) +
   
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 
+```{r}
+# plot for John
 
+phs_data_from_2016 <- phs_data_sex_age %>% 
+  filter(admission_type == "Elective Inpatients" |
+         admission_type == "Emergency Inpatients"|
+         admission_type == "Not Specified") %>% 
+  mutate(age = str_replace_all(age, "90 years and over", "90 +")) %>% 
+  filter(hb %in% target & location %in% target) %>% 
+  mutate(
+    location = str_replace_all(location, "S08000015", "Ayrshire and Arran"),
+    location = str_replace_all(location, "S08000016", "Borders"),
+    location = str_replace_all(location, "S08000017", "Dumfries and Galloway"),
+    location = str_replace_all(location, "S08000019", "Forth Valley"),
+    location = str_replace_all(location, "S08000020", "Grampian"),
+    location = str_replace_all(location, "S08000022", "Highland"),
+    location = str_replace_all(location, "S08000024", "Lothian"),
+    location = str_replace_all(location, "S08000025", "Orkney"),
+    location = str_replace_all(location, "S08000026", "Shetland"),
+    location = str_replace_all(location, "S08000028", "Western Isle"),
+    location = str_replace_all(location, "S08000029", "Fife"),
+    location = str_replace_all(location, "S08000030", "Tayside"),
+    location = str_replace_all(location, "S08000031", 
+                               "Greater Glasgow and Clyde"),
+    location = str_replace_all(location, "S08000032", "Lanarkshire"),
+    location = str_replace_all(location, "S27000001", 
+                               "non-NHS Provider/ Location")) %>% 
+  select(quarter,location,length_of_stay) 
+      
+      
+phs_data_from_2016  
+  
+```
+```{r}
+
+phs_pivoted <- phs_data_from_2016 %>% 
+  group_by(quarter, location, length_of_stay) %>% 
+  pivot_wider(names_from = quarter, 
+            values_from = length_of_stay)
+
+phs_pivoted
+```
+
+
+df %>% 
+  group_by(State, Year, Var) %>%
+  mutate(rn = row_number()) %>%
+  pivot_wider(names_from = Var, values_from = X)

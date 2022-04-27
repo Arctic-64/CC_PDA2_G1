@@ -25,7 +25,8 @@ ui <- fluidPage(
 # Define server logic required to draw a histogram
 server <- function(input, output) {
 
-    output$hbPlot <- renderPlot({
+    
+  output$hbPlot <- renderPlot({
       phs_data_comparison_weekending %>%
         filter(hb %in% input$hb_input) %>% 
         ggplot() +
@@ -33,13 +34,13 @@ server <- function(input, output) {
             fill = difference > 0) +
         geom_col() +
         ylim(-min_max, min_max) +
-        xlim(500) +
+        
         labs(y = "Difference in Hospital Stays", x = "Health Board", 
              title = "Hospital Stays differences between 2020/21 and 2018/19") + 
         scale_fill_manual(values = c("#061a1f", "#062e3c"), name = "", 
                           labels = c("decrease", "increase")) +
-        theme_minimal() +
-        theme(axis.text.x = element_text(angle = 45, hjust = 1))
+        theme_bw() +
+        theme(axis.text.x = element_text(angle = 90, hjust = 1))
     })
 }
 
