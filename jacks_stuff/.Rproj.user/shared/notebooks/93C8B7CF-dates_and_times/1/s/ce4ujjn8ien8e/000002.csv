@@ -1,0 +1,12 @@
+"0","```r
+netflix <- read_csv(here(\"netflix.csv\"))
+```"
+"1","Rows: 7787 Columns: 12
+-- Column specification ------------------------------------------------------------------------------------------------------------------------------------------------------
+Delimiter: \",\"
+chr (11): show_id, type, title, director, cast, country, date_added, rating, duration, listed_in, description
+dbl  (1): release_year
+
+i Use `spec()` to retrieve the full column specification for this data.
+i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+"

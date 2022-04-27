@@ -1,0 +1,5 @@
+"0","leaflet() %>%"
+"0","addTiles() %>%"
+"0","addResetMapButton()%>%"
+"0","  addPolygons(data = scotlandpoly, popup = ~HBName, group = ""HB_regions"", layerId = ~HBName) %>%"
+"0","  addCircles(data = hospitals, lng = ~X, lat = ~Y, label = ~LocationName, group = ""hospital_locations"", color = ""red"")"

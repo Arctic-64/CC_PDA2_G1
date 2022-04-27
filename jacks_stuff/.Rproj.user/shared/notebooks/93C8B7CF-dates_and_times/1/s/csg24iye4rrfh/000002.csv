@@ -1,0 +1,7 @@
+"0","```r
+library(tsibble)
+library(tsibble_data)
+```"
+"1","Error in library(tsibble_data) : 
+  there is no package called â€˜tsibble_dataâ€™
+"
