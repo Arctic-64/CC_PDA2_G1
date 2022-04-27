@@ -4,7 +4,13 @@ library(shinythemes)
 library(DT)
 library(tidyverse)
 library(here)
-
+library(shinydashboard)
+library(ggplot2)
+library(lubridate)
+library(sf)
+library(leaflet)
+library(leaflet.extras)
+library(rgdal)
 
 ####################################################################
 ###############
@@ -35,9 +41,40 @@ kpi_labels <- c("All Staffed Beds",
                 "Percentage Occupancy")
 
 ####################################################################
+###############
+###############  Grant Walker
+data <- read_csv(here("clean_data/phs_admissions_data_clean.csv"))
+hb_name <- unique(data$hb_name)
+hb_urban <- unique(data$urban_rural)
+
+####################################################################
+###############
+###############  Jack Patton
+raw_data <- read_csv(here("clean_data/beds_by_nhs_board_of_treatment_and_specialty.csv"))
+
+scotlandpoly <- readOGR(here("clean_data/HB_WGS_84_EPSG4326/reprojected_hb.shp"))
+
+health_boards <- read_csv(here("clean_data/HB_scotland.csv"))
+
+hospitals <- read_csv(here("clean_data/hospitals_scotland.csv")) %>%
+  filter(!is.na(XCoordinate | YCoordinate))
 
 
+hosptials_data <- inner_join(raw_data, hospitals, by = "Location")
+HB_data <- inner_join(raw_data, health_boards, by = c("Location" = "HB"))
 
+HB_data = select(HB_data, Quarter, PercentageOccupancy, TotalOccupiedBeds, AverageOccupiedBeds, AllStaffedBeds, Location, SpecialtyName, HB)
+corrected_names = data.frame(scotlandpoly$HBName, scotlandpoly$HBCode)
+
+HB_data <- inner_join(HB_data, corrected_names, by = c("Location" = "scotlandpoly.HBCode"))
+
+hospitals_longlat <- hospitals %>%
+  st_as_sf(coords = c("XCoordinate", "YCoordinate"), crs = 27700) %>% st_transform(4326) %>%
+  st_coordinates() %>%
+  as_tibble()
+hospitals <- cbind(hospitals, hospitals_longlat)
+
+####################################################################
 
 ui <- fluidPage(
   tabsetPanel(
@@ -49,10 +86,33 @@ ui <- fluidPage(
     }'
     )),
    
+    tabPanel("Hospital Capacity",
+             
+             
+             # Application title
+             
+             h1(strong("Hospital Capacity"), align="center", style = "font-size:100px;"),
+             
+             #output print
+             verticalLayout(
+               wellPanel("Region_Selected: ", textOutput("region_selected")),
+               
+               # the map
+               mainPanel(
+                 leafletOutput("scotlandHM"),
+                 plotOutput("plotteddata")
+               )
+             ),
+             
+             br(),
+             br(),
+             
+      
+    ),
+    
     
     tabPanel("Demographics",
-             
-             
+
              
              # Application title
              
@@ -146,7 +206,61 @@ ui <- fluidPage(
        br(),
        plotOutput("diff_plot")
        
-   )   
+   ), 
+   
+   tabPanel("National variation",
+            titlePanel(h1("National variation in hospital activity", align = "center")),
+            fluidRow(
+              
+              titlePanel(h2("Health Board")),
+              br(),
+              p("Explore the differences between (left) and within (right) the 14 Health boards of Scotland. Within a Health board the variation in admissions is shown."),
+              br(),
+              column(6, 
+                     pickerInput(inputId = "multi_hb_input", 
+                                 label = "Select Health Boards", 
+                                 choices = unique(data$hb_name),
+                                 multiple = TRUE,
+                                 selected = unique(data$hb_name))),
+              
+              column(6,
+                     selectInput(inputId = "hb_input", 
+                                 label = "Select Health Board", 
+                                 choices = hb_name)),
+              
+            ),
+            
+            fluidRow(
+              
+              # column(6,
+              #   radioButtons(inputId = "urban_input", 
+              #                label = "Urban or rural?",
+              #                choices = hb_urban)),
+              
+              column(6,
+                     plotOutput("hb_quarter")),
+              
+              column(6,
+                     plotOutput("hb_activity")),
+              
+            ),
+            
+            br(),
+            
+            fluidRow(
+              
+              titlePanel(h2("Urban or rural")),
+              br(),
+              p("The differences between urban and rural Health board admissions are presented on a per capita basis."),
+              br(),
+              column(6,
+                     plotOutput("hb_urban")),
+              
+              column(6,
+                     plotOutput("hb_urban_rural_time")),
+              
+            )           
+   )
    
   ))
 
@@ -154,6 +268,63 @@ ui <- fluidPage(
 
 server <- function(input, output) {
   
+  ############### Jack's
+  ##map stuff
+  output$scotlandHM <- renderLeaflet({
+    leaflet() %>%
+      addTiles() %>%
+      addResetMapButton()%>%
+      addPolygons(data = scotlandpoly, popup = ~HBName, group = "HB_regions", layerId = ~HBName) %>%
+      addCircles(data = hospitals, lng = ~X, lat = ~Y, label = ~LocationName, group = "hospital_locations", color = "red")
+  })
+  ## trigger map stuff
+  observeEvent(input$scotlandHM_shape_click, { 
+    region_selected <- reactive(input$scotlandHM_shape_click)
+    p <- reactive(region_selected()$id)
+    output$region_selected <- renderText(p())
+    
+    
+    ##map data stuff
+    filtered_df <- reactive({
+      HB_data %>%
+        filter(scotlandpoly.HBName == p()) %>%
+        group_by(Quarter) %>%
+        summarise(PercentageOccupancy_mean = mean(PercentageOccupancy, na.rm = TRUE), 
+                  PercentageOccupancy_lowwer = quantile(PercentageOccupancy, 0.25, na.rm = TRUE), 
+                  PercentageOccupancy_upper = quantile(PercentageOccupancy, 0.75, na.rm = TRUE),  
+                  Quarter, scotlandpoly.HBName) %>%
+        arrange()
+    })
+    
+    
+    ##plotting stuff
+    output$plotteddata <- renderPlot({
+      ggplot(filtered_df()) +
+        
+        annotate('rect', xmin = -Inf, xmax = "2019Q4", 
+                 ymin=-Inf, ymax=Inf, alpha=0.5, fill="white") +
+        
+        geom_vline(aes(xintercept = "2019Q4"), color = "red") +
+        
+        geom_line(aes(x = Quarter, y = PercentageOccupancy_mean), group = "mean", size = 1) +
+        geom_line(aes(x = Quarter, y = PercentageOccupancy_upper), group = "75th percentile", size=0.5, alpha=0.5, color = "blue", linetype="twodash") +
+        geom_line(aes(x = Quarter, y = PercentageOccupancy_lowwer), group = "25th percentile", size=0.5, alpha=0.5, color = "blue", linetype="twodash") +
+        labs(
+          x = "yearly quarter", 
+          y = "Avarage percentage hospital cappacity with quartile markers", 
+          title = "patterns of hosptial cappacity over time",
+          subtitle = "historical referance data plotted before 2020"
+        ) + ylim(0, 100) +
+        theme(text=element_text(size = 20,  family = "Arial"),
+              strip.background =element_rect(fill = "#074859"),
+              strip.text = element_text(colour = 'white', size = 18,
+                                        family = "Arial"))+
+        theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+        theme(axis.title.x = element_text(margin = margin(t = 10)))
+      
+    })
+    
+  })
   
   ############### Simone's
   output$table_output <- renderDataTable({
@@ -272,6 +443,63 @@ server <- function(input, output) {
                                       family = "Arial"))
     
   })
+  
+  
+  ############### Grant's
+  output$hb_activity <- renderPlot({
+    data %>% 
+      filter(hb_name == input$hb_input) %>%
+      group_by(quarter, admission_type) %>%  
+      summarise(episodes = sum(episodes)) %>% 
+      ggplot() +
+      geom_line(aes(x = quarter, y = episodes, group = admission_type, colour = admission_type), alpha = 1) +
+      geom_point(aes(x = quarter, y = episodes, colour = admission_type), alpha = 0.5, size = 0.75) +
+      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+      xlab("Admission type") +
+      ylab("Episodes")
+  })
+  
+  output$hb_quarter <- renderPlot({
+    data %>%
+      filter(hb_name == input$multi_hb_input) %>%
+      group_by(quarter, hb_name) %>% 
+      summarise(episodes = sum(episodes)/mean(pop)) %>% 
+      ggplot() +
+      geom_line(aes(x = quarter, y = episodes, group = hb_name, colour = hb_name), alpha = 0.75) +
+      geom_point(aes(x = quarter, y = episodes, colour = hb_name), alpha = 0.75) +
+      xlab("Quarter") +
+      ylab("Episodes per capita") +
+      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+  })
+  
+  output$hb_urban <- renderPlot({
+    data %>%
+      filter(hb_code != "S27000001") %>% # urban_rural status unclear
+      group_by(urban_rural, admission_type) %>%
+      summarise(episodes = sum(episodes)/mean(pop)) %>% 
+      ggplot() +
+      aes(x = admission_type, y = episodes) +
+      geom_bar(stat = "identity") +
+      facet_grid(~urban_rural) +
+      xlab("Admission type") +
+      ylab("Episodes per capita") +
+      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+  })
+  
+  output$hb_urban_rural_time <- renderPlot({
+    
+    data %>%
+      group_by(quarter, urban_rural) %>% 
+      summarise(episodes = sum(episodes)/mean(pop)) %>% 
+      ggplot() +
+      aes(x = quarter, y = episodes, group = urban_rural, colour = urban_rural) +
+      geom_line() +
+      xlab("Quarter") +
+      ylab("Episodes per capita") +
+      ylim(0,NA)
+    
+  })
+  
 }
 
 # Run the application 
