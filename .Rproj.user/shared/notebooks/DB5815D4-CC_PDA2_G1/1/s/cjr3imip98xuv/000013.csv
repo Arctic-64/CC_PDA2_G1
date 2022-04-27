@@ -28,6 +28,7 @@
 "0","  addCircles(data = hospitals, lng = ~X, lat = ~Y, label = ~LocationName, group = ""hospital_locations"", color = ""red"")"
 "0","    })"
 "0","    ## trigger map bullshit"
+"0","  p = ""NHS Ayrshire and Arran"""
 "0","observeEvent(input$scotlandHM_shape_click, { "
 "0","    region_selected <- input$scotlandHM_shape_click"
 "0","    p <- renderText(region_selected$id)"
@@ -40,9 +41,10 @@
 "0","  })"
 "0","  ##plotting bullshit"
 "0","  output$plotteddata <- renderPlot({"
-"0","    ggplot(filtered_df()) +"
-"0","      aes(x = Quarter, y = TotalOccupiedBeds) +"
-"0","      geom_col()"
+"0","        ggplot(filtered_df) +"
+"0","        aes(x = Quarter, y = PercentageOccupancy) +"
+"0","        geom_line() +"
+"0","        geom_point()"
 "0","    "
 "0","  })"
 "0","    "
@@ -56,37 +58,20 @@
 Listening on http://127.0.0.1:4249
 "
 "2","Warning:"
-"2"," Error in filter: [38;5;157mProblem while computing `..1 = HBName == p`.[39m
-[1mCaused by error in [38;5;157m`HBName == p`[39m:[22m
-[33m![39m comparison (1) is possible only for atomic and list types
+"2"," Error in ggplot:   You're passing a function as global data.
+  Have you misspelled the `data` argument in `ggplot()`
 "
-"2","  201: [37m<Anonymous>[39m
-"
-"2","Warning:"
-"2"," Error in filter: [38;5;157mProblem while computing `..1 = HBName == p`.[39m
-[1mCaused by error in [38;5;157m`HBName == p`[39m:[22m
-[33m![39m comparison (1) is possible only for atomic and list types
-"
-"2","  201: [37m<Anonymous>[39m
+"2","  176: [37m<Anonymous>[39m
 "
 "2","Warning:"
-"2"," Error in filter: [38;5;157mProblem while computing `..1 = HBName == p`.[39m
-[1mCaused by error in [38;5;157m`HBName == p`[39m:[22m
-[33m![39m comparison (1) is possible only for atomic and list types
+"2"," Error in ggplot:   You're passing a function as global data.
+  Have you misspelled the `data` argument in `ggplot()`
 "
-"2","  201: [37m<Anonymous>[39m
-"
-"2","Warning:"
-"2"," Error in filter: [38;5;157mProblem while computing `..1 = HBName == p`.[39m
-[1mCaused by error in [38;5;157m`HBName == p`[39m:[22m
-[33m![39m comparison (1) is possible only for atomic and list types
-"
-"2","  201: [37m<Anonymous>[39m
+"2","  176: [37m<Anonymous>[39m
 "
 "2","Warning:"
-"2"," Error in filter: [38;5;157mProblem while computing `..1 = HBName == p`.[39m
-[1mCaused by error in [38;5;157m`HBName == p`[39m:[22m
-[33m![39m comparison (1) is possible only for atomic and list types
+"2"," Error in ggplot:   You're passing a function as global data.
+  Have you misspelled the `data` argument in `ggplot()`
 "
-"2","  201: [37m<Anonymous>[39m
+"2","  176: [37m<Anonymous>[39m
 "
