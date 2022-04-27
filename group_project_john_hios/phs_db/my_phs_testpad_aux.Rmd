@@ -12,6 +12,11 @@ output:
 ---
 
 
+# Intro
+
+This markdown describes the data cleaning/wrangling steps to process, visualise and extract statistics from the bed data sampling distribution comprising the years between 2016 and 2019.
+
+
 # Preamble
 
 ## Call libraries
