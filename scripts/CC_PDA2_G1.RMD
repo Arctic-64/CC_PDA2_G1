@@ -71,20 +71,19 @@ addResetMapButton()%>%
   addCircles(data = hospitals, lng = ~X, lat = ~Y, label = ~LocationName, group = "hospital_locations", color = "red")
     })
     ## trigger map bullshit
-  p = "NHS Ayrshire and Arran"
 observeEvent(input$scotlandHM_shape_click, { 
-    region_selected <- input$scotlandHM_shape_click
-    p <- renderText(region_selected$id)
-    output$region_selected <- p
+    region_selected <- reactive(input$scotlandHM_shape_click)
+    p <- reactive(region_selected()$id)
+    output$region_selected <- renderText(p())
 
  ##map data bullshit
  filtered_df <- reactive({
     HB_data %>%
-      filter(HBName == p)
+      filter(HBName == p())
   })
   ##plotting bullshit
   output$plotteddata <- renderPlot({
-        ggplot(filtered_df) +
+        ggplot(filtered_df()) +
         aes(x = Quarter, y = PercentageOccupancy) +
         geom_line() +
         geom_point()
@@ -101,6 +100,60 @@ shinyApp(ui = ui, server = server)
 
 
 ```{r}
-HB_data
+ui <- fluidPage(
+
+    # Application title
+    titlePanel("jacks experiment"),
+
+        #output print
+    verticalLayout(
+        wellPanel(textOutput("region_selected")),
+
+        # the map
+        mainPanel(
+           leafletOutput("scotlandHM"),
+           plotOutput("plotteddata")
+        )
+    )
+)
+
+
+
+# Define server logic 
+server <- function(input, output) {
+  ##map bullshit
+  output$scotlandHM <- renderLeaflet({
+    leaflet() %>%
+addTiles() %>%
+addResetMapButton()%>%
+  addPolygons(data = scotlandpoly, popup = ~HBName, group = "HB_regions", layerId = ~HBName) %>%
+  addCircles(data = hospitals, lng = ~X, lat = ~Y, label = ~LocationName, group = "hospital_locations", color = "red")
+    })
+    ## trigger map bullshit
+observeEvent(input$scotlandHM_shape_click, { 
+    region_selected <- reactive(input$scotlandHM_shape_click)
+    p <- reactive(region_selected()$id)
+    output$region_selected <- renderText(p())
+
+ ##map data bullshit
+ filtered_df <- reactive({
+    HB_data %>%
+      filter(HBName == p())
+  })
+  ##plotting bullshit
+  output$plotteddata <- renderPlot({
+        ggplot(filtered_df()) +
+        aes(x = Quarter, y = PercentageOccupancy) +
+        geom_line() +
+        geom_point()
+    
+  })
+    
+  })}
+
+
+
+# Run the application 
+shinyApp(ui = ui, server = server)
 ```
 

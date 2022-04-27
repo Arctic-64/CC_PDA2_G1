@@ -28,20 +28,19 @@
 "0","  addCircles(data = hospitals, lng = ~X, lat = ~Y, label = ~LocationName, group = ""hospital_locations"", color = ""red"")"
 "0","    })"
 "0","    ## trigger map bullshit"
-"0","  p = ""NHS Ayrshire and Arran"""
 "0","observeEvent(input$scotlandHM_shape_click, { "
-"0","    region_selected <- input$scotlandHM_shape_click"
-"0","    p <- renderText(region_selected$id)"
-"0","    output$region_selected <- p"
+"0","    region_selected <- reactive(input$scotlandHM_shape_click)"
+"0","    p <- reactive(region_selected()$id)"
+"0","    output$region_selected <- renderText(p())"
 "0",""
 "0"," ##map data bullshit"
 "0"," filtered_df <- reactive({"
 "0","    HB_data %>%"
-"0","      filter(HBName == p)"
+"0","      filter(HBName == p())"
 "0","  })"
 "0","  ##plotting bullshit"
 "0","  output$plotteddata <- renderPlot({"
-"0","        ggplot(filtered_df) +"
+"0","        ggplot(filtered_df()) +"
 "0","        aes(x = Quarter, y = PercentageOccupancy) +"
 "0","        geom_line() +"
 "0","        geom_point()"
@@ -55,23 +54,5 @@
 "0","# Run the application "
 "0","shinyApp(ui = ui, server = server)"
 "2","
-Listening on http://127.0.0.1:4249
-"
-"2","Warning:"
-"2"," Error in ggplot:   You're passing a function as global data.
-  Have you misspelled the `data` argument in `ggplot()`
-"
-"2","  176: [37m<Anonymous>[39m
-"
-"2","Warning:"
-"2"," Error in ggplot:   You're passing a function as global data.
-  Have you misspelled the `data` argument in `ggplot()`
-"
-"2","  176: [37m<Anonymous>[39m
-"
-"2","Warning:"
-"2"," Error in ggplot:   You're passing a function as global data.
-  Have you misspelled the `data` argument in `ggplot()`
-"
-"2","  176: [37m<Anonymous>[39m
+Listening on http://127.0.0.1:6450
 "

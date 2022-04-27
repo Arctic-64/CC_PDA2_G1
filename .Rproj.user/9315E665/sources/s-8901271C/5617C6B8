@@ -3,7 +3,7 @@
     "path": "D:/UNIVERSITY/CodeClan/CC_PDA2_G1/CC_PDA2_G1/scripts/CC_PDA2_G1.RMD",
     "project_path": "scripts/CC_PDA2_G1.RMD",
     "type": "r_markdown",
-    "hash": "1598071692",
+    "hash": "1547639564",
     "contents": "",
     "dirty": false,
     "created": 1650848005584.0,
@@ -12,18 +12,18 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "86,26",
-        "scrollLine": "68",
+        "cursorPosition": "156,34",
+        "scrollLine": "117",
         "rmdVisualMode": "false",
         "rmdVisualCollapsedChunks": "",
         "rmdVisualModeLocation": "2:0"
     },
     "folds": "",
-    "lastKnownWriteTime": 1651023124,
+    "lastKnownWriteTime": 1651054635,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1651023124892,
+    "last_content_update": 1651054635592,
     "read_only": false,
     "read_only_alternatives": []
 }
