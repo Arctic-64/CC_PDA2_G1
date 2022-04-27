@@ -108,11 +108,6 @@ phs_admissions_data <- phs_admissions_data %>%
 
 ```
 
-```{r}
-write_csv(phs_admissions_data, "../group_project_gw/clean_data/phs_admissions_data_clean.csv")
-  
-```
-
 Creating table of hb and population:
 
 Required if doing per capita calculation
@@ -138,6 +133,12 @@ phs_admissions_data <- phs_admissions_data %>%
 ```
 
 
+```{r}
+write_csv(phs_admissions_data, "../group_project_gw/clean_data/phs_admissions_data_clean.csv")
+  
+```
+
+
 # Data analysis
 
 ```{r}
@@ -159,7 +160,7 @@ phs_admissions_data %>%
 Q. Remove Transfers?
 
 ```{r}
-# num episodes (normalised) per hb per quarter
+# 2. num episodes (normalised) per hb per quarter
 # input selector is dropdown hb option list
 phs_admissions_data %>% 
   filter(hb_name != "National Facility NHS Louisa Jordan", hb_name != "Non-NHS Provider Location", hb_name != "The Golden Jubilee National Hospital") %>% # remove hb with pop NA
