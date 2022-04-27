@@ -96,9 +96,15 @@ server <- function(input, output) {
         ggplot() +
         aes(x = Quarter, y = .data[[input$kpi_input]], group = HBName, fill = HBName) +
         geom_col(colour = "black") +
-        geom_text(aes(label = .data[[input$kpi_input]]), vjust = -0.5) +
-        scale_fill_manual(guide = "none", values = phs_palette[1]) +
-        ylim(c(0, NA))
+        geom_text(aes(label = .data[[input$kpi_input]]), size = 6, vjust = -0.25) +
+        scale_fill_manual(guide = "none", values = "#008b87") +
+        ylim(c(0, NA)) +
+        theme_bw() +
+        theme(axis.title.x = element_text(margin = margin(t = 10)),
+              text=element_text(size = 20,  family = "Arial"),
+              strip.background = element_rect(fill = "#008b87"),
+              strip.text = element_text(colour = 'white', size = 18,
+                                        family = "Arial"))
         
     })
     
@@ -111,8 +117,15 @@ server <- function(input, output) {
         aes(x = Quarter, y = .data[[input$kpi_input]], group = HBName, fill = HBName) +
         geom_col(colour = "black") +
         ylab("Pre-Covid19 Percentage Difference (%)") +
-        geom_text(aes(label = .data[[input$kpi_input]]), vjust = -0.5) +
-        scale_fill_manual(guide = "none", values = phs_palette[1])
+        geom_text(aes(label = .data[[input$kpi_input]]), size = 6, vjust = -0.25) +
+        scale_fill_manual(guide = "none", values = phs_palette[1]) +
+        scale_fill_manual(guide = "none", values = "#008b87") +
+        theme_bw() +
+        theme(axis.title.x = element_text(margin = margin(t = 10)),
+              text=element_text(size = 20,  family = "Arial"),
+              strip.background = element_rect(fill = "#008b87"),
+              strip.text = element_text(colour = 'white', size = 18,
+                                        family = "Arial"))
       
     })
 }
