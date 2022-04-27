@@ -29,6 +29,7 @@ br(),
           
           
           
+          
           pickerInput("age_input", 
                "Select Age Groups", 
                choices = unique(tot_and_avg_stays$age),
