@@ -1,0 +1,13 @@
+"0","beds_oos <- read_csv(""data/beds_by_nhs_board_of_treatment_and_specialty.csv"") "
+"1","[1mRows: [22m[34m30448[39m [1mColumns: [22m[34m20[39m
+"
+"1","[36m--[39m [1mColumn specification[22m [36m--------------------------------------------------------------------------------------------------------------[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (11): Quarter, QuarterQF, HB, HBQF, Location, LocationQF, Specialty, SpecialtyQF, SpecialtyName, SpecialtyNameQF, PercentageOc...
+[32mdbl[39m  (5): AllStaffedBeds, TotalOccupiedBeds, AverageAvailableStaffedBeds, AverageOccupiedBeds, PercentageOccupancy
+[33mlgl[39m  (4): AllStaffedBedsQF, TotalOccupiedBedsQF, AverageAvailableStaffedBedsQF, AverageOccupiedBedsQF
+"
+"1","
+[36mi[39m Use `spec()` to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set `show_col_types = FALSE` to quiet this message.
+"

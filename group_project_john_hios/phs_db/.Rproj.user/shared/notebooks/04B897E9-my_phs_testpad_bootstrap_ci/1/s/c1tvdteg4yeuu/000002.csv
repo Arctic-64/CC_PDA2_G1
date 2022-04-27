@@ -1,0 +1,2 @@
+"0","beds <- beds %>%"
+"0","  filter(SpecialtyName == ""All Acute"")"

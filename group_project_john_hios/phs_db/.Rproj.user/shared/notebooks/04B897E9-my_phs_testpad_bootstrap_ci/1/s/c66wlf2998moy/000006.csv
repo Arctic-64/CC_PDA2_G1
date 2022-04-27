@@ -1,0 +1,8 @@
+"0","beds %>%"
+"0","  # filter(hb_name == ""NHS Greater Glasgow and Clyde"" ) %>% "
+"0","  filter(hb_name == ""NHS Grampian"" ) %>% "
+"0","  group_by(location) %>% "
+"0","  summarise(avg_tot_occ_beds = mean(total_occupied_beds),"
+"0","            avg_avail_staffed_beds = mean(average_available_staffed_beds),"
+"0","            avg_occupied_beds = mean(average_occupied_beds),"
+"0","            avg_percentage_occupancy = mean(percentage_occupancy)) "

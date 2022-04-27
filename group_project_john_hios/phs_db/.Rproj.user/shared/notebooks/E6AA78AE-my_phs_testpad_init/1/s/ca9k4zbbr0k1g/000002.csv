@@ -1,0 +1,3 @@
+"0","shb_name_beds <- unique(beds$shb_name) %>% "
+"0","  discard(is.na)"
+"0","  "

@@ -1,0 +1,6 @@
+"0",""
+"0","# Calculate a 99.9% CI for ``mean(total_occupied_beds)``, and visualise it on the distribution"
+"0",""
+"0","tob_ci999 <- bootstrap_distn_tob %>%"
+"0","  get_ci(level = 0.999, type = ""percentile"")"
+"0","tob_ci999"

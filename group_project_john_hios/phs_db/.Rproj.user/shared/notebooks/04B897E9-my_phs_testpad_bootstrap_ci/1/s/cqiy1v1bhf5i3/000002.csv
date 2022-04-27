@@ -1,0 +1,58 @@
+"0","shb_ci <- shb_ci%>% "
+"0","  select(-shb_name)"
+"0",""
+"0",""
+"0","beds <- beds %>%"
+"0","  left_join(shb_ci, , by = c(""hb"" = ""shb""))"
+"0",""
+"0","glimpse(beds)"
+"1","Rows: 361"
+"1",""
+"1","
+"
+"1","Columns: 39"
+"1",""
+"1","
+"
+"1","$ quarter                           [3m[38;5;246m<chr>[39m[23m ""2020Q1"", ""2020Q1"", ""2020Q2"", ""2020Q2"", ""2020Q3"", ""2020Q3"", ""2020Q4"", ""2020Q4"", ""2021Q1"", ""~
+$ quarter_qf                        [3m[38;5;246m<chr>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ""p"", ""p"", NA, NA, NA, NA, NA, NA, NA, NA, N~
+$ hb                                [3m[38;5;246m<chr>[39m[23m ""SB0801"", ""SB0801"", ""SB0801"", ""SB0801"", ""SB0801"", ""SB0801"", ""SB0801"", ""SB0801"", ""SB0801"", ""~
+$ hbqf                              [3m[38;5;246m<chr>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+$ location                          [3m[38;5;246m<chr>[39m[23m ""D102H"", ""SB0801"", ""D102H"", ""SB0801"", ""D102H"", ""SB0801"", ""D102H"", ""SB0801"", ""D102H"", ""SB080~
+$ location_qf                       [3m[38;5;246m<chr>[39m[23m NA, ""d"", NA, ""d"", NA, ""d"", NA, ""d"", NA, ""d"", NA, ""d"", NA, ""d"", NA, NA, ""d"", NA, NA, ""d"", NA~
+$ specialty                         [3m[38;5;246m<chr>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+$ specialty_qf                      [3m[38;5;246m<chr>[39m[23m ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""~
+$ specialty_name                    [3m[38;5;246m<chr>[39m[23m ""All Acute"", ""All Acute"", ""All Acute"", ""All Acute"", ""All Acute"", ""All Acute"", ""All Acute"", ~
+$ specialty_name_qf                 [3m[38;5;246m<chr>[39m[23m ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""~
+$ all_staffed_beds                  [3m[38;5;246m<dbl>[39m[23m 14896, 14896, 14366, 14366, 15442, 15442, 15665, 15665, 16547, 16547, 16159, 16159, 16897, ~
+$ all_staffed_beds_qf               [3m[38;5;246m<lgl>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+$ total_occupied_beds               [3m[38;5;246m<dbl>[39m[23m 10915, 10915, 8101, 8101, 9934, 9934, 11164, 11164, 12060, 12060, 12269, 12269, 12029, 1202~
+$ total_occupied_beds_qf            [3m[38;5;246m<lgl>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+$ average_available_staffed_beds    [3m[38;5;246m<dbl>[39m[23m 163.6923, 163.6923, 157.8681, 157.8681, 167.8478, 167.8478, 170.2717, 170.2717, 183.8556, 1~
+$ average_available_staffed_beds_qf [3m[38;5;246m<lgl>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+$ average_occupied_beds             [3m[38;5;246m<dbl>[39m[23m 119.94505, 119.94505, 89.02198, 89.02198, 107.97826, 107.97826, 121.34783, 121.34783, 134.0~
+$ average_occupied_beds_qf          [3m[38;5;246m<lgl>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+$ percentage_occupancy              [3m[38;5;246m<dbl>[39m[23m 73.27470, 73.27470, 56.39009, 56.39009, 64.33105, 64.33105, 71.26716, 71.26716, 72.88330, 7~
+$ percentage_occupancy_qf           [3m[38;5;246m<chr>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+$ shb_name                          [3m[38;5;246m<chr>[39m[23m ""The Golden Jubilee National Hospital"", ""The Golden Jubilee National Hospital"", ""The Golden~
+$ hb_name                           [3m[38;5;246m<chr>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, ""NHS Ayrshire and Arran"", ""NHS Ayrs~
+$ country_name                      [3m[38;5;246m<chr>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,~
+$ lower_tob_ci999.x                 [3m[38;5;246m<dbl>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 81184.50, 81184.50, 81184.50, 81184~
+$ upper_tob_ci999.x                 [3m[38;5;246m<dbl>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 86960.24, 86960.24, 86960.24, 86960~
+$ lower_aasb_ci999.x                [3m[38;5;246m<dbl>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 946.4210, 946.4210, 946.4210, 946.4~
+$ upper_aasb_ci999.x                [3m[38;5;246m<dbl>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 1028.7880, 1028.7880, 1028.7880, 10~
+$ lower_aob_ci999.x                 [3m[38;5;246m<dbl>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 885.2339, 885.2339, 885.2339, 885.2~
+$ upper_aob_ci999.x                 [3m[38;5;246m<dbl>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 957.3345, 957.3345, 957.3345, 957.3~
+$ lower_po_ci999.x                  [3m[38;5;246m<dbl>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 92.33720, 92.33720, 92.33720, 92.33~
+$ upper_po_ci999.x                  [3m[38;5;246m<dbl>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 94.38636, 94.38636, 94.38636, 94.38~
+$ lower_tob_ci999.y                 [3m[38;5;246m<dbl>[39m[23m 11777.43, 11777.43, 11777.43, 11777.43, 11777.43, 11777.43, 11777.43, 11777.43, 11777.43, 1~
+$ upper_tob_ci999.y                 [3m[38;5;246m<dbl>[39m[23m 12144.07, 12144.07, 12144.07, 12144.07, 12144.07, 12144.07, 12144.07, 12144.07, 12144.07, 1~
+$ lower_aasb_ci999.y                [3m[38;5;246m<dbl>[39m[23m 167.6339, 167.6339, 167.6339, 167.6339, 167.6339, 167.6339, 167.6339, 167.6339, 167.6339, 1~
+$ upper_aasb_ci999.y                [3m[38;5;246m<dbl>[39m[23m 173.4391, 173.4391, 173.4391, 173.4391, 173.4391, 173.4391, 173.4391, 173.4391, 173.4391, 1~
+$ lower_aob_ci999.y                 [3m[38;5;246m<dbl>[39m[23m 129.095, 129.095, 129.095, 129.095, 129.095, 129.095, 129.095, 129.095, 129.095, 129.095, 1~
+$ upper_aob_ci999.y                 [3m[38;5;246m<dbl>[39m[23m 132.7745, 132.7745, 132.7745, 132.7745, 132.7745, 132.7745, 132.7745, 132.7745, 132.7745, 1~
+$ lower_po_ci999.y                  [3m[38;5;246m<dbl>[39m[23m 75.57855, 75.57855, 75.57855, 75.57855, 75.57855, 75.57855, 75.57855, 75.57855, 75.57855, 7~
+$ upper_po_ci999.y                  [3m[38;5;246m<dbl>[39m[23m 77.91663, 77.91663, 77.91663, 77.91663, 77.91663, 77.91663, 77.91663, 77.91663, 77.91663, 7~"
+"1",""
+"1","
+"

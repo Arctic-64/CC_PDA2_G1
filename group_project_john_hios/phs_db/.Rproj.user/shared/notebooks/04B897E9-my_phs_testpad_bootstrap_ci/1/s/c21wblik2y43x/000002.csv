@@ -1,0 +1,5 @@
+"0","# beds <- beds %>% "
+"0","#   mutate(Country = if_else(!is.na(Country.x), Country.x, Country.y)) %>% "
+"0","#   select(-Country.x, -Country.y)"
+"0","# "
+"0","# glimpse(beds) "
