@@ -403,7 +403,7 @@ server <- function(input, output) {
         labs(
           x = "Yearly Quarter", 
           y = "Avarage Percentage Hospital Capacity", 
-          title = "Hosptial Capacity Over Time",
+          title = "Hospital Capacity Over Time",
           subtitle = "Historical Reference Data Plotted Before 2020"
         ) + ylim(0, 100) +
         theme(text=element_text(size = 16,  family = "Arial"),
