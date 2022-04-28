@@ -53,14 +53,14 @@ hb_urban <- unique(data$urban_rural)
 ###############
 ###############  Jack Patton
 raw_data <- read_csv(
-  here("clean_data/beds_by_nhs_board_of_treatment_and_specialty.csv"))
+  here("raw_data/beds_by_nhs_board_of_treatment_and_specialty.csv"))
 
 scotlandpoly <- readOGR(
   here("clean_data/HB_WGS_84_EPSG4326/reprojected_hb.shp"))
 
-health_boards <- read_csv(here("clean_data/HB_scotland.csv"))
+health_boards <- read_csv(here("raw_data/HB_scotland.csv"))
 
-hospitals <- read_csv(here("clean_data/hospitals_scotland.csv")) %>%
+hospitals <- read_csv(here("raw_data/hospitals_scotland.csv")) %>%
   filter(!is.na(XCoordinate | YCoordinate))
 
 
