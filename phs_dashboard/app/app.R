@@ -104,7 +104,7 @@ ui <- fluidPage(
              
              #output print
              verticalLayout(
-               wellPanel("Region_Selected: ", textOutput("region_selected")),
+               wellPanel("Region Selected: ", textOutput("region_selected")),
                
                # the map
                mainPanel(
