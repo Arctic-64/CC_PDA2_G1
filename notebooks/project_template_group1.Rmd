@@ -31,7 +31,7 @@ Person 4: Grant Walker
 
 **Jack Patton** set up the Github repository, and worked on the `Hospital Capacity` dashboard tab (workpack 3).
 
-**Grant Walker** set up the Trello project management tool, and worked on the `National Variation` dashboard tab (workpack 2).
+**Grant Walker** set up the Trello project management tool and worked on the `National Variation` dashboard tab (workpack 2). Prepared the basic leaflet map by cleaning and overlaying polygons of NHS Health boards. 
 
 **Everyone** worked on creating the workpacks for building the dashboard and merging each tab in the masted dashboard
 
@@ -75,7 +75,7 @@ The dashboard outlines our topic in terms of:
 * R (programming language for statistical computing and graphics)
 * Shiny (R package used to build interactive web apps)
 * Leaflet (open-source JavaScript libraries for interactive maps)
-
+* QGIS software (loading, cleaning and exporting shapefiles)
 
 ### How did you gather and synthesise requirements for the project?
 
