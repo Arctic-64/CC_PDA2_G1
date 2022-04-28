@@ -93,6 +93,46 @@ ui <- fluidPage(
       font-size: 20px; 
     }'
     )),
+    
+    tabPanel("Intro",
+             
+             h1(strong("Intro"), align="center", 
+                style = "font-size:100px;"),
+             
+    p("Our dashboard contains 4 main tabs providing insights on various aspects of secondary care in the acute hospital sector from 2020 onward."),
+      
+      
+      p("Our topic is to consider the impact that winter may have on the health care, primarily the hospital (acute care) sector in Scotland."), 
+      
+      p("This is achieved by answering the following questions:"),
+      
+        
+      p("- Capacity – what is happening to the number of beds over the period? Perhaps think about the specialities these are if there has been specific variation?"),
+      
+        
+      p("- Are there any demographic groups that are driving the activity?"),
+      
+        
+      p("- What does this mean for the number of people in intensive care and the number of beds?"),
+      
+        
+      p("- How significant are the differences in hospital activity across the country? Does urban/rural have an impact or is it related to the size and capacity of the health board?"),
+      
+    p("The dashboard outlines our topic in terms of:"),
+        
+      
+      p("- Hospital Capacity (in terms of patients) across the National Health Boards in Scotland."),
+      
+        
+      p("- Demographics on total stays and average length of stays on a countrywide level."),
+      
+        
+      p("- Bed availability/occupancy per National Health Board and countrywide."),
+        
+        
+      p(" - Variation per admission type and differences between rural and urban areas."),
+    
+    ),
    
     tabPanel("Hospital Capacity",
              
@@ -176,6 +216,8 @@ ui <- fluidPage(
    
    
     ),
+   
+   
    
    tabPanel("Acute Care vs. NHS Bed Numbers",
             h1(strong("Acute Care vs. NHS Bed Numbers"), align = "center", 
