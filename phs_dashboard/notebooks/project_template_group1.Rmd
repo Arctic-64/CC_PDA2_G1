@@ -102,7 +102,7 @@ To clean the datasets we used the tidyverse library and the janitor. Data belong
 
 [**Hint**: This page offers a good starting point for understanding the data structure: https://guides.statistics.gov.scot/article/34-understanding-the-data-structure]
 
-The data is in the form of csv files which are being stored in the assignment folders `raw_data`` and  `clean_data`.
+The data is in the form of csv files which are being stored in the assignment folders `raw_data` and `clean_data`.
 
 This means that the original files used to derive the cleaned up set of data (refer to https://www.opendata.nhs.scot/dataset) are readily available for reviewing / QA'ing.
 
