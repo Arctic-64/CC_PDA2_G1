@@ -208,8 +208,17 @@ ui <- fluidPage(
        
    ), 
    
+   tags$head(tags$style('
+    body {
+      font-family: Arial; 
+      font-size: 20px; 
+    }'
+   )),
+   
    tabPanel("National variation",
-            titlePanel(h1("National variation in hospital activity", align = "center")),
+            
+            h1(strong("National variation in hospital activity"), align="center", style = "font-size:100px;"),
+            
             fluidRow(
               
               titlePanel(h2("Health Board")),
@@ -251,7 +260,7 @@ ui <- fluidPage(
               
               titlePanel(h2("Urban or rural")),
               br(),
-              p("The differences between urban and rural Health board admissions are presented on a per capita basis."),
+              p("The differences between the six urban and eight rural Health board admissions are presented on a per capita basis."),
               br(),
               column(6,
                      plotOutput("hb_urban")),
@@ -453,10 +462,23 @@ server <- function(input, output) {
       summarise(episodes = sum(episodes)) %>% 
       ggplot() +
       geom_line(aes(x = quarter, y = episodes, group = admission_type, colour = admission_type), alpha = 1) +
-      geom_point(aes(x = quarter, y = episodes, colour = admission_type), alpha = 0.5, size = 0.75) +
+      geom_point(aes(x = quarter, y = episodes, colour = admission_type), alpha = 0.5, size = 0.9) +
       theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
       xlab("Admission type") +
-      ylab("Episodes")
+      ylab("Episodes") +
+      scale_colour_manual("Admission type", values = c(
+        "All Day cases" = "#061a1f",
+        "All Inpatients" = "#062e3c",
+        "Elective Inpatients" = "#074859",
+        "Emergency Inpatients" = "#11667f",
+        "Transfers" = "#008b87")) +
+      theme_bw() +
+      theme(axis.title.x = element_text(margin = margin(t = 10)),
+            text=element_text(size = 16,  family = "Arial"),
+            strip.background = element_rect(fill = "#008b87"),
+            strip.text = element_text(colour = 'white', size = 18,
+                                      family = "Arial")) +
+      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
   })
   
   output$hb_quarter <- renderPlot({
@@ -466,9 +488,25 @@ server <- function(input, output) {
       summarise(episodes = sum(episodes)/mean(pop)) %>% 
       ggplot() +
       geom_line(aes(x = quarter, y = episodes, group = hb_name, colour = hb_name), alpha = 0.75) +
-      geom_point(aes(x = quarter, y = episodes, colour = hb_name), alpha = 0.75) +
+      geom_point(aes(x = quarter, y = episodes, colour = hb_name), alpha = 0.75, size = 0.9) +
       xlab("Quarter") +
       ylab("Episodes per capita") +
+      scale_colour_manual("Health boards", values = c(
+                                              "Ayrshire and Arran" = "#061a1f",
+                                              "Borders" = "#062e3c",
+                                              "Dumfries and Galloway" = "#074859",
+                                              "Fife" = "#11667f",
+                                              "Forth Valley" = "#008b87",
+                                              "Grampian" = "#47899b",
+                                              "Greater Glasgow and Clyde" = "#659799",
+                                              "Highland" = "#012F3C",
+                                              "Lanarkshire" = "#2A6B75", "Lothian" = "#E0D7C4", "Orkney" = "#01636A", "Shetland" = "#98B1AF", "Tayside" = "#054C59", "Western Isles" = "#022129")) +
+      theme_bw() +
+      theme(axis.title.x = element_text(margin = margin(t = 10)),
+            text=element_text(size = 16,  family = "Arial"),
+            strip.background = element_rect(fill = "#008b87"),
+            strip.text = element_text(colour = 'white', size = 18,
+                                      family = "Arial")) +
       theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
   })
   
@@ -483,6 +521,12 @@ server <- function(input, output) {
       facet_grid(~urban_rural) +
       xlab("Admission type") +
       ylab("Episodes per capita") +
+      theme_bw() +
+      theme(axis.title.x = element_text(margin = margin(t = 10)),
+            text=element_text(size = 16,  family = "Arial"),
+            strip.background = element_rect(fill = "#008b87"),
+            strip.text = element_text(colour = 'white', size = 18,
+                                      family = "Arial")) +
       theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
   })
   
@@ -494,9 +538,19 @@ server <- function(input, output) {
       ggplot() +
       aes(x = quarter, y = episodes, group = urban_rural, colour = urban_rural) +
       geom_line() +
+      geom_point(aes(x = quarter, y = episodes, colour = urban_rural), alpha = 0.5, size = 0.9) +
       xlab("Quarter") +
       ylab("Episodes per capita") +
-      ylim(0,NA)
+      scale_colour_manual("Urban or rural", values = c("Urban" = "#061a1f", "Rural" = "#659799")) +
+      ylim(0,NA) +
+      theme_bw() +
+      theme(axis.title.x = element_text(margin = margin(t = 10)),
+            text=element_text(size = 16,  family = "Arial"),
+            strip.background = element_rect(fill = "#008b87"),
+            strip.text = element_text(colour = 'white', size = 18,
+                                      family = "Arial")) +
+      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+      theme(legend.title=element_blank())
     
   })
   
