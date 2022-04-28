@@ -16,8 +16,10 @@ library(rgdal)
 ###############
 ###############  Simone Famiano
 
-dashboard_data_table <- read_csv(here("clean_data/dashboard_data_table.csv"))
-tot_and_avg_stays <- read_csv(here("clean_data/national_total_stays_and_avg_length.csv"))
+dashboard_data_table <- read_csv(
+  here("clean_data/dashboard_data_table.csv"))
+tot_and_avg_stays <- read_csv(
+  here("clean_data/national_total_stays_and_avg_length.csv"))
 
 ####################################################################
 ###############
@@ -50,26 +52,32 @@ hb_urban <- unique(data$urban_rural)
 ####################################################################
 ###############
 ###############  Jack Patton
-raw_data <- read_csv(here("clean_data/beds_by_nhs_board_of_treatment_and_specialty.csv"))
+raw_data <- read_csv(
+  here("raw_data/beds_by_nhs_board_of_treatment_and_specialty.csv"))
 
-scotlandpoly <- readOGR(here("clean_data/HB_WGS_84_EPSG4326/reprojected_hb.shp"))
+scotlandpoly <- readOGR(
+  here("clean_data/HB_WGS_84_EPSG4326/reprojected_hb.shp"))
 
-health_boards <- read_csv(here("clean_data/HB_scotland.csv"))
+health_boards <- read_csv(here("raw_data/HB_scotland.csv"))
 
-hospitals <- read_csv(here("clean_data/hospitals_scotland.csv")) %>%
+hospitals <- read_csv(here("raw_data/hospitals_scotland.csv")) %>%
   filter(!is.na(XCoordinate | YCoordinate))
 
 
 hosptials_data <- inner_join(raw_data, hospitals, by = "Location")
 HB_data <- inner_join(raw_data, health_boards, by = c("Location" = "HB"))
 
-HB_data = select(HB_data, Quarter, PercentageOccupancy, TotalOccupiedBeds, AverageOccupiedBeds, AllStaffedBeds, Location, SpecialtyName, HB)
+HB_data = select(HB_data, Quarter, PercentageOccupancy, TotalOccupiedBeds, 
+                 AverageOccupiedBeds, AllStaffedBeds, Location, SpecialtyName, 
+                 HB)
 corrected_names = data.frame(scotlandpoly$HBName, scotlandpoly$HBCode)
 
-HB_data <- inner_join(HB_data, corrected_names, by = c("Location" = "scotlandpoly.HBCode"))
+HB_data <- inner_join(HB_data, corrected_names, 
+                      by = c("Location" = "scotlandpoly.HBCode"))
 
 hospitals_longlat <- hospitals %>%
-  st_as_sf(coords = c("XCoordinate", "YCoordinate"), crs = 27700) %>% st_transform(4326) %>%
+  st_as_sf(coords = c("XCoordinate", "YCoordinate"), 
+           crs = 27700) %>% st_transform(4326) %>%
   st_coordinates() %>%
   as_tibble()
 hospitals <- cbind(hospitals, hospitals_longlat)
@@ -85,27 +93,83 @@ ui <- fluidPage(
       font-size: 20px; 
     }'
     )),
+    
+    tabPanel("Intro",
+             
+             h1(strong("Intro"), align="center", 
+                style = "font-size:100px;"),
+             
+             br(),
+             br(),
+             
+    p("Our dashboard contains 4 main tabs providing insights on various aspects of secondary care in the acute hospital sector from 2020 onward."),
+      
+      
+    p("Our topic is to consider the impact that winter may have on the health care, primarily the hospital (acute care) sector in Scotland."), 
+    
+            br(),
+      
+    p("This is achieved by answering the following questions:"),
+    
+            br(),
+      
+        
+      p(HTML("- <em> Capacity – what is happening to the number of beds over the period? Perhaps think about the specialities these are if there has been specific variation? </em>")),
+      
+        
+      p(HTML("- <em> Are there any demographic groups that are driving the activity? </em> ")),
+      
+        
+      p(HTML("- <em> What does this mean for the number of people in intensive care and the number of beds? </em> ")),
+      
+        
+      p(HTML("- <em>  How significant are the differences in hospital activity across the country? Does urban/rural have an impact or is it related to the size and capacity of the health board? </em> ")),
+    
+            br(),
+            br(),
+    
+    p("The dashboard outlines our topic in terms of:"),
+    
+            br(),
+        
+      
+      p(HTML("- <em> Hospital Capacity (in terms of patients) across the National Health Boards in Scotland. </em> ")),
+      
+        
+      p(HTML("- <em> Demographics on total stays and average length of stays on a countrywide level.</em>")),
+      
+        
+      p(HTML("- <em> Bed availability/occupancy per National Health Board and countrywide. </em>")),
+        
+        
+      p(HTML("- <em> Variation per admission type and differences between rural and urban areas. </em>")),
+    
+    ),
    
     tabPanel("Hospital Capacity",
              
              
              # Application title
              
-             h1(strong("Hospital Capacity"), align="center", style = "font-size:100px;"),
+             h1(strong("Hospital Capacity By Health Board"), align="center", 
+                                             style = "font-size:100px;"),
              
              #output print
              verticalLayout(
-               wellPanel("Region_Selected: ", textOutput("region_selected")),
+               wellPanel("Region Selected: ", textOutput("region_selected")),
                
                # the map
                mainPanel(
                  leafletOutput("scotlandHM"),
+                 br(),
+                 br(),
                  plotOutput("plotteddata")
                )
              ),
              
              br(),
              br(),
+             
              
       
     ),
@@ -116,7 +180,8 @@ ui <- fluidPage(
              
              # Application title
              
-             h1(strong("Demographics Data"), align="center", style = "font-size:100px;"),
+             h1(strong("Demographics Data"), align="center", 
+                                             style = "font-size:100px;"),
              
             
    
@@ -164,8 +229,12 @@ ui <- fluidPage(
    
     ),
    
-   tabPanel("Acute care vs. NHS bed numbers",
-            h1(strong("Acute Care vs. NHS Bed Numbers"), align="center", style = "font-size:100px;"),
+   
+   
+   tabPanel("Acute Care vs. NHS Bed Numbers",
+            h1(strong("Acute Care vs. NHS Bed Numbers"), align = "center", 
+                                                         style = 
+                 "font-size:100px;"),
            
             tags$head(tags$style('
        body {
@@ -208,11 +277,22 @@ ui <- fluidPage(
        
    ), 
    
-   tabPanel("National variation",
-            titlePanel(h1("National variation in hospital activity", align = "center")),
+   tags$head(tags$style('
+    body {
+      font-family: Arial; 
+      font-size: 20px; 
+    }'
+   )),
+   
+   tabPanel("National Variation",
+            
+            h1(strong("National Variation In Hospital Activity"), 
+               align ="center", 
+               style = "font-size:100px;"),
+            
             fluidRow(
               
-              titlePanel(h2("Health Board")),
+              titlePanel(h2("Health Board", style = "font-size:50px;")),
               br(),
               p("Explore the differences between (left) and within (right) the 14 Health boards of Scotland. Within a Health board the variation in admissions is shown."),
               br(),
@@ -221,7 +301,8 @@ ui <- fluidPage(
                                  label = "Select Health Boards", 
                                  choices = unique(data$hb_name),
                                  multiple = TRUE,
-                                 selected = unique(data$hb_name))),
+                                 selected = c("Ayrshire and Arran", 
+                                              "Borders"))),
               
               column(6,
                      selectInput(inputId = "hb_input", 
@@ -249,9 +330,9 @@ ui <- fluidPage(
             
             fluidRow(
               
-              titlePanel(h2("Urban or rural")),
+              titlePanel(h2("Urban or Rural", style = "font-size:50px;")),
               br(),
-              p("The differences between urban and rural Health board admissions are presented on a per capita basis."),
+              p("The differences between the 6 urban and 8 rural Health board admissions are presented on a per capita basis."),
               br(),
               column(6,
                      plotOutput("hb_urban")),
@@ -274,8 +355,10 @@ server <- function(input, output) {
     leaflet() %>%
       addTiles() %>%
       addResetMapButton()%>%
-      addPolygons(data = scotlandpoly, popup = ~HBName, group = "HB_regions", layerId = ~HBName) %>%
-      addCircles(data = hospitals, lng = ~X, lat = ~Y, label = ~LocationName, group = "hospital_locations", color = "red")
+      addPolygons(data = scotlandpoly, popup = ~HBName, group = "HB_regions", 
+                  layerId = ~HBName) %>%
+      addCircles(data = hospitals, lng = ~X, lat = ~Y, label = ~LocationName, 
+                 group = "hospital_locations", color = "red")
   })
   ## trigger map stuff
   observeEvent(input$scotlandHM_shape_click, { 
@@ -289,9 +372,12 @@ server <- function(input, output) {
       HB_data %>%
         filter(scotlandpoly.HBName == p()) %>%
         group_by(Quarter) %>%
-        summarise(PercentageOccupancy_mean = mean(PercentageOccupancy, na.rm = TRUE), 
-                  PercentageOccupancy_lowwer = quantile(PercentageOccupancy, 0.25, na.rm = TRUE), 
-                  PercentageOccupancy_upper = quantile(PercentageOccupancy, 0.75, na.rm = TRUE),  
+        summarise(PercentageOccupancy_mean = mean(
+          PercentageOccupancy, na.rm = TRUE), 
+                  PercentageOccupancy_lowwer = quantile(
+                    PercentageOccupancy, 0.25, na.rm = TRUE), 
+                  PercentageOccupancy_upper = quantile(
+                    PercentageOccupancy, 0.75, na.rm = TRUE),  
                   Quarter, scotlandpoly.HBName) %>%
         arrange()
     })
@@ -306,16 +392,21 @@ server <- function(input, output) {
         
         geom_vline(aes(xintercept = "2019Q4"), color = "red") +
         
-        geom_line(aes(x = Quarter, y = PercentageOccupancy_mean), group = "mean", size = 1) +
-        geom_line(aes(x = Quarter, y = PercentageOccupancy_upper), group = "75th percentile", size=0.5, alpha=0.5, color = "blue", linetype="twodash") +
-        geom_line(aes(x = Quarter, y = PercentageOccupancy_lowwer), group = "25th percentile", size=0.5, alpha=0.5, color = "blue", linetype="twodash") +
+        geom_line(aes(x = Quarter, y = PercentageOccupancy_mean), 
+                  group = "mean", size = 1) +
+        geom_line(aes(x = Quarter, y = PercentageOccupancy_upper), 
+                  group = "75th percentile", size=0.5, alpha=0.5,
+                  color = "blue", linetype="twodash") +
+        geom_line(aes(x = Quarter, y = PercentageOccupancy_lowwer), 
+                  group = "25th percentile", size=0.5, alpha=0.5, 
+                  color = "blue", linetype="twodash") +
         labs(
-          x = "yearly quarter", 
-          y = "Avarage percentage hospital cappacity with quartile markers", 
-          title = "patterns of hosptial cappacity over time",
-          subtitle = "historical referance data plotted before 2020"
+          x = "Yearly Quarter", 
+          y = "Avarage Percentage Hospital Capacity", 
+          title = "Hosptial Capacity Over Time",
+          subtitle = "Historical Reference Data Plotted Before 2020"
         ) + ylim(0, 100) +
-        theme(text=element_text(size = 20,  family = "Arial"),
+        theme(text=element_text(size = 16,  family = "Arial"),
               strip.background =element_rect(fill = "#074859"),
               strip.text = element_text(colour = 'white', size = 18,
                                         family = "Arial"))+
@@ -410,9 +501,11 @@ server <- function(input, output) {
       filter(HBName == input$nhs_board_input) %>%
       filter(Location == HB) %>%
       ggplot() +
-      aes(x = Quarter, y = .data[[input$kpi_input]], group = HBName, fill = HBName) +
+      aes(x = Quarter, y = .data[[input$kpi_input]], group = HBName, 
+          fill = HBName) +
       geom_col(colour = "black") +
-      geom_text(aes(label = .data[[input$kpi_input]]), size = 6, vjust = -0.25) +
+      geom_text(aes(label = .data[[input$kpi_input]]), size = 6, 
+                vjust = -0.25) +
       scale_fill_manual(guide = "none", values = "#008b87") +
       ylim(c(0, NA)) +
       theme_bw() +
@@ -430,10 +523,12 @@ server <- function(input, output) {
       filter(HBName == input$nhs_board_input) %>%
       filter(Location == HB) %>%
       ggplot() +
-      aes(x = Quarter, y = .data[[input$kpi_input]], group = HBName, fill = HBName) +
+      aes(x = Quarter, y = .data[[input$kpi_input]], group = HBName, 
+          fill = HBName) +
       geom_col(colour = "black") +
       ylab("Pre-Covid19 Percentage Difference (%)") +
-      geom_text(aes(label = .data[[input$kpi_input]]), size = 6, vjust = -0.25) +
+      geom_text(aes(label = .data[[input$kpi_input]]), size = 6, 
+                vjust = -0.25) +
       scale_fill_manual(guide = "none", values = "#008b87") +
       theme_bw() +
       theme(axis.title.x = element_text(margin = margin(t = 10)),
@@ -452,11 +547,27 @@ server <- function(input, output) {
       group_by(quarter, admission_type) %>%  
       summarise(episodes = sum(episodes)) %>% 
       ggplot() +
-      geom_line(aes(x = quarter, y = episodes, group = admission_type, colour = admission_type), alpha = 1) +
-      geom_point(aes(x = quarter, y = episodes, colour = admission_type), alpha = 0.5, size = 0.75) +
+      geom_line(aes(x = quarter, y = episodes, group = admission_type, 
+                    colour = admission_type), alpha = 1, size = 0.9) +
+      geom_point(aes(x = quarter, y = episodes, colour = admission_type), 
+                 alpha = 0.5, size = 0.9) +
       theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
       xlab("Admission type") +
-      ylab("Episodes")
+      ylab("Episodes") +
+      scale_colour_manual("Admission type", values = c(
+        "All Day cases" = "#061a1f",
+        "All Inpatients" = "#062e3c",
+        "Elective Inpatients" = "#074859",
+        "Emergency Inpatients" = "#11667f",
+        "Transfers" = "#008b87")) +
+      theme_bw() +
+      theme(axis.title.x = element_text(margin = margin(t = 10)),
+            text=element_text(size = 16,  family = "Arial"),
+            strip.background = element_rect(fill = "#008b87"),
+            strip.text = element_text(colour = 'white', size = 18,
+                                      family = "Arial")) +
+      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))+
+      scale_colour_brewer(palette = "Paired") 
   })
   
   output$hb_quarter <- renderPlot({
@@ -465,11 +576,36 @@ server <- function(input, output) {
       group_by(quarter, hb_name) %>% 
       summarise(episodes = sum(episodes)/mean(pop)) %>% 
       ggplot() +
-      geom_line(aes(x = quarter, y = episodes, group = hb_name, colour = hb_name), alpha = 0.75) +
-      geom_point(aes(x = quarter, y = episodes, colour = hb_name), alpha = 0.75) +
+      geom_line(aes(x = quarter, y = episodes, group = hb_name, 
+                    colour = hb_name), alpha = 0.75, size = 0.9) +
+      geom_point(aes(x = quarter, y = episodes, colour = hb_name), 
+                 alpha = 0.75, size = 0.9) +
       xlab("Quarter") +
       ylab("Episodes per capita") +
-      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+      scale_colour_manual("Health boards", values = c(
+                                              "Ayrshire and Arran" = "#061a1f",
+                                              "Borders" = "#062e3c",
+                                              "Dumfries and Galloway" = 
+                                                "#074859",
+                                              "Fife" = "#11667f",
+                                              "Forth Valley" = "#008b87",
+                                              "Grampian" = "#47899b",
+                                              "Greater Glasgow and Clyde" = 
+                                                "#659799",
+                                              "Highland" = "#012F3C",
+                                              "Lanarkshire" = "#2A6B75", 
+                                              "Lothian" = "#E0D7C4", 
+                                              "Orkney" = "#01636A", 
+                                              "Shetland" = "#98B1AF", 
+                                              "Tayside" = "#054C59", 
+                                              "Western Isles" = "#022129")) +
+      theme_bw() +
+      theme(axis.title.x = element_text(margin = margin(t = 10)),
+            text=element_text(size = 16,  family = "Arial"),
+            strip.background = element_rect(fill = "#008b87"),
+            strip.text = element_text(colour = 'white', size = 18,
+                                      family = "Arial")) +
+      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) 
   })
   
   output$hb_urban <- renderPlot({
@@ -483,6 +619,12 @@ server <- function(input, output) {
       facet_grid(~urban_rural) +
       xlab("Admission type") +
       ylab("Episodes per capita") +
+      theme_bw() +
+      theme(axis.title.x = element_text(margin = margin(t = 10)),
+            text=element_text(size = 16,  family = "Arial"),
+            strip.background = element_rect(fill = "#008b87"),
+            strip.text = element_text(colour = 'white', size = 18,
+                                      family = "Arial")) +
       theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
   })
   
@@ -492,11 +634,25 @@ server <- function(input, output) {
       group_by(quarter, urban_rural) %>% 
       summarise(episodes = sum(episodes)/mean(pop)) %>% 
       ggplot() +
-      aes(x = quarter, y = episodes, group = urban_rural, colour = urban_rural) +
-      geom_line() +
+      aes(x = quarter, y = episodes, group = urban_rural, 
+          colour = urban_rural) +
+      geom_line(size = 0.9) +
+      geom_point(aes(x = quarter, y = episodes, colour = urban_rural), 
+                 alpha = 0.5, size = 0.9) +
       xlab("Quarter") +
       ylab("Episodes per capita") +
-      ylim(0,NA)
+      scale_colour_manual("Urban or rural", 
+                          values = c("Urban" = "#061a1f", 
+                                     "Rural" = "#659799")) +
+      ylim(0,NA) +
+      theme_bw() +
+      theme(axis.title.x = element_text(margin = margin(t = 10)),
+            text=element_text(size = 16,  family = "Arial"),
+            strip.background = element_rect(fill = "#008b87"),
+            strip.text = element_text(colour = 'white', size = 18,
+                                      family = "Arial")) +
+      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+      theme(legend.title=element_blank())
     
   })
   
