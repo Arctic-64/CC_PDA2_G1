@@ -99,38 +99,50 @@ ui <- fluidPage(
              h1(strong("Intro"), align="center", 
                 style = "font-size:100px;"),
              
+             br(),
+             br(),
+             
     p("Our dashboard contains 4 main tabs providing insights on various aspects of secondary care in the acute hospital sector from 2020 onward."),
       
       
-      p("Our topic is to consider the impact that winter may have on the health care, primarily the hospital (acute care) sector in Scotland."), 
+    p("Our topic is to consider the impact that winter may have on the health care, primarily the hospital (acute care) sector in Scotland."), 
+    
+            br(),
       
-      p("This is achieved by answering the following questions:"),
-      
-        
-      p("- Capacity – what is happening to the number of beds over the period? Perhaps think about the specialities these are if there has been specific variation?"),
-      
-        
-      p("- Are there any demographic groups that are driving the activity?"),
+    p("This is achieved by answering the following questions:"),
+    
+            br(),
       
         
-      p("- What does this mean for the number of people in intensive care and the number of beds?"),
+      p(HTML("- <em> Capacity – what is happening to the number of beds over the period? Perhaps think about the specialities these are if there has been specific variation? </em>")),
       
         
-      p("- How significant are the differences in hospital activity across the country? Does urban/rural have an impact or is it related to the size and capacity of the health board?"),
+      p(HTML("- <em> Are there any demographic groups that are driving the activity? </em> ")),
       
+        
+      p(HTML("- <em> What does this mean for the number of people in intensive care and the number of beds? </em> ")),
+      
+        
+      p(HTML("- <em>  How significant are the differences in hospital activity across the country? Does urban/rural have an impact or is it related to the size and capacity of the health board? </em> ")),
+    
+            br(),
+            br(),
+    
     p("The dashboard outlines our topic in terms of:"),
+    
+            br(),
         
       
-      p("- Hospital Capacity (in terms of patients) across the National Health Boards in Scotland."),
+      p(HTML("- <em> Hospital Capacity (in terms of patients) across the National Health Boards in Scotland. </em> ")),
       
         
-      p("- Demographics on total stays and average length of stays on a countrywide level."),
+      p(HTML("- <em> Demographics on total stays and average length of stays on a countrywide level.</em>")),
       
         
-      p("- Bed availability/occupancy per National Health Board and countrywide."),
+      p(HTML("- <em> Bed availability/occupancy per National Health Board and countrywide. </em>")),
         
         
-      p(" - Variation per admission type and differences between rural and urban areas."),
+      p(HTML("- <em> Variation per admission type and differences between rural and urban areas. </em>")),
     
     ),
    
