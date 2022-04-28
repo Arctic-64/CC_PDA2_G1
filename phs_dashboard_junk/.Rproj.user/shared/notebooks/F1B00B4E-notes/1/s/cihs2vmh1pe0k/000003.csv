@@ -1,0 +1,7 @@
+"0","```r
+
+colnames(dashboard_data_table)
+```"
+"1","[1] \"Quarter\"                          \"Age\"                              \"Gender\"                           \"Location\"                        
+[5] \"Total Stays\"                      \"Average Length of Stay (in days)\"
+"

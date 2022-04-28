@@ -1,0 +1,4 @@
+"0","leaflet(data) %>%"
+"0","addTiles() %>%"
+"0","  addPolygons(data = scotland, popup = ""hi"") %>%"
+"0","  addMarkers(lng = ~YCoordinate, lat = ~XCoordinate ,popup = ""single marker"")"

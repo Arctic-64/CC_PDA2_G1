@@ -1,0 +1,6 @@
+"0","```r
+# Get fields (i.e. columns) in the meteorite_class table
+dbListFields(conn = db_connection, name = \"meteorite_class\")
+```"
+"1","[1] \"id\"    \"class\"
+"

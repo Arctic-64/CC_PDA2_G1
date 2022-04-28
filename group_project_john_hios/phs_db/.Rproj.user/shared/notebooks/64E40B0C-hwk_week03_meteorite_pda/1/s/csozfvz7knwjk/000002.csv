@@ -1,0 +1,15 @@
+"0","```r
+# Create connection object using meteorites_username and meteorites_password
+db_connection = dbConnect(
+  drv = Postgres(), 
+  user = meteorites_username,
+  password = meteorites_password,
+  dbname = \"meteorites_pool\",
+  host = \"db-postgresql-lon1-20135-do-user-7581050-0.b.db.ondigitalocean.com\",
+  port = 25061,
+  bigint = \"numeric\"
+)
+
+# Remove credentials from global environment
+rm(meteorites_username, meteorites_password)
+```"

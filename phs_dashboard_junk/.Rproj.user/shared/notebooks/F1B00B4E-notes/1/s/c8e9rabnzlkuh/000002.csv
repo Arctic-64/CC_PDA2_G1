@@ -1,0 +1,14 @@
+"0","```r
+
+# joining the tot_stay data set with the average length of stay data set
+# this newly created data set will be the base of the plots in the shiny app
+
+tot_and_avg_stays <- inner_join(tot_stays_age_no_location, avg_stays_age) %>% 
+  mutate(average_length_of_stay = round(average_length_of_stay)) %>% 
+  arrange(desc(average_length_of_stay))
+```"
+"1","Joining, by = c(\"age\", \"quarter\", \"sex\")
+"
+"0","```r
+tot_and_avg_stays
+```"

@@ -1,0 +1,43 @@
+"0","```r
+france <-  read_csv(here(\"tour_de_france.csv\"))
+```"
+"1","Rows: 106 Columns: 18
+-- Column specification ------------------------------------------------------------------------------------------------------------------------------------------------------
+Delimiter: \",\"
+chr (10): start_date, winner_name, winner_team, born, died, full_name, nickname, birth_town, birth_country, nationality
+dbl  (8): edition, distance, time_overall, time_margin, stage_wins, stages_led, height, weight
+
+i Use `spec()` to retrieve the full column specification for this data.
+i Specify the column types or set `show_col_types = FALSE` to quiet this message.
+"
+"0","```r
+france <-  france %>%
+  mutate(start_date = dmy(start_date), born = dmy(born), died = dmy(died)) %>%
+  mutate(month = months(start_date)) %>%
+  filter(month %in% c(\"June\", \"July\")) %>%
+  mutate(day = weekdays(start_date)) %>%
+  mutate(date_end = start_date + days(23)) %>%
+  mutate(age_years  = as.numeric(as.period(start_date - born), \"years\"), .after = born)
+```"
+"1","Warning: Problem while computing `start_date = dmy(start_date)`.
+i  53 failed to parse.
+Warning: Problem while computing `died = dmy(died)`.
+i  36 failed to parse.
+"
+"0","```r
+table(france$month)
+```"
+"1","
+July June 
+   5    4 
+"
+"0","```r
+table(france$day)
+```"
+"1","
+  Friday Saturday Thursday  Tuesday 
+       3        3        1        2 
+"
+"0","```r
+france
+```"

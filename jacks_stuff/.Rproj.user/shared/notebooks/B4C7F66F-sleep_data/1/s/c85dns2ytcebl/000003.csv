@@ -1,0 +1,38 @@
+"0","```r
+
+nrow(sleep_data)
+```"
+"1","[1] 83
+"
+"0","```r
+colnames(sleep_data)
+```"
+"1"," [1] \"name\"         \"genus\"        \"vore\"         \"order\"        \"conservation\" \"sleep_total\"  \"sleep_rem\"    \"sleep_cycle\"  \"awake\"        \"brainwt\"      \"bodywt\"      
+"
+"0","```r
+unique(sleep_data$sleep_total) ## no NA values = good
+```"
+"1"," [1] 12.1 17.0 14.4 14.9  4.0  8.7  7.0 10.1  3.0  5.3  9.4 10.0 12.5 10.3  8.3  9.1 17.4 18.0  3.9 19.7  2.9  3.1 10.9  9.8  1.9  2.7  6.2  6.3  8.0  9.5  3.3 19.4 14.2 14.3 12.8 19.9 14.6 11.0
+[39]  7.7 14.5  8.4  3.8  9.7 15.8 10.4 13.5 11.5 13.7  3.5  5.6 11.1 18.1  5.4 13.0  9.6 11.3 10.6 16.6 13.8 15.9  8.6  4.4 15.6  8.9  5.2
+"
+"0","```r
+sort(unique(sleep_data$name))
+```"
+"1"," [1] \"African elephant\"               \"African giant pouched rat\"      \"African striped mouse\"          \"Arctic fox\"                     \"Arctic ground squirrel\"        
+ [6] \"Asian elephant\"                 \"Baboon\"                         \"Big brown bat\"                  \"Bottle-nosed dolphin\"           \"Brazilian tapir\"               
+[11] \"Caspian seal\"                   \"Cheetah\"                        \"Chimpanzee\"                     \"Chinchilla\"                     \"Common porpoise\"               
+[16] \"Cotton rat\"                     \"Cow\"                            \"Deer mouse\"                     \"Degu\"                           \"Desert hedgehog\"               
+[21] \"Dog\"                            \"Domestic cat\"                   \"Donkey\"                         \"Eastern american chipmunk\"      \"Eastern american mole\"         
+[26] \"European hedgehog\"              \"Galago\"                         \"Genet\"                          \"Giant armadillo\"                \"Giraffe\"                       
+[31] \"Goat\"                           \"Golden-mantled ground squirrel\" \"Golden hamster\"                 \"Gray hyrax\"                     \"Gray seal\"                     
+[36] \"Greater short-tailed shrew\"     \"Grivet\"                         \"Guinea pig\"                     \"Horse\"                          \"House mouse\"                   
+[41] \"Human\"                          \"Jaguar\"                         \"Laboratory rat\"                 \"Lesser short-tailed shrew\"      \"Lion\"                          
+[46] \"Little brown bat\"               \"Long-nosed armadillo\"           \"Macaque\"                        \"Mole rat\"                       \"Mongolian gerbil\"              
+[51] \"Mongoose lemur\"                 \"Mountain beaver\"                \"Musk shrew\"                     \"North American Opossum\"         \"Northern fur seal\"             
+[56] \"Northern grasshopper mouse\"     \"Owl monkey\"                     \"Patas monkey\"                   \"Phalanger\"                      \"Pig\"                           
+[61] \"Pilot whale\"                    \"Potoroo\"                        \"Potto\"                          \"Rabbit\"                         \"Red fox\"                       
+[66] \"Rock hyrax\"                     \"Roe deer\"                       \"Round-tailed muskrat\"           \"Sheep\"                          \"Short-nosed echidna\"           
+[71] \"Slow loris\"                     \"Squirrel monkey\"                \"Star-nosed mole\"                \"Tenrec\"                         \"Thick-tailed opposum\"          
+[76] \"Thirteen-lined ground squirrel\" \"Three-toed sloth\"               \"Tiger\"                          \"Tree hyrax\"                     \"Tree shrew\"                    
+[81] \"Vesper mouse\"                   \"Vole \"                          \"Western american chipmunk\"     
+"

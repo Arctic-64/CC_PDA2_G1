@@ -1,0 +1,9 @@
+"0","```r
+observed_stat <- msleep_conservation_prop %>% 
+  specify(response = conservation_flag, success = \"domesticated\") %>% 
+  calculate(stat = \"prop\")
+
+observed_stat
+```"
+"1","Response: conservation_flag (factor)
+"

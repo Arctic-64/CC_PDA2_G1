@@ -1,0 +1,8 @@
+"0",""
+"0",""
+"0","beds_oos %>%"
+"0","  select(percentage_occupancy, shb_name) %>% "
+"0","  filter(shb_name == ""The Golden Jubilee National Hospital"") %>% "
+"0","  ggplot() +"
+"0","  aes(x = percentage_occupancy) +"
+"0","  geom_histogram(col = ""white"", binwidth = 1)"

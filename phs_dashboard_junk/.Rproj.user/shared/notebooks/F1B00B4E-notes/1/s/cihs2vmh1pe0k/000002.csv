@@ -1,0 +1,31 @@
+"0","```r
+# creating a data set for the data table to be included in the shiny app
+
+avg_stays_age_location <- phs_data_clean_location %>% 
+  group_by(age, quarter,sex, location) %>% 
+  summarise(average_length_of_stay = median(
+    average_length_of_stay, na.rm = TRUE)) %>% 
+  mutate(age = str_remove_all(age, \"years\"),
+         average_length_of_stay = round(average_length_of_stay)) 
+```"
+"1","`summarise()` has grouped output by 'age', 'quarter', 'sex'. You can override using the `.groups` argument.
+"
+"0","```r
+location_joined <- inner_join(tot_stays_age, avg_stays_age_location)
+```"
+"1","Joining, by = c(\"age\", \"quarter\", \"sex\", \"location\")
+"
+"0","```r
+dashboard_data_table <- location_joined %>%
+  relocate(age, .after = quarter) %>% 
+  rename(\"Age\" = age,
+         \"Quarter\" = quarter,
+         \"Gender\" = sex,
+         \"Location\" = location,
+         \"Total Stays\" = tot_stays,
+         \"Average Length of Stay (in days)\" = average_length_of_stay
+         ) %>% 
+  arrange(Location)
+
+dashboard_data_table
+```"

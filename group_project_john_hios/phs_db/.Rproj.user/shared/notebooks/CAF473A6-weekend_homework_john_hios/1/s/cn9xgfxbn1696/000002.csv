@@ -1,0 +1,5 @@
+"0","```r
+null_distribution %>%
+  visualize(bins = 30) +
+  shade_p_value(obs_stat = observed_stat$mean_sleep, direction = \"both\")
+```"

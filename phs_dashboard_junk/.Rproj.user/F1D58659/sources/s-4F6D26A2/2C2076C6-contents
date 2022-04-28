@@ -1,0 +1,80 @@
+library(readr)
+library(ggplot2)
+library(dplyr)
+library(shiny)
+
+students_big <- read_csv("data/students_big.csv")
+
+ui <- fluidPage(
+  
+  titlePanel("Comparing Importance of Internet Access vs. Reducing Pollution"),
+  
+  sidebarLayout(
+    sidebarPanel(
+      selectInput("gender",
+                  "Gender",
+                  choices = c(Male = "M", Female = "F")
+      ),
+      
+      selectInput("region",
+                  "Region",
+                  choices = unique(students_big$region)
+      ),
+      
+      actionButton("go", "Generate Plots and Table")
+      
+    ),
+    
+    mainPanel(
+      tabsetPanel(
+        tabPanel("Plots",
+                 fluidRow(
+                   column(6, plotOutput("internet_access")),
+                   column(6, plotOutput("reducing_pollution"))
+                 )
+                 
+        ), 
+        
+        tabPanel("Data",
+                 dataTableOutput("table") 
+        )
+        
+      )
+    )
+  )
+)
+
+
+server <- function(input, output) {
+  
+  filtered_data <- eventReactive(input$go, {
+    students_big %>%
+      filter(gender == input$gender) %>%
+      filter(region == input$region) %>%
+      select(
+        region,
+        gender,
+        importance_internet_access,
+        importance_reducing_pollution
+      )
+  })
+  
+  output$internet_access <- renderPlot({
+    ggplot(filtered_data()) +
+      aes(x = importance_internet_access) +
+      geom_histogram()
+  })
+  
+  output$reducing_pollution <- renderPlot({
+    ggplot(filtered_data()) +
+      aes(x = importance_reducing_pollution) +
+      geom_histogram()
+  })
+  
+  output$table <- renderDataTable({
+    filtered_data()
+  })
+  
+}
+
+shinyApp(ui, server)

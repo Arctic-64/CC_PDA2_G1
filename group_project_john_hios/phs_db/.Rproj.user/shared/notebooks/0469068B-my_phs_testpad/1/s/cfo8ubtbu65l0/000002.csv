@@ -1,0 +1,36 @@
+"0","beds_oos <- beds_oos %>%"
+"0","  clean_names()"
+"0",""
+"0","glimpse(beds_oos)"
+"1","Rows: 721"
+"1",""
+"1","
+"
+"1","Columns: 21"
+"1",""
+"1","
+"
+"1","$ quarter                           [3m[38;5;246m<chr>[39m[23m ""2016Q3"", ""2016Q3"", ""2016Q4"", ""2016Q4"", ""2017Q1"", ""2017Q1"", ""2017Q2"", ""2017Q2"", ""2017Q3"", ~
+$ quarter_qf                        [3m[38;5;246m<chr>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+$ hb                                [3m[38;5;246m<chr>[39m[23m ""SB0801"", ""SB0801"", ""SB0801"", ""SB0801"", ""SB0801"", ""SB0801"", ""SB0801"", ""SB0801"", ""SB0801"", ~
+$ hbqf                              [3m[38;5;246m<chr>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+$ location                          [3m[38;5;246m<chr>[39m[23m ""D102H"", ""SB0801"", ""D102H"", ""SB0801"", ""D102H"", ""SB0801"", ""D102H"", ""SB0801"", ""D102H"", ""SB08~
+$ location_qf                       [3m[38;5;246m<chr>[39m[23m NA, ""d"", NA, ""d"", NA, ""d"", NA, ""d"", NA, ""d"", NA, ""d"", NA, ""d"", NA, ""d"", NA, ""d"", NA, ""d"", ~
+$ specialty                         [3m[38;5;246m<chr>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+$ specialty_qf                      [3m[38;5;246m<chr>[39m[23m ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ""z"", ~
+$ specialty_name                    [3m[38;5;246m<chr>[39m[23m ""All Acute"", ""All Acute"", ""All Acute"", ""All Acute"", ""All Acute"", ""All Acute"", ""All Acute"",~
+$ specialty_name_qf                 [3m[38;5;246m<chr>[39m[23m ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ""d"", ~
+$ all_staffed_beds                  [3m[38;5;246m<dbl>[39m[23m 16413, 16413, 16117, 16117, 15622, 15622, 15604, 15604, 15426, 15426, 16159, 16159, 15681,~
+$ all_staffed_beds_qf               [3m[38;5;246m<lgl>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+$ total_occupied_beds               [3m[38;5;246m<dbl>[39m[23m 12380, 12380, 12049, 12049, 11569, 11569, 11614, 11614, 11658, 11658, 12434, 12434, 11871,~
+$ total_occupied_beds_qf            [3m[38;5;246m<lgl>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+$ average_available_staffed_beds    [3m[38;5;246m<dbl>[39m[23m 1.784022e+02, 1.784022e+02, 1.751848e+02, 1.751848e+02, 1.735778e+02, 1.735778e+02, 1.7147~
+$ average_available_staffed_beds_qf [3m[38;5;246m<lgl>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+$ average_occupied_beds             [3m[38;5;246m<dbl>[39m[23m 134.56521739, 134.56521739, 130.96739130, 130.96739130, 128.54444444, 128.54444444, 127.62~
+$ average_occupied_beds_qf          [3m[38;5;246m<lgl>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+$ percentage_occupancy              [3m[38;5;246m<dbl>[39m[23m 75.42801, 75.42801, 74.75957, 74.75957, 74.05582, 74.05582, 74.42963, 74.42963, 75.57371, ~
+$ percentage_occupancy_qf           [3m[38;5;246m<chr>[39m[23m NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA~
+$ hb_name                           [3m[38;5;246m<chr>[39m[23m ""The Golden Jubilee National Hospital"", ""The Golden Jubilee National Hospital"", ""The Golde~"
+"1",""
+"1","
+"

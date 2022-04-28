@@ -1,0 +1,34 @@
+"0","shb_ci <- read_csv(""shb_ci.csv"") "
+"1","[1mRows: [22m[34m1[39m [1mColumns: [22m[34m10[39m
+"
+"1","[36m--[39m [1mColumn specification[22m [36m---------------------------------------------------------------------------------------------------------------[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m (2): shb, shb_name
+[32mdbl[39m (8): lower_tob_ci999, upper_tob_ci999, lower_aasb_ci999, upper_aasb_ci999, lower_aob_ci999, upper_aob_ci999, lower_po_ci999, up...
+"
+"1","
+[36mi[39m Use `spec()` to retrieve the full column specification for this data.
+[36mi[39m Specify the column types or set `show_col_types = FALSE` to quiet this message.
+"
+"0","glimpse(shb_ci)"
+"1","Rows: 1"
+"1",""
+"1","
+"
+"1","Columns: 10"
+"1",""
+"1","
+"
+"1","$ shb              [3m[38;5;246m<chr>[39m[23m ""SB0801""
+$ shb_name         [3m[38;5;246m<chr>[39m[23m ""The Golden Jubilee National Hospital""
+$ lower_tob_ci999  [3m[38;5;246m<dbl>[39m[23m 11777.43
+$ upper_tob_ci999  [3m[38;5;246m<dbl>[39m[23m 12144.07
+$ lower_aasb_ci999 [3m[38;5;246m<dbl>[39m[23m 167.6339
+$ upper_aasb_ci999 [3m[38;5;246m<dbl>[39m[23m 173.4391
+$ lower_aob_ci999  [3m[38;5;246m<dbl>[39m[23m 129.095
+$ upper_aob_ci999  [3m[38;5;246m<dbl>[39m[23m 132.7745
+$ lower_po_ci999   [3m[38;5;246m<dbl>[39m[23m 75.57855
+$ upper_po_ci999   [3m[38;5;246m<dbl>[39m[23m 77.91663"
+"1",""
+"1","
+"
