@@ -1,5 +1,0 @@
-"1","Error in gregexpr(calltext, singleline, fixed = TRUE) : 
-  regular expression is invalid UTF-8
-Error in sys.function(sysP <- sys.parent()) : 
-  INTEGER() can only be applied to a 'integer', not a 'closure'
-"
