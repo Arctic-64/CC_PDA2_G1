@@ -83,7 +83,8 @@ We prioritised the delivery of a minimum viable product (MVP) consisting of 4 da
 
 - We used bed data and hospital information to answer the Hospital Capacity across NHBs question (Jack).
 - We used activity by board of treatment age and sex information to answer the Demographics status question (Simone). 
-- We used the bed data information to answer the NHS Bed Numbers status across time question (John). - We used the activity by health boards and speciality, and demographics information to answer the variation in hospital activity across the country (Grant). The Scottish Government's spatial data site was accessed to obtain shapefiles so that we had a picture to reference the data against. The motivation was to bring another visual element to the dashboard to aid the user.
+- We used the bed data information to answer the NHS Bed Numbers status across time question (John). 
+- We used the activity by health boards and speciality, and demographics information to answer the variation in hospital activity across the country. This dataset contained an aggregate measure for general hospital activity levels ('episodes') across admission types and so was useful for making urban and rural comparisons. The Scottish Government's spatial data site was accessed to obtain shapefiles so that we had a picture to reference the data against. The motivation was to bring another visual element to the dashboard to aid the user  (Grant).
 
 ### Data quality and potential bias, including a brief summary of data cleaning and transformations
 
