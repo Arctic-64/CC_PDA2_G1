@@ -1,7 +1,0 @@
-"0","```r
-null_distribution %>%
-  visualise(bins = 10) +
-  shade_p_value(obs_stat = observed_stat, direction = \"more\")
-```"
-"1","Warning: `direction` should be one of `\"less\"`, `\"left\"`, `\"greater\"`, `\"right\"`, `\"two-sided\"`, `\"both\"`, `\"two_sided\"`, `\"two sided\"`, or `\"two.sided\"`.
-"

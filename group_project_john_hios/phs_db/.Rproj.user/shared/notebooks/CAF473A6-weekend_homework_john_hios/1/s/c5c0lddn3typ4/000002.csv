@@ -1,7 +1,0 @@
-"0","```r
-msleep_hrs <- msleep %>% 
-  filter(vore == \"omni\"| vore == \"herbi\") %>% 
-  select(vore, sleep_total)
-
-head(msleep_hrs)
-```"

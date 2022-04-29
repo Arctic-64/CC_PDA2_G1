@@ -1,9 +1,0 @@
-"0","```r
-p_value <- null_distribution %>%
-  get_p_value(obs_stat = observed_stat, direction = \"greater\")
-```"
-"1","Warning: Please be cautious in reporting a p-value of 0. This result is an approximation based on the number of `reps` chosen in the `generate()` step. See `?get_p_value()` for more information.
-"
-"0","```r
-p_value
-```"

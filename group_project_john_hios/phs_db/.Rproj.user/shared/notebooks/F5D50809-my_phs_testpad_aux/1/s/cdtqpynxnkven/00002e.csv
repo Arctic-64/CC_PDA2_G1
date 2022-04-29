@@ -1,6 +1,0 @@
-"0",""
-"0","# Calculate a 99.9% CI for ``mean(percentage_occupancy)``, and visualise it on the distribution"
-"0",""
-"0","po_ci999 <- bootstrap_distn_po %>%"
-"0","  get_ci(level = 0.999, type = ""percentile"")"
-"0","po_ci999"

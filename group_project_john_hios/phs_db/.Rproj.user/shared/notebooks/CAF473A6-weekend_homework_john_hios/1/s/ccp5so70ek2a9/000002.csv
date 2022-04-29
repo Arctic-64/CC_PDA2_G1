@@ -1,8 +1,0 @@
-"0","```r
-# specify that we want to look at sleep_total variable, 5000 reps, and want to calculate the mean
-null_distribution <- msleep %>%
-  specify(response = sleep_total) %>%
-  hypothesize(null = \"point\", mu = 7) %>%
-  generate(reps = 10000, type = \"bootstrap\") %>%
-  calculate(stat = \"mean\")
-```"

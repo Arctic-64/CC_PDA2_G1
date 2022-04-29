@@ -1,6 +1,0 @@
-"0","```r
-msleep  %>%
-  ggplot(aes(x = sleep_total)) +
-  geom_boxplot() +
-  xlim(0, 22)
-```"

@@ -1,8 +1,0 @@
-"0","```r
-meteorite_class <- dbGetQuery(conn = db_connection, statement = \"SELECT * FROM meteorite_class\")
-
-# Check that class returns a data.frame
-class(meteorite_class)
-```"
-"1","[1] \"data.frame\"
-"

@@ -1,8 +1,0 @@
-"0","```r
-msleep  %>%
-  ggplot(aes(x = sleep_total)) +
-  geom_histogram(col = \"white\", binwidth = 1) +
-  xlim(0, 22)
-```"
-"1","Warning: Removed 2 rows containing missing values (geom_bar).
-"

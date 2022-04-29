@@ -1,6 +1,0 @@
-"0","```r
-p_value <- null_distribution %>%
-  get_p_value(obs_stat = observed_stat, direction = \"left\")
-
-p_value
-```"

@@ -1,6 +1,0 @@
-"0","```r
-observed_stat <- msleep %>%
-  summarise(mean_sleep = mean(sleep_total))
-
-observed_stat
-```"

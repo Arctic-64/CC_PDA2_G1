@@ -1,7 +1,0 @@
-"0","```r
-# Left join of dataframes 
-meteorite_landings_combined <- meteorite_landings %>% 
-  left_join(meteorite_class, by = \"id\")
-
-meteorite_landings_combined
-```"

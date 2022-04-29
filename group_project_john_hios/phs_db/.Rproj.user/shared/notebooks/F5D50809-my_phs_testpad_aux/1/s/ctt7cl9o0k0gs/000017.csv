@@ -1,8 +1,0 @@
-"0",""
-"0",""
-"0","beds_oos %>%"
-"0","  select(average_occupied_beds, country_name) %>% "
-"0","  filter(country_name == ""Scotland"") %>% "
-"0","  ggplot() +"
-"0","  aes(x = average_occupied_beds) +"
-"0","  geom_histogram(col = ""white"", binwidth = 200)"

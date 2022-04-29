@@ -1,8 +1,0 @@
-"0",""
-"0",""
-"0","beds_oos %>%"
-"0","  select(average_available_staffed_beds, location) %>%"
-"0","  filter(location == this_nhb) %>% "
-"0","  ggplot() +"
-"0","  aes(x = average_available_staffed_beds) +"
-"0","  geom_histogram(col = ""white"", binwidth = 20)"

@@ -1,2 +1,0 @@
-"0","beds_oos <- beds_oos %>%"
-"0","  filter(Quarter %in% quarters_out_of_scope)"

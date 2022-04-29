@@ -1,3 +1,0 @@
-"0"," write_csv(kpi_beds, here(""kpi_beds_clean.csv""))"
-"0",""
-"0"," write_csv(kpi_diff_beds, here(""kpi_diff_beds_clean.csv""))"

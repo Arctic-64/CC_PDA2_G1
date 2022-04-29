@@ -1,9 +1,0 @@
-"0","```r
-# library(testthat) is required for this code chunk 
-test_that(\"Non-numeric input returns an error\", {
-  expect_error(refactor_get_meteorite_count(meteorite_landings, \"character\"))
-  expect_error(refactor_get_meteorite_count(meteorite_landings, TRUE))
-})
-```"
-"1","Test passed 
-"

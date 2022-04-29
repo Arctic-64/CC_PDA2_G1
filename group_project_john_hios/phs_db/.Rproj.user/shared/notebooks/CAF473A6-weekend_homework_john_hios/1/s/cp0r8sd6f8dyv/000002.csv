@@ -1,5 +1,0 @@
-"0","```r
-msleep %>%
-  summarise(across(.cols = everything(),
-                   .fns = ~sum(is.na(.x))))
-```"

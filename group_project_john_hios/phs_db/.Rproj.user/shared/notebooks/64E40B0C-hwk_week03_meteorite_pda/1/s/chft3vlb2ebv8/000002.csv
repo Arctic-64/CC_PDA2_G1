@@ -1,6 +1,0 @@
-"0","```r
-# List the tables, passing in the connection object
-dbListTables(conn = db_connection)
-```"
-"1","[1] \"meteorite_class\"
-"

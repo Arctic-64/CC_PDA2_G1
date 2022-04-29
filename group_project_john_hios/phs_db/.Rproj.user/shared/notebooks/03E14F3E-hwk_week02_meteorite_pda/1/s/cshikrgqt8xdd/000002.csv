@@ -1,5 +1,0 @@
-"0","```r
-meteorite_landings %>%
-  group_by(fall) %>% 
-  summarise(avg_mass = mean(mass_g, na.rm = TRUE) )
-```"

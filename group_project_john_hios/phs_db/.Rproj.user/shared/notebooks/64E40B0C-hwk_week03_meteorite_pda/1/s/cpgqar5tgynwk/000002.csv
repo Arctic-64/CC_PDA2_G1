@@ -1,4 +1,0 @@
-"0","```r
-# Disconnect from database once the data is in R.
-dbDisconnect(conn = db_connection)
-```"

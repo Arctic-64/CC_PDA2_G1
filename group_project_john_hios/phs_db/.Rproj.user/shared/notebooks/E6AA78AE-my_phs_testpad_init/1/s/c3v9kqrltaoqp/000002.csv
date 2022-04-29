@@ -1,2 +1,0 @@
-"0","beds <- beds %>%"
-"0","  filter(Quarter %in% quarters_in_scope)"

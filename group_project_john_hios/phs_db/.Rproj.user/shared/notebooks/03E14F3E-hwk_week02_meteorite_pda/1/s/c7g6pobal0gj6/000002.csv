@@ -1,5 +1,0 @@
-"0","```r
-meteorite_landings %>% 
-  select(name, mass_g, year) %>% 
-  slice_max(mass_g, n = 10)
-```"

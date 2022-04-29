@@ -1,6 +1,0 @@
-"0","```r
-meteorite_landings %>%
-  filter(year >= 2000) %>% 
-  group_by(year) %>% 
-  summarise(meteorite_count = n())
-```"

@@ -1,3 +1,0 @@
-"0","```r
- write_csv(meteorite_landings_combined, here(\"clean_data/meteorite_landings_clean.csv\"))
-```"

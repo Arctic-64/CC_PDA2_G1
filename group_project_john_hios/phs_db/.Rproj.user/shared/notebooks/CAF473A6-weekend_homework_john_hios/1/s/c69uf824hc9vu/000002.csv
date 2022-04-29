@@ -1,5 +1,0 @@
-"0","```r
-msleep_hrs %>%
-  ggplot(aes(y = sleep_total, x = vore)) +
-  geom_boxplot()
-```"
