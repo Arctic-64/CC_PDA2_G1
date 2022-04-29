@@ -551,16 +551,16 @@ server <- function(input, output) {
                     colour = admission_type), alpha = 1, size = 0.9) +
       geom_point(aes(x = quarter, y = episodes, colour = admission_type), 
                  alpha = 0.5, size = 0.9) +
-      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
-      xlab("Admission type") +
+      xlab("Quarter") +
       ylab("Episodes") +
-      scale_colour_manual("Admission type", values = c(
+      scale_colour_manual("Admission Type", values = c(
         "All Day cases" = "#061a1f",
         "All Inpatients" = "#062e3c",
         "Elective Inpatients" = "#074859",
         "Emergency Inpatients" = "#11667f",
         "Transfers" = "#008b87")) +
       theme_bw() +
+      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
       theme(axis.title.x = element_text(margin = margin(t = 10)),
             text=element_text(size = 16,  family = "Arial"),
             strip.background = element_rect(fill = "#008b87"),
