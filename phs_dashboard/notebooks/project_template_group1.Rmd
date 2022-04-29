@@ -65,7 +65,6 @@ The dashboard outlines our topic in terms of:
 * Building the dashboard
 * Standardisation of aesthetics across all dashboard tabs
 
-
 ### Which tools were used in the project
 
 * Zoom (daily stand-ups and occasional mob programming)
@@ -81,14 +80,13 @@ The dashboard outlines our topic in terms of:
 
 We synthesised the information given in the brief by holding a kick-off meeting (KOM) on Friday PM hrs where the main ideas were discussed and the workscope was defined. The outcome of the KOM was the creation of 4 workpacks that would be lead by each one of the team members. A catch-up meeting was held on Saturday AM hrs to discuss any items requiring further attention.  
 
-We prioritised the delivery of a minimum viable product (MVP) consisting of 3 dashboard tabs and outlined what the extension scope would be if time permitted working on this. 
+We prioritised the delivery of a minimum viable product (MVP) consisting of 4 dashboard tabs and outlined what the extension scope would be if time permitted working on this. 
 
 ### Motivations for using the data you have chosen
 
 - We used bed data and hospital information to answer the Hospital Capacity across NHBs question (Jack).
 - We used activity by board of treatment age and sex information to answer the Demographics status question (Simone). 
-- We used the bed data information to answer the NHS Bed Numbers status across time question (John). 
-- We used the activity by hearth boards and speciality, and demographics information to answer the variation in hospital activity across the country (Grant).
+- We used the bed data information to answer the NHS Bed Numbers status across time question (John). - We used the activity by health boards and speciality, and demographics information to answer the variation in hospital activity across the country (Grant). The Scottish Government's spatial data site was accessed to obtain shapefiles so that we had a picture to reference the data against. The motivation was to bring another visual element to the dashboard to aid the user.
 
 ### Data quality and potential bias, including a brief summary of data cleaning and transformations
 
